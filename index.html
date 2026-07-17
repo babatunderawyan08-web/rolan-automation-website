@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ROLAN AUTOMATION — AI Automation & Call Center Specialist. Enterprise workflows, VoIP, and scalable business automation worldwide.">
+  <title>ROLAN AUTOMATION | AI Automation & Call Center Specialist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav container">
+      <a href="#hero" class="logo">
+        <span class="logo__mark">R</span>
+        <span class="logo__text">ROLAN <em>AUTOMATION</em></span>
+      </a>
+      <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav__links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Portfolio</a></li>
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#contact" class="btn btn--sm btn--primary">Book Consultation</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Premium Hero — portrait: images/rolan-portrait.jpg -->
+    <section class="hero-premium" id="hero">
+      <div class="hero-premium__bg" aria-hidden="true">
+        <div class="hero-premium__mesh"></div>
+        <div class="hero-premium__orb hero-premium__orb--1"></div>
+        <div class="hero-premium__orb hero-premium__orb--2"></div>
+        <div class="hero-premium__orb hero-premium__orb--3"></div>
+        <canvas class="hero-premium__canvas" id="hero-network"></canvas>
+        <div class="hero-premium__particles">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="container hero-premium__grid">
+        <!-- LEFT: Portrait (45%) -->
+        <div class="hero-premium__visual hero-animate hero-animate--left">
+          <svg class="hero-premium__art" viewBox="0 0 420 520" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#2563EB" stop-opacity="0.5"/>
+                <stop offset="1" stop-color="#06B6D4" stop-opacity="0.2"/>
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="80" r="6" fill="#2563EB" opacity="0.4"/>
+            <circle cx="360" cy="120" r="5" fill="#06B6D4" opacity="0.5"/>
+            <circle cx="40" cy="380" r="4" fill="#2563EB" opacity="0.35"/>
+            <circle cx="380" cy="420" r="7" fill="#06B6D4" opacity="0.3"/>
+            <path d="M60 80 L180 160 L320 120 L360 200" stroke="url(#lineGrad)" stroke-width="1.5" stroke-dasharray="4 6"/>
+            <path d="M40 380 L160 320 L280 360 L380 420" stroke="url(#lineGrad)" stroke-width="1.5" stroke-dasharray="4 6"/>
+            <path d="M180 160 L160 320" stroke="url(#lineGrad)" stroke-width="1" opacity="0.6"/>
+            <rect x="300" y="60" width="48" height="28" rx="8" stroke="#2563EB" stroke-opacity="0.25" fill="rgba(37,99,235,0.04)"/>
+            <rect x="24" y="300" width="56" height="32" rx="8" stroke="#06B6D4" stroke-opacity="0.25" fill="rgba(6,182,212,0.04)"/>
+            <circle cx="324" cy="74" r="3" fill="#2563EB" opacity="0.6"/>
+            <circle cx="52" cy="316" r="3" fill="#06B6D4" opacity="0.6"/>
+            <path d="M100 440 H320" stroke="#2563EB" stroke-opacity="0.12" stroke-width="1"/>
+            <path d="M120 448 H300 M140 456 H280" stroke="#2563EB" stroke-opacity="0.08" stroke-width="1"/>
+          </svg>
+
+          <div class="hero-premium__card">
+            <div class="hero-premium__glow"></div>
+            <div class="hero-premium__frame">
+              <img
+                src="images/rolan-portrait.jpg"
+                alt="Rolan — AI Automation & Call Center Specialist"
+                class="hero-premium__portrait"
+                width="560"
+                height="700"
+              >
+            </div>
+            <div class="hero-premium__card-badge">
+              <span class="hero-premium__card-dot"></span>
+              Available Worldwide
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Content (55%) -->
+        <div class="hero-premium__content">
+          <div class="hero-premium__badge hero-animate hero-animate--1">
+            <span aria-hidden="true">🚀</span>
+            AI Automation &amp; Call Center Specialist
+          </div>
+
+          <h1 class="hero-premium__title hero-animate hero-animate--2">
+            <span class="hero-premium__title-line">
+              <span class="gradient-text">Automating</span> Businesses.
+            </span>
+            <span class="hero-premium__title-line">
+              Powering Smarter Customer Communication.
+            </span>
+          </h1>
+          <p class="hero-premium__keywords hero-animate hero-animate--2">
+            <span class="gradient-text">Automation</span>
+            <span class="hero-premium__keywords-sep">·</span>
+            <span class="gradient-text">AI</span>
+            <span class="hero-premium__keywords-sep">·</span>
+            <span class="gradient-text">Call Center</span>
+          </p>
+
+          <div class="hero-premium__desc hero-animate hero-animate--3">
+            <p>I help businesses eliminate repetitive work, automate workflows, and build enterprise-grade call center systems that improve productivity, customer experience, and business growth.</p>
+            <p>I specialize in designing scalable <strong>automation</strong> solutions using AI, APIs, and modern workflow platforms while deploying reliable VoIP and PBX infrastructures for businesses worldwide.</p>
+          </div>
+
+          <div class="hero-premium__expertise hero-animate hero-animate--4">
+            <p class="hero-premium__expertise-label">Expertise Includes</p>
+            <ul class="hero-premium__expertise-list">
+              <li>AI Automation</li>
+              <li>Workflow Automation</li>
+              <li>API Integration</li>
+              <li>n8n</li>
+              <li>Make.com</li>
+              <li>Zapier</li>
+              <li>OpenAI</li>
+              <li>Claude AI</li>
+              <li>Gemini AI</li>
+              <li>CRM Automation</li>
+              <li>WhatsApp Automation</li>
+              <li>Email Automation</li>
+              <li>Lead Generation Automation</li>
+              <li>Business Process Automation</li>
+              <li>Dashboard Automation</li>
+              <li>3CX</li>
+              <li>VICIdial</li>
+              <li>FreePBX</li>
+              <li>Asterisk</li>
+              <li>VoIP Solutions</li>
+              <li>SIP Trunks</li>
+              <li>IVR</li>
+              <li>Predictive Dialer</li>
+              <li>Inbound &amp; Outbound Call Centers</li>
+            </ul>
+          </div>
+
+          <div class="hero-premium__actions hero-animate hero-animate--5">
+            <a href="#contact" class="btn btn--primary btn--lg btn--glow">Book a Free Consultation</a>
+            <a href="#projects" class="btn btn--secondary btn--lg">View Portfolio</a>
+          </div>
+
+          <ul class="hero-premium__trust hero-animate hero-animate--6">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Automation Expert</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> AI Integration Specialist</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Call Center Consultant</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Business Process Expert</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Remote Worldwide Service</li>
+          </ul>
+
+          <div class="hero-premium__stats hero-animate hero-animate--7">
+            <div class="hero-stat-card">
+              <div class="hero-stat-card__value">
+                <span data-count="50">0</span><span class="hero-stat-card__suffix">+</span>
+              </div>
+              <div class="hero-stat-card__label">Automation Projects</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-card__value">
+                <span data-count="100">0</span><span class="hero-stat-card__suffix">+</span>
+              </div>
+              <div class="hero-stat-card__label">Business Workflows</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-card__value">
+                <span data-count="24">0</span><span class="hero-stat-card__suffix">/7</span>
+              </div>
+              <div class="hero-stat-card__label">Support</div>
+            </div>
+            <div class="hero-stat-card">
+              <div class="hero-stat-card__value">
+                <span data-count="99">0</span><span class="hero-stat-card__suffix">%</span>
+              </div>
+              <div class="hero-stat-card__label">Client Satisfaction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section section--about">
+      <div class="container about__layout">
+        <!-- Left: Portrait (same height as content) -->
+        <aside class="about__photo" aria-label="Photo of Rolan">
+          <div class="about__photo-inner">
+            <div class="about__photo-glow" aria-hidden="true"></div>
+            <div class="about__photo-ring" aria-hidden="true"></div>
+            <div class="about__photo-frame">
+              <img
+                src="images/rolan-portrait.jpg"
+                alt="Rolan — AI Automation & Call Center Specialist"
+                class="about__photo-img"
+                width="520"
+                height="650"
+              >
+            </div>
+            <div class="about__photo-badge">
+              <span class="about__photo-badge-dot"></span>
+              Rolan · Founder
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right: Content -->
+        <div class="about__content">
+          <div class="section__header about__header">
+            <span class="section__tag">About Me</span>
+            <h2>Turning manual work into<br>reliable automation</h2>
+          </div>
+          <div class="about__text">
+            <p>
+              Every business has tasks that eat up hours — copying data between apps,
+              sending the same emails, updating spreadsheets, chasing approvals.
+              I find those bottlenecks and replace them with automations that just work.
+            </p>
+            <p>
+              From simple scripts to full multi-step workflows, I focus on solutions
+              that are easy to maintain, easy to understand, and built to last.
+            </p>
+          </div>
+          <div class="about__cards">
+            <div class="about-card">
+              <span class="about-card__icon">🎯</span>
+              <h3>Problem-first</h3>
+              <p>I start with your pain points, not the tech stack.</p>
+            </div>
+            <div class="about-card">
+              <span class="about-card__icon">🔧</span>
+              <h3>Built to last</h3>
+              <p>Clean, documented automations you can trust long-term.</p>
+            </div>
+            <div class="about-card">
+              <span class="about-card__icon">📈</span>
+              <h3>Measurable impact</h3>
+              <p>Every project tracks time saved and errors eliminated.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section section--alt">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__tag">Services</span>
+          <h2>What I automate</h2>
+          <p class="section__desc">End-to-end solutions for repetitive work across your stack.</p>
+        </div>
+        <div class="services__grid">
+          <article class="service-card">
+            <div class="service-card__icon">🔄</div>
+            <h3>Workflow Automation</h3>
+            <p>Multi-step pipelines that trigger on events, schedules, or webhooks — no manual handoffs.</p>
+            <ul>
+              <li>Scheduled jobs & cron tasks</li>
+              <li>Event-driven triggers</li>
+              <li>Approval flows</li>
+            </ul>
+          </article>
+          <article class="service-card">
+            <div class="service-card__icon">🔗</div>
+            <h3>App Integrations</h3>
+            <p>Connect the tools you already use so data flows automatically between them.</p>
+            <ul>
+              <li>API connections</li>
+              <li>CRM & email sync</li>
+              <li>Database pipelines</li>
+            </ul>
+          </article>
+          <article class="service-card">
+            <div class="service-card__icon">📊</div>
+            <h3>Reporting & Alerts</h3>
+            <p>Automated dashboards, daily digests, and smart alerts when something needs attention.</p>
+            <ul>
+              <li>Custom reports</li>
+              <li>Slack / email notifications</li>
+              <li>Data aggregation</li>
+            </ul>
+          </article>
+          <article class="service-card">
+            <div class="service-card__icon">🤖</div>
+            <h3>AI-Powered Tasks</h3>
+            <p>Combine automation with AI for classification, summarization, and intelligent routing.</p>
+            <ul>
+              <li>Document processing</li>
+              <li>Smart categorization</li>
+              <li>Content generation</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section container">
+      <div class="section__header">
+        <span class="section__tag">Projects</span>
+        <h2>Recent automations</h2>
+      </div>
+      <div class="projects__grid">
+        <article class="project-card">
+          <div class="project-card__header">
+            <span class="project-card__tag">E-commerce</span>
+            <span class="project-card__status">Live</span>
+          </div>
+          <h3>Order Processing Pipeline</h3>
+          <p>Automatically syncs orders from Shopify to inventory, sends shipping labels, and updates customers.</p>
+          <div class="project-card__metrics">
+            <span>⏱ Saves 3h/day</span>
+            <span>📦 200+ orders/day</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-card__header">
+            <span class="project-card__tag">Marketing</span>
+            <span class="project-card__status">Live</span>
+          </div>
+          <h3>Lead Nurture Sequence</h3>
+          <p>Captures leads from forms, scores them, and routes hot prospects to sales with personalized follow-ups.</p>
+          <div class="project-card__metrics">
+            <span>📈 40% faster response</span>
+            <span>🎯 Auto-scoring</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-card__header">
+            <span class="project-card__tag">Operations</span>
+            <span class="project-card__status">Live</span>
+          </div>
+          <h3>Invoice & Payment Tracker</h3>
+          <p>Monitors overdue invoices, sends reminders, and logs payments into accounting software automatically.</p>
+          <div class="project-card__metrics">
+            <span>💰 95% collection rate</span>
+            <span>🔔 Smart reminders</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="tools" class="section section--alt">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__tag">Tools</span>
+          <h2>Technologies I work with</h2>
+        </div>
+        <div class="tools__grid">
+          <div class="tool-chip">Python</div>
+          <div class="tool-chip">JavaScript</div>
+          <div class="tool-chip">Zapier</div>
+          <div class="tool-chip">Make</div>
+          <div class="tool-chip">n8n</div>
+          <div class="tool-chip">Power Automate</div>
+          <div class="tool-chip">GitHub Actions</div>
+          <div class="tool-chip">REST APIs</div>
+          <div class="tool-chip">Webhooks</div>
+          <div class="tool-chip">Slack</div>
+          <div class="tool-chip">Google Sheets</div>
+          <div class="tool-chip">Airtable</div>
+          <div class="tool-chip">Notion</div>
+          <div class="tool-chip">OpenAI</div>
+          <div class="tool-chip">PostgreSQL</div>
+          <div class="tool-chip">Docker</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section container">
+      <div class="contact">
+        <div class="contact__info">
+          <span class="section__tag">Contact</span>
+          <h2>Let's automate something</h2>
+          <p>Tell me about a task that's eating your time. I'll reply within 24 hours with ideas on how to fix it.</p>
+          <div class="contact__links">
+            <a href="mailto:hello@rolan.dev" class="contact__link">
+              <span>✉️</span> hello@rolan.dev
+            </a>
+          </div>
+        </div>
+        <form class="contact__form" id="contact-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="you@company.com">
+          </div>
+          <div class="form-group">
+            <label for="message">What do you want to automate?</label>
+            <textarea id="message" name="message" rows="4" required placeholder="Describe the task, tools involved, and how often it happens..."></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full btn--glow">Book a Free Consultation</button>
+          <p class="form__success" id="form-success" hidden>Thanks! I'll get back to you soon.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>&copy; 2026 ROLAN AUTOMATION. Built with automation in mind.</p>
+      <a href="#hero" class="footer__top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFF6FF"/>
+      <stop offset="1" stop-color="#DBEAFE"/>
+    </linearGradient>
+    <linearGradient id="silhouette" x1="200" y1="80" x2="200" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#bg)"/>
+  <ellipse cx="200" cy="430" rx="120" ry="18" fill="#2563EB" opacity="0.08"/>
+  <circle cx="200" cy="165" r="72" fill="url(#silhouette)" opacity="0.85"/>
+  <path d="M95 480c8-78 52-118 105-118s97 40 105 118H95z" fill="url(#silhouette)" opacity="0.85"/>
+  <text x="200" y="468" text-anchor="middle" fill="#64748B" font-family="Inter, sans-serif" font-size="13" font-weight="500">Replace with rolan-portrait.jpg</text>
+</svg>

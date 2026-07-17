@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Rolan — Automation specialist. I build workflows, integrations, and systems that save you time." />
+  <title>Rolan | Automation Specialist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="nav container">
+      <a href="#" class="logo">
+        <span class="logo-mark">⚡</span>
+        <span>Rolan</span>
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#contact" class="btn btn-sm">Get in touch</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <p class="eyebrow">Automation Specialist</p>
+        <h1>I build systems that <span class="gradient-text">work while you sleep</span></h1>
+        <p class="hero-sub">
+          From workflow automation to custom integrations — I help businesses eliminate repetitive tasks,
+          connect their tools, and scale without adding headcount.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">Start a project</a>
+          <a href="#services" class="btn btn-ghost">See what I do</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">10+</span>
+            <span class="stat-label">Hours saved weekly</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Custom solutions</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">24/7</span>
+            <span class="stat-label">Automated workflows</span>
+          </div>
+        </div>
+
+        <div class="workflow-demo" aria-label="Live automation workflow demo">
+          <div class="workflow-header">
+            <span class="workflow-dot"></span>
+            <span class="workflow-title">Live workflow</span>
+            <span class="workflow-status" id="workflow-status">Running</span>
+          </div>
+          <div class="workflow-pipeline">
+            <div class="workflow-node" data-step="0">
+              <span class="node-icon">📥</span>
+              <span class="node-label">Trigger</span>
+              <span class="node-detail">New form submit</span>
+            </div>
+            <div class="workflow-connector"><span class="pulse"></span></div>
+            <div class="workflow-node" data-step="1">
+              <span class="node-icon">⚙️</span>
+              <span class="node-label">Process</span>
+              <span class="node-detail">Validate & enrich</span>
+            </div>
+            <div class="workflow-connector"><span class="pulse"></span></div>
+            <div class="workflow-node" data-step="2">
+              <span class="node-icon">📤</span>
+              <span class="node-label">Action</span>
+              <span class="node-detail">CRM + Slack alert</span>
+            </div>
+          </div>
+          <p class="workflow-log" id="workflow-log">Waiting for trigger…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Services</p>
+          <h2>Automation that fits your business</h2>
+          <p class="section-sub">Practical solutions — not buzzwords. Every workflow is built around your actual processes.</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon">🔄</div>
+            <h3>Workflow Automation</h3>
+            <p>Connect apps, trigger actions, and route data automatically. Email sequences, lead handling, reporting — on autopilot.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🔗</div>
+            <h3>API Integrations</h3>
+            <p>Bridge tools that don't talk to each other. CRMs, spreadsheets, payment systems, and custom software — unified.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🤖</div>
+            <h3>AI-Powered Tasks</h3>
+            <p>Smart document processing, chatbots, content pipelines, and decision workflows powered by modern AI tools.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">📊</div>
+            <h3>Monitoring & Alerts</h3>
+            <p>Dashboards, scheduled reports, and instant notifications so you always know what's happening — without checking manually.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="process" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Process</p>
+          <h2>How we work together</h2>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num">01</span>
+            <div>
+              <h3>Discover</h3>
+              <p>We map your current workflow, find bottlenecks, and identify the highest-impact automation opportunities.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num">02</span>
+            <div>
+              <h3>Design</h3>
+              <p>I propose a clear automation plan — tools, triggers, outcomes — before writing a single line of code.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num">03</span>
+            <div>
+              <h3>Build & Test</h3>
+              <p>Workflows are built, tested with real data, and refined until they run reliably every time.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num">04</span>
+            <div>
+              <h3>Launch & Support</h3>
+              <p>You get documentation, handover, and optional ongoing support as your business evolves.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="tools" class="section">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Tools & Platforms</p>
+          <h2>Built with industry-leading tech</h2>
+        </div>
+        <div class="tool-grid">
+          <span class="tool-tag">Zapier</span>
+          <span class="tool-tag">Make (Integromat)</span>
+          <span class="tool-tag">n8n</span>
+          <span class="tool-tag">Python</span>
+          <span class="tool-tag">Node.js</span>
+          <span class="tool-tag">REST APIs</span>
+          <span class="tool-tag">Google Workspace</span>
+          <span class="tool-tag">Slack</span>
+          <span class="tool-tag">Notion</span>
+          <span class="tool-tag">Airtable</span>
+          <span class="tool-tag">HubSpot</span>
+          <span class="tool-tag">OpenAI</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section section-alt">
+      <div class="container contact-grid">
+        <div class="contact-info">
+          <p class="eyebrow">Contact</p>
+          <h2>Let's automate something great</h2>
+          <p>Tell me about your project — I'll get back to you within 24 hours with next steps.</p>
+          <ul class="contact-details">
+            <li>
+              <span class="detail-label">Email</span>
+              <a href="mailto:hello@rolan.dev">hello@rolan.dev</a>
+            </li>
+            <li>
+              <span class="detail-label">Response time</span>
+              <span>Within 24 hours</span>
+            </li>
+          </ul>
+        </div>
+        <form class="contact-form" id="contact-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="you@company.com" />
+          </div>
+          <div class="form-group">
+            <label for="message">What do you want to automate?</label>
+            <textarea id="message" name="message" rows="4" required placeholder="Describe your workflow or challenge..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Send message</button>
+          <p class="form-note" id="form-status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 Rolan. Automation specialist.</p>
+      <a href="#contact">Contact</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
