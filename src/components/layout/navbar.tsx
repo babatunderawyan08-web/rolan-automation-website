@@ -8,6 +8,7 @@ import { Menu, X, Moon, Sun, Search, ChevronDown, Bot, PhoneCall } from "lucide-
 import { AnimatedLogo } from "@/components/shared/animated-logo";
 import { BrandLogo } from "@/components/shared/brand-logo";
 import { DynamicIcon } from "@/components/shared/dynamic-icon";
+import { SiteSearch } from "@/components/layout/site-search";
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS } from "@/lib/constants";
 import { services, callCenterServices } from "@/data/site-data";
@@ -243,7 +244,7 @@ export function Navbar() {
 
       {searchOpen && (
         <div className="border-t border-border bg-card px-4 py-3">
-          <input type="search" placeholder="Search blog, services..." className="w-full max-w-xl mx-auto block rounded-xl border border-border bg-background px-4 py-2 text-sm" />
+          <SiteSearch onNavigate={() => setSearchOpen(false)} />
         </div>
       )}
 

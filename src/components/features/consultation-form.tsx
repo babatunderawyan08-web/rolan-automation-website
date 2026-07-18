@@ -2,60 +2,35 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea, Label } from "@/components/ui/input";
-import { SITE } from "@/lib/constants";
 import { z } from "zod";
 import {
   CONSULTATION_SERVICES,
   consultationSchema,
 } from "@/lib/consultation-schema";
+import { cn } from "@/lib/utils";
 
 const schema = consultationSchema;
 
 type FormData = z.input<typeof consultationSchema>;
 
-function buildWhatsAppMessage(data: {
-  name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  service: string;
-  message: string;
-}): string {
-  const company = data.company?.trim() || "Not provided";
-  const phone = data.phone?.trim() || "Not provided";
-  return [
-    "Hello Rolan Automation,",
-    "",
-    "I would like to book a consultation.",
-    "",
-    "👤 Full Name:",
-    data.name.trim(),
-    "",
-    "📧 Email:",
-    data.email.trim(),
-    "",
-    "📞 Phone:",
-    phone,
-    "",
-    "🏢 Company:",
-    company,
-    "",
-    "⚙️ Service:",
-    data.service,
-    "",
-    "📝 Project Details:",
-    data.message.trim(),
-    "",
-    "Please contact me at your earliest convenience.",
-  ].join("\n");
-}
+type SubmitStatus =
+  | { type: "idle" }
+  | { type: "success" }
+  | { type: "error"; message: string };
+
+const SUCCESS_MESSAGE =
+  "✅ Your consultation request has been sent successfully. Our team will contact you soon.";
 
 export function ConsultationForm() {
+  const [status, setStatus] = useState<SubmitStatus>({ type: "idle" });
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -70,23 +45,67 @@ export function ConsultationForm() {
   });
 
   const onSubmit = async (data: FormData) => {
+    setStatus({ type: "idle" });
+
     try {
-      await fetch("/api/consultation", {
+      const response = await fetch("/api/consultation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-    } catch {
-      // Backend notification failed — still open WhatsApp
-    }
 
-    const text = buildWhatsAppMessage(data);
-    const url = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+      const result = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        error?: string;
+      } | null;
+
+      if (!response.ok || !result?.ok) {
+        setStatus({
+          type: "error",
+          message:
+            result?.error ||
+            "We couldn’t send your request. Please try again in a moment.",
+        });
+        return;
+      }
+
+      reset({
+        name: "",
+        email: "",
+        phone: "",
+        company: "",
+        service: "",
+        message: "",
+      });
+      setStatus({ type: "success" });
+    } catch {
+      setStatus({
+        type: "error",
+        message: "Network error. Please check your connection and try again.",
+      });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+      {status.type === "success" && (
+        <div
+          role="status"
+          className="rounded-xl border border-success/30 bg-success/10 px-4 py-3 text-sm leading-relaxed text-foreground"
+        >
+          {SUCCESS_MESSAGE}
+        </div>
+      )}
+
+      {status.type === "error" && (
+        <div
+          role="alert"
+          className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm leading-relaxed text-foreground"
+        >
+          {status.message}
+        </div>
+      )}
+
       <div>
         <Label htmlFor="consult-name">Full Name</Label>
         <Input
@@ -166,11 +185,16 @@ export function ConsultationForm() {
         {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message.message}</p>}
       </div>
 
-      <Button type="submit" variant="accent" className="w-full" disabled={isSubmitting}>
-        Book Consultation
+      <Button
+        type="submit"
+        variant="accent"
+        className={cn("w-full", isSubmitting && "opacity-80")}
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Sending..." : "Book Consultation"}
       </Button>
       <p className="text-center text-xs text-muted">
-        Opens WhatsApp with your details — nothing is stored on this site.
+        Your request is sent securely to our team — we’ll follow up within 48 hours.
       </p>
     </form>
   );
