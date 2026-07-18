@@ -53,7 +53,7 @@ export default function BookConsultationPage() {
               <div className="rounded-2xl border border-border bg-card p-5 card-shadow sm:p-6 md:p-8">
                 <h2 className="font-heading text-xl font-semibold mb-2">Request your consultation</h2>
                 <p className="text-sm text-muted mb-6">
-                  Fill out the form and we&apos;ll open WhatsApp with your details ready to send.
+                  Fill out the form and we&apos;ll receive your request instantly. Our team will contact you soon.
                 </p>
                 <ConsultationForm />
               </div>

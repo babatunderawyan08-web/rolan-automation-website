@@ -217,8 +217,6 @@ export function buildInternalEmailHtml(
     </table>
     ${ctaButton(`mailto:${encodeURIComponent(data.email.trim())}?subject=${encodeURIComponent(`Re: Your consultation request — ${SITE.name}`)}`, "Reply to Client")}
     <p style="margin:20px 0 0;text-align:center;">
-      <a href="${escapeHtml(`https://wa.me/${SITE.whatsapp}`)}" style="color:${BRAND.blue};font-size:13px;text-decoration:none;font-weight:600;">Open WhatsApp</a>
-      <span style="color:${BRAND.border};padding:0 8px;">·</span>
       <a href="${escapeHtml(siteUrl("/book-consultation"))}" style="color:${BRAND.blue};font-size:13px;text-decoration:none;font-weight:600;">View booking page</a>
     </p>
   `;
@@ -255,9 +253,7 @@ export function buildConfirmationEmailHtml(data: ConsultationFormData): string {
     </table>
     ${ctaButton(siteUrl("/services"), "Explore Our Services")}
     <p style="margin:24px 0 0;color:${BRAND.muted};font-size:14px;line-height:1.65;text-align:center;">
-      Prefer messaging?
-      <a href="${escapeHtml(`https://wa.me/${SITE.whatsapp}`)}" style="color:${BRAND.blue};text-decoration:none;font-weight:600;">Chat on WhatsApp</a>
-      or email
+      Questions? Email
       <a href="mailto:contact@rolanautomation.com" style="color:${BRAND.blue};text-decoration:none;font-weight:600;">contact@rolanautomation.com</a>
     </p>
   `;
@@ -291,7 +287,6 @@ export function buildInternalEmailText(
     `Visitor IP: ${meta.visitorIp || "Not available"}`,
     "",
     `Reply to client: ${data.email.trim()}`,
-    `WhatsApp: https://wa.me/${SITE.whatsapp}`,
     `Website: ${SITE.url}`,
   ].join("\n");
 }
@@ -315,12 +310,29 @@ export function buildConfirmationEmailText(data: ConsultationFormData): string {
     data.message.trim(),
     "",
     `Explore services: ${siteUrl("/services")}`,
-    `WhatsApp: https://wa.me/${SITE.whatsapp}`,
     "Email: contact@rolanautomation.com",
     "",
     SITE.name,
     SITE.url,
   ].join("\n");
+}
+
+function formatSmtpError(error: unknown): string {
+  if (error instanceof Error) {
+    const withCode = error as Error & { code?: string; response?: string; responseCode?: number };
+    const parts = [withCode.message];
+    if (withCode.code) parts.push(`code=${withCode.code}`);
+    if (withCode.responseCode) parts.push(`responseCode=${withCode.responseCode}`);
+    if (withCode.response) parts.push(`response=${withCode.response}`);
+    if (withCode.stack) parts.push(withCode.stack);
+    return parts.join(" | ");
+  }
+  if (typeof error === "string") return error;
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
 }
 
 function getSmtpConfig() {
@@ -334,11 +346,18 @@ function getSmtpConfig() {
       ? process.env.SMTP_SECURE === "true"
       : port === 465;
 
-  if (!host || !user || !pass || !from) {
-    return null;
+  const missing = [
+    !host ? "SMTP_HOST" : null,
+    !user ? "SMTP_USER" : null,
+    !pass ? "SMTP_PASS" : null,
+    !from ? "SMTP_FROM" : null,
+  ].filter(Boolean);
+
+  if (missing.length > 0) {
+    return { error: `SMTP is not configured — missing ${missing.join(", ")}` } as const;
   }
 
-  return { host, port, user, pass, from, secure };
+  return { host: host!, port, user: user!, pass: pass!, from: from!, secure } as const;
 }
 
 export async function sendConsultationEmail(
@@ -346,12 +365,13 @@ export async function sendConsultationEmail(
   meta: ConsultationEmailMeta
 ): Promise<ConsultationEmailResult> {
   const config = getSmtpConfig();
-  if (!config) {
+  if ("error" in config) {
+    console.error("[consultation] SMTP error:", config.error);
     return {
       ok: false,
       internal: false,
       confirmation: false,
-      error: "SMTP is not configured",
+      error: config.error,
     };
   }
 
@@ -391,35 +411,41 @@ export async function sendConsultationEmail(
     const internal = internalResult.status === "fulfilled";
     const confirmation = confirmationResult.status === "fulfilled";
 
+    let error: string | undefined;
+
     if (!internal && internalResult.status === "rejected") {
-      console.error("Internal consultation email failed:", internalResult.reason);
+      const detail = formatSmtpError(internalResult.reason);
+      console.error("[consultation] SMTP error (internal):", detail);
+      error = `Internal email failed: ${detail}`;
     }
     if (!confirmation && confirmationResult.status === "rejected") {
-      console.error("Confirmation consultation email failed:", confirmationResult.reason);
+      const detail = formatSmtpError(confirmationResult.reason);
+      console.error("[consultation] SMTP error (confirmation):", detail);
+      error = error
+        ? `${error}; Confirmation email failed: ${detail}`
+        : `Confirmation email failed: ${detail}`;
     }
 
     const ok = internal || confirmation;
+    if (!ok && !error) {
+      error = "Failed to send consultation emails";
+      console.error("[consultation] SMTP error:", error);
+    }
+
     return {
       ok,
       internal,
       confirmation,
-      ...(!ok
-        ? { error: "Failed to send consultation emails" }
-        : !internal || !confirmation
-          ? {
-              error: !internal
-                ? "Internal email failed"
-                : "Confirmation email failed",
-            }
-          : {}),
+      ...(error ? { error } : {}),
     };
   } catch (error) {
-    console.error("Consultation email failed:", error);
+    const detail = formatSmtpError(error);
+    console.error("[consultation] SMTP error:", detail);
     return {
       ok: false,
       internal: false,
       confirmation: false,
-      error: error instanceof Error ? error.message : "Failed to send email",
+      error: detail,
     };
   }
 }
