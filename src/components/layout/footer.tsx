@@ -32,7 +32,7 @@ const footerLinks = {
 export function Footer() {
   return (
     <footer className="border-t border-border bg-background-alt">
-      <div className="container mx-auto max-w-7xl px-4 py-16">
+      <div className="container mx-auto max-w-7xl px-4 py-10 sm:py-14 md:py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <AnimatedLogo size="md" />

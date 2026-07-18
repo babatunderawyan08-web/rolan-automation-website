@@ -33,7 +33,7 @@ function Node({
   return (
     <motion.div
       animate={float(delay)}
-      className={`absolute flex items-center justify-center rounded-xl border border-border bg-card/95 shadow-lg backdrop-blur-sm ${className}`}
+      className={`absolute items-center justify-center rounded-xl border border-border bg-card/95 shadow-lg backdrop-blur-sm ${className}`}
     >
       {children}
     </motion.div>
@@ -84,7 +84,7 @@ export function HeroIllustration() {
       />
 
       <motion.div
-        className="relative aspect-[4/3.5] min-h-[340px] w-full overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-secondary/[0.06] via-card to-accent/[0.08] card-shadow-hover md:min-h-[420px] lg:min-h-[480px]"
+        className="relative aspect-[4/3.5] min-h-[280px] w-full overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-secondary/[0.06] via-card to-accent/[0.08] card-shadow-hover sm:min-h-[340px] sm:rounded-3xl md:min-h-[420px] lg:min-h-[480px]"
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
@@ -166,36 +166,36 @@ export function HeroIllustration() {
           </div>
         </motion.div>
 
-        {/* Floating nodes */}
-        <Node className="left-[6%] top-[14%] h-11 w-11 text-secondary" delay={0}>
+        {/* Floating nodes — fewer on small screens */}
+        <Node className="left-[6%] top-[14%] flex h-11 w-11 text-secondary" delay={0}>
           <Brain className="h-5 w-5" />
         </Node>
-        <Node className="right-[8%] top-[10%] h-10 w-10 text-accent" delay={0.4}>
+        <Node className="right-[8%] top-[10%] hidden h-10 w-10 text-accent sm:flex" delay={0.4}>
           <Plug className="h-4 w-4" />
         </Node>
-        <Node className="left-[4%] top-[48%] h-10 w-10 text-secondary" delay={0.8}>
+        <Node className="left-[4%] top-[48%] hidden h-10 w-10 text-secondary md:flex" delay={0.8}>
           <GitBranch className="h-4 w-4" />
         </Node>
-        <Node className="right-[5%] top-[42%] h-11 w-11 text-accent" delay={0.2}>
+        <Node className="right-[5%] top-[42%] flex h-11 w-11 text-accent" delay={0.2}>
           <Phone className="h-5 w-5" />
         </Node>
-        <Node className="left-[10%] bottom-[12%] h-10 w-10 text-secondary" delay={1}>
+        <Node className="left-[10%] bottom-[12%] hidden h-10 w-10 text-secondary sm:flex" delay={1}>
           <Users className="h-4 w-4" />
         </Node>
-        <Node className="right-[10%] bottom-[14%] h-10 w-10 text-accent" delay={0.6}>
+        <Node className="right-[10%] bottom-[14%] hidden h-10 w-10 text-accent sm:flex" delay={0.6}>
           <Server className="h-4 w-4" />
         </Node>
-        <Node className="left-[22%] bottom-[8%] h-9 w-9 text-muted" delay={1.2}>
+        <Node className="left-[22%] bottom-[8%] hidden h-9 w-9 text-muted md:flex" delay={1.2}>
           <Cloud className="h-4 w-4" />
         </Node>
-        <Node className="right-[22%] bottom-[6%] h-9 w-9 text-muted" delay={0.3}>
+        <Node className="right-[22%] bottom-[6%] hidden h-9 w-9 text-muted md:flex" delay={0.3}>
           <Headphones className="h-4 w-4" />
         </Node>
 
         {/* CRM card */}
         <motion.div
           animate={float(0.5, 8)}
-          className="absolute left-[8%] top-[32%] z-10 rounded-xl border border-border bg-card/90 px-3 py-2 shadow-md backdrop-blur-sm"
+          className="absolute left-[8%] top-[32%] z-10 hidden rounded-xl border border-border bg-card/90 px-3 py-2 shadow-md backdrop-blur-sm sm:block"
         >
           <div className="flex items-center gap-2">
             <Users className="h-3.5 w-3.5 text-secondary" />
@@ -209,7 +209,7 @@ export function HeroIllustration() {
         {/* Chatbot bubble */}
         <motion.div
           animate={float(0.7, 10)}
-          className="absolute right-[6%] top-[28%] z-10 max-w-[120px] rounded-xl rounded-tr-sm border border-border bg-card/90 px-3 py-2 shadow-md backdrop-blur-sm"
+          className="absolute right-[6%] top-[28%] z-10 hidden max-w-[120px] rounded-xl rounded-tr-sm border border-border bg-card/90 px-3 py-2 shadow-md backdrop-blur-sm sm:block"
         >
           <div className="flex items-start gap-1.5">
             <Bot className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
@@ -220,7 +220,7 @@ export function HeroIllustration() {
         {/* 3CX / PBX badge */}
         <motion.div
           animate={float(0.9, 6)}
-          className="absolute bottom-[22%] left-[38%] z-10 rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-[10px] font-semibold text-secondary"
+          className="absolute bottom-[22%] left-[38%] z-10 hidden rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-[10px] font-semibold text-secondary md:block"
         >
           3CX · VICIdial · PBX
         </motion.div>
@@ -228,7 +228,7 @@ export function HeroIllustration() {
         {/* Analytics mini card */}
         <motion.div
           animate={float(1.1, 7)}
-          className="absolute right-[18%] top-[18%] z-10 flex items-center gap-1.5 rounded-lg border border-border bg-card/90 px-2 py-1.5 shadow-md"
+          className="absolute right-[18%] top-[18%] z-10 hidden items-center gap-1.5 rounded-lg border border-border bg-card/90 px-2 py-1.5 shadow-md sm:flex"
         >
           <BarChart3 className="h-3.5 w-3.5 text-secondary" />
           <Activity className="h-3 w-3 text-success" />
@@ -237,31 +237,31 @@ export function HeroIllustration() {
 
         {/* Pipeline label */}
         <motion.div
-          className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-1.5 text-[10px] font-medium text-muted backdrop-blur-sm"
+          className="absolute bottom-3 left-1/2 z-10 flex w-[calc(100%-1.5rem)] max-w-xs -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1.5 text-[10px] font-medium text-muted backdrop-blur-sm sm:bottom-4 sm:w-auto sm:px-4"
           animate={{ opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 3, repeat: Infinity }}
         >
-          <MessageSquare className="h-3 w-3 text-accent" />
-          Automation + Call Center Pipeline
+          <MessageSquare className="h-3 w-3 shrink-0 text-accent" />
+          <span className="truncate">Automation + Call Center Pipeline</span>
         </motion.div>
       </motion.div>
 
       {/* Floating stat badges */}
       <motion.div
-        className="absolute bottom-2 left-2 rounded-2xl border border-border bg-card p-3 card-shadow-hover sm:bottom-0 sm:left-0 sm:p-4 md:-left-2"
+        className="absolute bottom-1 left-1 rounded-xl border border-border bg-card p-2.5 card-shadow-hover sm:bottom-0 sm:left-0 sm:rounded-2xl sm:p-4 md:-left-2"
         animate={{ y: [0, -5, 0] }}
         transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
       >
-        <p className="text-xl font-bold text-success sm:text-2xl">+340%</p>
-        <p className="text-[11px] text-muted sm:text-xs">Average client ROI</p>
+        <p className="text-lg font-bold text-success sm:text-2xl">+340%</p>
+        <p className="text-[10px] text-muted sm:text-xs">Average client ROI</p>
       </motion.div>
       <motion.div
-        className="absolute right-2 top-2 rounded-2xl border border-border bg-card p-3 card-shadow-hover sm:right-0 sm:top-0 sm:p-4 md:-right-2"
+        className="absolute right-1 top-1 rounded-xl border border-border bg-card p-2.5 card-shadow-hover sm:right-0 sm:top-0 sm:rounded-2xl sm:p-4 md:-right-2"
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
       >
-        <p className="text-xl font-bold text-secondary sm:text-2xl">24/7</p>
-        <p className="text-[11px] text-muted sm:text-xs">Automated operations</p>
+        <p className="text-lg font-bold text-secondary sm:text-2xl">24/7</p>
+        <p className="text-[10px] text-muted sm:text-xs">Automated operations</p>
       </motion.div>
     </div>
   );

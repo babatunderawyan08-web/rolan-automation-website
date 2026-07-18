@@ -34,18 +34,21 @@ export function CookieBanner() {
   if (consent !== null) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card p-4 shadow-2xl sm:bottom-4 sm:left-4 sm:right-auto sm:max-w-md sm:rounded-2xl sm:border">
-      <div className="flex items-start gap-3 pr-1 sm:pr-0">
+    <div
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 p-3 shadow-2xl backdrop-blur-md sm:bottom-4 sm:left-4 sm:right-auto sm:max-w-sm sm:rounded-2xl sm:border sm:p-4"
+      style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
+    >
+      <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium">We value your privacy</p>
           <p className="mt-1 text-xs leading-relaxed text-muted">
             We use cookies to improve your experience and analyze site traffic.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Button size="sm" className="min-h-11 px-5" onClick={accept}>
+          <div className="mt-3 flex gap-2">
+            <Button size="sm" className="min-h-10 flex-1 px-4 sm:flex-none" onClick={accept}>
               Accept
             </Button>
-            <Button size="sm" variant="outline" className="min-h-11 px-5" onClick={accept}>
+            <Button size="sm" variant="outline" className="min-h-10 flex-1 px-4 sm:flex-none" onClick={accept}>
               Decline
             </Button>
           </div>
@@ -53,7 +56,7 @@ export function CookieBanner() {
         <button
           type="button"
           onClick={accept}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-background-alt hover:text-foreground"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-background-alt hover:text-foreground"
           aria-label="Close"
         >
           <X className="h-5 w-5" />

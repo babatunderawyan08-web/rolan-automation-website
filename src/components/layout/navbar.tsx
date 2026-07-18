@@ -122,9 +122,9 @@ export function Navbar() {
         scrolled ? "glass shadow-sm" : "bg-transparent"
       )}
     >
-      <nav className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:h-20">
+      <nav className="container mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 md:h-20">
+        <AnimatedLogo size="sm" className="min-w-0 sm:hidden" />
         <AnimatedLogo size="md" className="hidden sm:flex" />
-        <AnimatedLogo size="sm" showText={false} className="sm:hidden" />
 
         <ul className="hidden items-center gap-1 lg:flex">
           {NAV_LINKS.map((link) => (
@@ -248,23 +248,50 @@ export function Navbar() {
       )}
 
       {open && (
-        <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-card px-4 py-4 lg:hidden">
+        <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-border bg-card px-4 py-4 lg:hidden">
           <ul className="space-y-1">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="block rounded-lg px-3 py-3 text-sm font-medium hover:bg-background-alt"
+                  className={cn(
+                    "block rounded-lg px-3 py-3.5 text-sm font-medium transition-colors hover:bg-background-alt",
+                    pathname === link.href && "bg-background-alt text-secondary"
+                  )}
                   onClick={() => setOpen(false)}
                 >
                   {link.label}
                 </Link>
+                {link.mega && (
+                  <ul className="mb-2 ml-2 mt-1 space-y-0.5 border-l border-border pl-3">
+                    {services.slice(0, 4).map((s) => (
+                      <li key={s.id}>
+                        <Link
+                          href={`/services/${s.id}`}
+                          className="block rounded-lg px-2 py-2.5 text-sm text-muted hover:bg-background-alt hover:text-foreground"
+                          onClick={() => setOpen(false)}
+                        >
+                          {s.title}
+                        </Link>
+                      </li>
+                    ))}
+                    <li>
+                      <Link
+                        href="/services"
+                        className="block rounded-lg px-2 py-2.5 text-sm font-medium text-secondary"
+                        onClick={() => setOpen(false)}
+                      >
+                        View all services →
+                      </Link>
+                    </li>
+                  </ul>
+                )}
               </li>
             ))}
-            <li className="pt-2">
-              <Button variant="accent" className="w-full min-h-11" asChild>
+            <li className="pt-3">
+              <Button variant="accent" className="w-full min-h-12" asChild>
                 <Link href="/book-consultation" onClick={() => setOpen(false)}>
-                  Book Consultation
+                  Book Free Consultation
                 </Link>
               </Button>
             </li>
