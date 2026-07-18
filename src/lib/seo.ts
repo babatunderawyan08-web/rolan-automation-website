@@ -40,9 +40,16 @@ export function createMetadata({
       images: [image],
     },
     robots: { index: true, follow: true },
+    manifest: "/site.webmanifest",
     icons: {
-      icon: "/logo.png",
-      apple: "/logo.png",
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon.png", type: "image/png", sizes: "512x512" },
+        { url: "/icons/icon-192.png", type: "image/png", sizes: "192x192" },
+        { url: "/icons/icon-32.png", type: "image/png", sizes: "32x32" },
+      ],
+      shortcut: "/favicon.ico",
+      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
     },
   };
 }
