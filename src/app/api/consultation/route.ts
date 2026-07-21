@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
+import {
+  buildBookingDetails,
+  buildIcs,
+  zonedDateTimeToUtc,
+  addMinutes,
+} from "@/lib/booking";
+import { SITE } from "@/lib/constants";
 import { getVisitorIp, sendConsultationEmail } from "@/lib/consultation-email";
-import { buildConsultationMessage, consultationSchema } from "@/lib/consultation-schema";
+import {
+  buildConsultationMessage,
+  consultationSchema,
+} from "@/lib/consultation-schema";
+import {
+  createCalendarEvent,
+  getBusyIntervals,
+  isGoogleCalendarConfigured,
+  isSlotFree,
+} from "@/lib/google-calendar";
 
 function formatError(error: unknown): string {
   if (error instanceof Error) {
@@ -14,56 +30,10 @@ function formatError(error: unknown): string {
   }
 }
 
-/** Trim whitespace and optional surrounding quotes from env values. */
 function env(name: string): string {
   const raw = process.env[name];
   if (raw == null) return "";
   return raw.trim().replace(/^['"]|['"]$/g, "");
-}
-
-function envPresent(name: string): boolean {
-  return env(name).length > 0;
-}
-
-function logEnvStatus() {
-  const required = [
-    "TELEGRAM_BOT_TOKEN",
-    "TELEGRAM_CHAT_ID",
-    "SMTP_HOST",
-    "SMTP_PORT",
-    "SMTP_USER",
-    "SMTP_PASS",
-    "CONTACT_EMAIL",
-    "CONSULTATION_EMAIL_TO",
-    "SMTP_FROM",
-  ] as const;
-
-  const status = Object.fromEntries(
-    required.map((key) => [key, envPresent(key) ? "SET" : "MISSING"])
-  );
-
-  console.log("[consultation] Environment variable status:", status);
-
-  const missingCritical = [
-    !envPresent("TELEGRAM_BOT_TOKEN") ? "TELEGRAM_BOT_TOKEN" : null,
-    !envPresent("TELEGRAM_CHAT_ID") ? "TELEGRAM_CHAT_ID" : null,
-    !envPresent("SMTP_HOST") ? "SMTP_HOST" : null,
-    !envPresent("SMTP_USER") ? "SMTP_USER" : null,
-    !envPresent("SMTP_PASS") ? "SMTP_PASS" : null,
-  ].filter(Boolean);
-
-  if (missingCritical.length > 0) {
-    console.error(
-      "[consultation] Missing environment variable(s):",
-      missingCritical.join(", ")
-    );
-  }
-
-  if (!envPresent("CONTACT_EMAIL") && !envPresent("CONSULTATION_EMAIL_TO") && !envPresent("SMTP_FROM")) {
-    console.warn(
-      "[consultation] No CONTACT_EMAIL / CONSULTATION_EMAIL_TO / SMTP_FROM — will fall back to SMTP_USER or default inbox"
-    );
-  }
 }
 
 function interpretTelegramError(detail: string, httpStatus: number): string {
@@ -85,9 +55,7 @@ function interpretTelegramError(detail: string, httpStatus: number): string {
 
 async function sendTelegram(
   text: string
-): Promise<{ ok: boolean; error?: string; response?: string }> {
-  console.log("[consultation] Telegram request: starting");
-
+): Promise<{ ok: boolean; error?: string }> {
   const token = env("TELEGRAM_BOT_TOKEN");
   const chatIdRaw = env("TELEGRAM_CHAT_ID");
 
@@ -98,21 +66,12 @@ async function sendTelegram(
     ]
       .filter(Boolean)
       .join(", ");
-    const error = `Missing environment variable: ${missing}`;
-    console.error("[consultation] Telegram error:", error);
-    return { ok: false, error };
+    return { ok: false, error: `Missing environment variable: ${missing}` };
   }
 
-  // Numeric chat IDs must be numbers for Telegram API reliability
   const chatId = /^-?\d+$/.test(chatIdRaw) ? Number(chatIdRaw) : chatIdRaw;
 
   try {
-    console.log("[consultation] Telegram request: POST sendMessage", {
-      chatIdType: typeof chatId,
-      textLength: text.length,
-      tokenLength: token.length,
-    });
-
     const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -123,10 +82,6 @@ async function sendTelegram(
     });
 
     const detail = await response.text();
-    console.log("[consultation] Telegram response:", {
-      httpStatus: response.status,
-      bodyPreview: detail.slice(0, 500),
-    });
 
     let payload: { ok?: boolean; description?: string } | null = null;
     try {
@@ -137,63 +92,174 @@ async function sendTelegram(
 
     if (!response.ok || payload?.ok === false) {
       const raw = payload?.description || detail;
-      const error = interpretTelegramError(raw, response.status);
-      console.error("[consultation] Telegram error:", error);
-      return { ok: false, error, response: detail };
+      return { ok: false, error: interpretTelegramError(raw, response.status) };
     }
 
-    console.log("[consultation] Telegram request: success");
-    return { ok: true, response: detail };
+    return { ok: true };
   } catch (error) {
-    const message = `Network error contacting Telegram: ${formatError(error)}`;
-    console.error("[consultation] Telegram error:", message);
-    return { ok: false, error: message };
+    return { ok: false, error: `Network error contacting Telegram: ${formatError(error)}` };
   }
 }
 
 export async function POST(request: Request) {
-  console.log("[consultation] ========== NEW SUBMISSION ==========");
-  logEnvStatus();
-
   let body: unknown;
   try {
     body = await request.json();
-    console.log("[consultation] Form received:", {
-      name: typeof body === "object" && body && "name" in body ? String((body as { name?: string }).name)?.slice(0, 40) : undefined,
-      email:
-        typeof body === "object" && body && "email" in body
-          ? String((body as { email?: string }).email)?.slice(0, 60)
-          : undefined,
-      service:
-        typeof body === "object" && body && "service" in body
-          ? String((body as { service?: string }).service)
-          : undefined,
-      hasPhone: typeof body === "object" && body && "phone" in body && Boolean((body as { phone?: string }).phone),
-      hasCompany:
-        typeof body === "object" && body && "company" in body && Boolean((body as { company?: string }).company),
-      messageLength:
-        typeof body === "object" && body && "message" in body
-          ? String((body as { message?: string }).message || "").length
-          : 0,
-    });
-  } catch (error) {
-    console.error("[consultation] Invalid JSON body:", formatError(error));
+  } catch {
     return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
   }
 
   const parsed = consultationSchema.safeParse(body);
   if (!parsed.success) {
-    console.error("[consultation] Invalid form data:", parsed.error.flatten());
     return NextResponse.json({ ok: false, error: "Invalid form data" }, { status: 400 });
   }
 
-  const text = buildConsultationMessage(parsed.data);
+  const data = parsed.data;
+
+  if (!isGoogleCalendarConfigured()) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          "Online booking is temporarily unavailable. Please email contact@rolanautomation.com.",
+      },
+      { status: 503 }
+    );
+  }
+
+  const start = zonedDateTimeToUtc(data.date, data.time, data.timeZone);
+  const end = addMinutes(start, data.duration);
+  const now = Date.now();
+
+  if (start.getTime() <= now + 15 * 60_000) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Please choose a time at least 15 minutes from now.",
+        code: "SLOT_TOO_SOON",
+      },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const busy = await getBusyIntervals(
+      addMinutes(start, -1).toISOString(),
+      addMinutes(end, 1).toISOString()
+    );
+
+    if (!isSlotFree(start, end, busy)) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "That time slot was just booked. Please choose another available time.",
+          code: "SLOT_UNAVAILABLE",
+        },
+        { status: 409 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: `Unable to verify availability: ${formatError(error)}`,
+      },
+      { status: 502 }
+    );
+  }
+
+  const typeLabel =
+    data.consultationType === "video"
+      ? "Video Consultation (Google Meet)"
+      : "Audio Consultation";
+
+  const description = [
+    `Consultation with ${data.name.trim()}`,
+    `Type: ${typeLabel}`,
+    `Service: ${data.service}`,
+    `Email: ${data.email.trim()}`,
+    `Phone: ${data.phone?.trim() || "Not provided"}`,
+    `Company: ${data.company?.trim() || "Not provided"}`,
+    "",
+    "Project details:",
+    data.message.trim(),
+  ].join("\n");
+
+  let event: Awaited<ReturnType<typeof createCalendarEvent>>;
+  try {
+    event = await createCalendarEvent({
+      summary: `${typeLabel} — ${data.name.trim()}`,
+      description,
+      startIso: start.toISOString(),
+      endIso: end.toISOString(),
+      timeZone: data.timeZone,
+      attendeeEmail: data.email.trim(),
+      attendeeName: data.name.trim(),
+      createMeet: data.consultationType === "video",
+    });
+  } catch (error) {
+    const detail = formatError(error);
+    if (
+      detail.toLowerCase().includes("conflict") ||
+      detail.toLowerCase().includes("duplicate")
+    ) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "That time slot is no longer available. Please pick another.",
+          code: "SLOT_UNAVAILABLE",
+        },
+        { status: 409 }
+      );
+    }
+    return NextResponse.json(
+      {
+        ok: false,
+        error: `Unable to create calendar event: ${detail}`,
+      },
+      { status: 502 }
+    );
+  }
+
+  const booking = buildBookingDetails(data, {
+    meetLink: event.meetLink,
+    htmlLink: event.htmlLink,
+    eventId: event.eventId,
+  });
+
+  const organizerEmail =
+    env("CONTACT_EMAIL") ||
+    env("CONSULTATION_EMAIL_TO") ||
+    env("SMTP_FROM") ||
+    env("SMTP_USER") ||
+    "contact@rolanautomation.com";
+
+  const icsContent = buildIcs({
+    title: `${typeLabel} — ${SITE.name}`,
+    description: [
+      description,
+      booking.meetLink ? `\nMeet link: ${booking.meetLink}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    location:
+      booking.meetLink ||
+      (data.consultationType === "audio" ? "Audio consultation" : undefined),
+    start,
+    end,
+    organizerEmail,
+    attendeeEmail: data.email.trim(),
+    url: booking.meetLink || booking.htmlLink,
+  });
+
+  const text = buildConsultationMessage(data, booking);
   const emailMeta = {
     submittedAt: new Date().toISOString(),
     visitorIp: getVisitorIp(request),
   };
 
-  let telegramResult: { ok: boolean; error?: string; response?: string } = {
+  let telegramResult: { ok: boolean; error?: string } = {
     ok: false,
     error: "Telegram not attempted",
   };
@@ -204,80 +270,36 @@ export async function POST(request: Request) {
     error: "Email not attempted",
   };
 
-  // Separate try/catch so one channel never blocks the other
   try {
     telegramResult = await sendTelegram(text);
   } catch (error) {
-    const message = `Telegram unexpected error: ${formatError(error)}`;
-    console.error("[consultation] Telegram error:", message);
-    telegramResult = { ok: false, error: message };
+    telegramResult = { ok: false, error: `Telegram unexpected error: ${formatError(error)}` };
   }
 
   try {
-    console.log("[consultation] Email request: starting");
-    emailResult = await sendConsultationEmail(parsed.data, emailMeta);
-    console.log("[consultation] Email response:", {
-      ok: emailResult.ok,
-      internal: emailResult.internal,
-      confirmation: emailResult.confirmation,
-      error: emailResult.error || null,
+    emailResult = await sendConsultationEmail(data, emailMeta, {
+      booking,
+      icsContent,
     });
   } catch (error) {
-    const message = `Email unexpected error: ${formatError(error)}`;
-    console.error("[consultation] SMTP error:", message);
     emailResult = {
       ok: false,
       internal: false,
       confirmation: false,
-      error: message,
+      error: `Email unexpected error: ${formatError(error)}`,
     };
   }
 
-  const telegramOk = telegramResult.ok;
-  const emailOk = emailResult.ok;
-
-  console.log("[consultation] Channel results:", {
-    telegram: telegramOk,
-    email: emailOk,
-    telegramError: telegramResult.error || null,
-    emailError: emailResult.error || null,
+  // Calendar event is the booking source of truth — treat as success even if notify fails
+  return NextResponse.json({
+    ok: true,
+    booked: true,
+    booking,
+    telegram: telegramResult.ok,
+    email: emailResult.ok,
+    emailInternal: emailResult.internal,
+    emailConfirmation: emailResult.confirmation,
+    ...(emailResult.error ? { emailError: emailResult.error } : {}),
+    ...(telegramResult.error ? { telegramError: telegramResult.error } : {}),
   });
-
-  // Success if Telegram OR email succeeds
-  if (telegramOk || emailOk) {
-    const final = {
-      ok: true as const,
-      telegram: telegramOk,
-      email: emailOk,
-      emailInternal: emailResult.internal,
-      emailConfirmation: emailResult.confirmation,
-      ...(emailResult.error ? { emailError: emailResult.error } : {}),
-      ...(telegramResult.error ? { telegramError: telegramResult.error } : {}),
-    };
-    console.log("[consultation] Final response: SUCCESS", final);
-    return NextResponse.json(final);
-  }
-
-  // Both failed — return the real causes (no secrets)
-  const parts = [
-    telegramResult.error ? `Telegram: ${telegramResult.error}` : null,
-    emailResult.error ? `Email: ${emailResult.error}` : null,
-  ].filter(Boolean);
-
-  const error =
-    parts.length > 0
-      ? parts.join(" | ")
-      : "Unable to deliver your request. Please try again shortly.";
-
-  const final = {
-    ok: false as const,
-    telegram: false,
-    email: false,
-    error,
-    telegramError: telegramResult.error,
-    emailError: emailResult.error,
-  };
-
-  console.error("[consultation] Final response: FAILURE", final);
-  return NextResponse.json(final, { status: 502 });
 }

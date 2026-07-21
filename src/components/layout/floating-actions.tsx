@@ -23,7 +23,7 @@ export function FloatingActions() {
   return (
     <>
       <div
-        className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] right-3 z-40 flex flex-col items-end gap-2.5 sm:bottom-6 sm:right-6 sm:gap-3"
+        className="fixed bottom-[calc(7.5rem+env(safe-area-inset-bottom,0px))] right-3 z-40 flex flex-col items-end gap-2.5 sm:bottom-24 sm:right-6 sm:gap-3"
       >
         {/* Expanded contacts — mobile toggle; always visible from sm */}
         <div

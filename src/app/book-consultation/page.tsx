@@ -1,4 +1,4 @@
-import { Calendar, CheckCircle2 } from "lucide-react";
+import { Calendar, CheckCircle2, Video, Phone } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
 import { ConsultationForm } from "@/components/features/consultation-form";
 import { FadeIn } from "@/components/shared/animations";
@@ -6,25 +6,26 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   title: "Book Consultation",
-  description: "Book a free automation consultation with ROLAN AUTOMATION. Get a custom roadmap within 48 hours.",
+  description:
+    "Book a video or audio automation consultation with ROLAN AUTOMATION. Choose your date, time, and duration — confirmed instantly on Google Calendar.",
   path: "/book-consultation",
 });
 
 const benefits = [
-  "Free 30-minute strategy session",
+  "Video (Google Meet) or audio consultation",
+  "30 or 60 minute sessions",
+  "Instant calendar confirmation",
   "Custom automation roadmap",
-  "ROI estimate for your business",
   "No obligation, no pressure",
-  "Response within 48 hours",
 ];
 
 export default function BookConsultationPage() {
   return (
     <>
       <PageHero
-        eyebrow="Free Consultation"
-        title="Book your free automation strategy session"
-        subtitle="Discover exactly how automation can transform your business — with a custom roadmap delivered within 48 hours."
+        eyebrow="Book Online"
+        title="Schedule your automation strategy session"
+        subtitle="Pick a date and time that works for you. We’ll confirm instantly, send a calendar invite, and meet by video or audio."
       />
       <section className="section-padding">
         <div className="container mx-auto max-w-7xl px-4">
@@ -39,21 +40,42 @@ export default function BookConsultationPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-8 rounded-2xl border border-border bg-background-alt p-6">
-                <div className="flex items-center gap-3 mb-4">
+              <div className="mt-8 space-y-4 rounded-2xl border border-border bg-background-alt p-6">
+                <div className="flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-secondary" />
-                  <p className="font-semibold">Prefer to schedule directly?</p>
+                  <p className="font-semibold">How booking works</p>
                 </div>
-                <div className="h-64 rounded-xl bg-card border border-dashed border-border flex items-center justify-center text-sm text-muted">
-                  Calendly Scheduling Widget Placeholder
+                <ol className="space-y-3 text-sm text-muted">
+                  <li className="flex gap-3">
+                    <span className="font-semibold text-foreground">1.</span>
+                    Choose video or audio, then pick a date, time zone, and duration.
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="font-semibold text-foreground">2.</span>
+                    We check Google Calendar so only open slots appear — no double bookings.
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="font-semibold text-foreground">3.</span>
+                    Confirm and receive an email with meeting details and a calendar invite.
+                  </li>
+                </ol>
+                <div className="grid gap-3 pt-2 sm:grid-cols-2">
+                  <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm">
+                    <Video className="h-4 w-4 text-secondary shrink-0" />
+                    Google Meet for video
+                  </div>
+                  <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm">
+                    <Phone className="h-4 w-4 text-secondary shrink-0" />
+                    Phone / audio option
+                  </div>
                 </div>
               </div>
             </FadeIn>
             <FadeIn delay={0.2}>
               <div className="rounded-2xl border border-border bg-card p-5 card-shadow sm:p-6 md:p-8">
-                <h2 className="font-heading text-xl font-semibold mb-2">Request your consultation</h2>
+                <h2 className="font-heading text-xl font-semibold mb-2">Book your consultation</h2>
                 <p className="text-sm text-muted mb-6">
-                  Fill out the form and we&apos;ll receive your request instantly. Our team will contact you soon.
+                  Select your preferred slot. Confirmation is instant when the time is available.
                 </p>
                 <ConsultationForm />
               </div>
