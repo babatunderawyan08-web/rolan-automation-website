@@ -19,6 +19,9 @@ export function CTABanner() {
                   <Link href="/book-consultation">Book Free Consultation</Link>
                 </Button>
                 <Button size="lg" variant="outline" className="w-full border-white/30 text-white hover:bg-white/10 sm:w-auto" asChild>
+                  <Link href="/book-appointment">Book Appointment</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="w-full border-white/30 text-white hover:bg-white/10 sm:w-auto" asChild>
                   <Link href="/contact">Contact Us</Link>
                 </Button>
               </div>

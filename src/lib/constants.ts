@@ -4,7 +4,7 @@ export const SITE = {
   description:
     "Premium AI automation, workflow engineering, call center solutions, and CRM integrations for businesses that demand excellence.",
   url: "https://rolanautomation.com",
-  email: "babatunderawyan08@gmail.com",
+  email: "contact@rolanautomation.com",
   phone: "+234 703 482 1995",
   whatsapp: "2347034821995",
   telegram: "https://t.me/chancenew",

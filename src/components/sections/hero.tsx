@@ -36,6 +36,9 @@ export function HeroSection() {
                 </Link>
               </Button>
               <Button variant="outline" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
+                <Link href="/book-appointment">Book Appointment</Link>
+              </Button>
+              <Button variant="ghost" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
                 <Link href="/portfolio">
                   <Play className="h-4 w-4" /> View Portfolio
                 </Link>

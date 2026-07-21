@@ -228,7 +228,7 @@ export function Navbar() {
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
           )}
-          <Button variant="outline" size="sm" className="hidden min-h-11 lg:inline-flex" asChild>
+          <Button variant="outline" size="sm" className="hidden min-h-11 md:inline-flex" asChild>
             <Link href="/book-appointment">Book Appointment</Link>
           </Button>
           <Button variant="accent" size="sm" className="hidden min-h-11 md:inline-flex" asChild>
