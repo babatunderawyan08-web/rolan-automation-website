@@ -1,32 +1,18 @@
-export type HeroLayout = "flow" | "hub" | "funnel" | "pipeline" | "dial" | "mesh" | "radar";
-
-export type HeroAccent = "blue" | "cyan" | "emerald" | "violet" | "amber" | "rose" | "slate";
-
-export type WorkflowNodeDef = {
+export type OrbitNodeDef = {
   id: string;
+  /** Official brand name for BrandLogo (OpenAI, n8n, etc.). Omit for step chips. */
+  brand?: string;
   label: string;
-  /** Lucide icon name key resolved in the canvas */
-  icon: string;
-  status?: "idle" | "active" | "done" | "alert";
-};
-
-export type WorkflowEdgeDef = {
-  from: string;
-  to: string;
-};
-
-export type ActivityCardDef = {
-  title: string;
-  meta: string;
-  tone?: "ok" | "info" | "warn";
+  /** Short story shown when this node is active / hovered */
+  story: string;
 };
 
 export type ServiceWorkflowDef = {
-  layout: HeroLayout;
-  accent: HeroAccent;
   caption: string;
-  nodes: WorkflowNodeDef[];
-  edges: WorkflowEdgeDef[];
-  activities: ActivityCardDef[];
+  nodes: OrbitNodeDef[];
+  /** Ordered path of node ids that activate as the “story” sequence */
+  paths: string[][];
   metric?: { label: string; value: string; delta?: string };
+  /** Optional secondary activity lines that cycle */
+  activities: { title: string; meta: string }[];
 };

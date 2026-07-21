@@ -1,538 +1,265 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import {
-  Activity,
-  Archive,
-  AudioLines,
-  Award,
-  BarChart3,
-  Bell,
-  Blocks,
-  BookOpen,
-  Bot,
-  Boxes,
-  Brain,
-  Building2,
-  Calendar,
-  CalendarCheck,
-  Cable,
-  CheckCircle2,
-  CircleDot,
-  ClipboardCheck,
-  ClipboardList,
-  Clock,
-  Cloud,
-  Code2,
-  Cog,
-  Database,
-  Disc,
-  Download,
-  Compass,
-  Eye,
-  FastForward,
-  FileOutput,
-  FilePlus,
-  FileText,
-  Filter,
-  Gauge,
-  Gem,
-  GitBranch,
-  Globe,
-  HardDrive,
-  Headphones,
-  Home,
-  Image,
-  Inbox,
-  Kanban,
-  Keyboard,
-  Landmark,
-  Laptop,
-  Layers,
-  Lightbulb,
-  LineChart,
-  List,
-  ListOrdered,
-  ListTree,
-  Lock,
-  Mail,
-  Map as MapIcon,
-  Megaphone,
-  MessageCircle,
-  MessageSquare,
-  MessagesSquare,
-  Mic,
-  Monitor,
-  MonitorSmartphone,
-  MousePointerClick,
-  Phone,
-  PhoneCall,
-  PhoneForwarded,
-  PhoneIncoming,
-  PhoneOutgoing,
-  Plug,
-  Puzzle,
-  Radar,
-  Radio,
-  RefreshCw,
-  Repeat,
-  Rocket,
-  Route,
-  ScanSearch,
-  ScanText,
-  ScrollText,
-  Search,
-  Send,
-  Server,
-  Settings,
-  Share2,
-  Shield,
-  ShieldAlert,
-  ShieldCheck,
-  Smartphone,
-  Sparkles,
-  Split,
-  StepForward,
-  Target,
-  TrendingUp,
-  Trophy,
-  Upload,
-  User,
-  UserPlus,
-  Users,
-  Volume2,
-  Wifi,
-  Wrench,
-  Zap,
-  type LucideIcon,
-} from "lucide-react";
+import Image from "next/image";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { cn } from "@/lib/utils";
-import type { HeroAccent, ServiceWorkflowDef, WorkflowNodeDef } from "./types";
+import type { ServiceWorkflowDef } from "./types";
 
-const ICONS: Record<string, LucideIcon> = {
-  Activity,
-  Archive,
-  AudioLines,
-  Award,
-  BarChart3,
-  Bell,
-  Blocks,
-  BookOpen,
-  Bot,
-  Boxes,
-  Brain,
-  Building2,
-  Calendar,
-  CalendarCheck,
-  Cable,
-  CheckCircle2,
-  CircleDot,
-  ClipboardCheck,
-  ClipboardList,
-  Clock,
-  Cloud,
-  Code2,
-  Cog,
-  Database,
-  Disc,
-  Download,
-  Compass,
-  Eye,
-  FastForward,
-  FileOutput,
-  FilePlus,
-  FileText,
-  Filter,
-  Gauge,
-  Gem,
-  GitBranch,
-  Globe,
-  HardDrive,
-  Headphones,
-  Home,
-  Image,
-  Inbox,
-  Kanban,
-  Keyboard,
-  Landmark,
-  Laptop,
-  Layers,
-  Lightbulb,
-  LineChart,
-  List,
-  ListOrdered,
-  ListTree,
-  Lock,
-  Mail,
-  Map: MapIcon,
-  Megaphone,
-  MessageCircle,
-  MessageSquare,
-  MessagesSquare,
-  Mic,
-  Monitor,
-  MonitorSmartphone,
-  MousePointerClick,
-  Phone,
-  PhoneCall,
-  PhoneForwarded,
-  PhoneIncoming,
-  PhoneOutgoing,
-  Plug,
-  Puzzle,
-  Radar,
-  Radio,
-  RefreshCw,
-  Repeat,
-  Rocket,
-  Route,
-  ScanSearch,
-  ScanText,
-  ScrollText,
-  Search,
-  Send,
-  Server,
-  Settings,
-  Share2,
-  Shield,
-  ShieldAlert,
-  ShieldCheck,
-  Smartphone,
-  Sparkles,
-  Split,
-  StepForward,
-  Target,
-  TrendingUp,
-  Trophy,
-  Upload,
-  User,
-  UserPlus,
-  Users,
-  Volume2,
-  Wifi,
-  Wrench,
-  Zap,
-};
+const LOGO_SRC = "/images/rolan-logo.png";
+const W = 560;
+const H = 400;
+const CX = W / 2;
+const CY = H / 2 - 6;
 
-const ACCENT: Record<
-  HeroAccent,
-  { solid: string; soft: string; glow: string; line: string }
-> = {
-  blue: {
-    solid: "#2563eb",
-    soft: "rgba(37,99,235,0.12)",
-    glow: "rgba(37,99,235,0.35)",
-    line: "#60a5fa",
-  },
-  cyan: {
-    solid: "#06b6d4",
-    soft: "rgba(6,182,212,0.12)",
-    glow: "rgba(6,182,212,0.35)",
-    line: "#22d3ee",
-  },
-  emerald: {
-    solid: "#10b981",
-    soft: "rgba(16,185,129,0.12)",
-    glow: "rgba(16,185,129,0.35)",
-    line: "#34d399",
-  },
-  violet: {
-    solid: "#7c3aed",
-    soft: "rgba(124,58,237,0.12)",
-    glow: "rgba(124,58,237,0.35)",
-    line: "#a78bfa",
-  },
-  amber: {
-    solid: "#d97706",
-    soft: "rgba(217,119,6,0.12)",
-    glow: "rgba(217,119,6,0.35)",
-    line: "#fbbf24",
-  },
-  rose: {
-    solid: "#e11d48",
-    soft: "rgba(225,29,72,0.12)",
-    glow: "rgba(225,29,72,0.35)",
-    line: "#fb7185",
-  },
-  slate: {
-    solid: "#475569",
-    soft: "rgba(71,85,105,0.12)",
-    glow: "rgba(71,85,105,0.3)",
-    line: "#94a3b8",
-  },
-};
+type Pt = { x: number; y: number };
 
-type Point = { x: number; y: number };
-
-function layoutPositions(
-  layout: ServiceWorkflowDef["layout"],
-  count: number,
-  w: number,
-  h: number
-): Point[] {
-  const padX = 72;
-  const padY = 70;
-  const usableW = w - padX * 2;
-  const usableH = h - padY * 2;
-
-  if (layout === "hub" && count >= 3) {
-    const cx = w / 2;
-    const cy = h / 2 - 8;
-    const r = Math.min(usableW, usableH) * 0.34;
-    return Array.from({ length: count }, (_, i) => {
-      if (i === 1) return { x: cx, y: cy };
-      const idx = i === 0 ? 0 : i - 1;
-      const n = count - 1;
-      const angle = -Math.PI / 2 + (idx / n) * Math.PI * 2;
-      return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r * 0.85 };
-    });
-  }
-
-  if (layout === "funnel") {
-    return Array.from({ length: count }, (_, i) => ({
-      x: w / 2 + (i % 2 === 0 ? -28 : 28) * (i > 0 ? 1 : 0),
-      y: padY + (usableH / Math.max(count - 1, 1)) * i,
-    }));
-  }
-
-  if (layout === "pipeline") {
-    return Array.from({ length: count }, (_, i) => ({
-      x: padX + (usableW / Math.max(count - 1, 1)) * i,
-      y: h * 0.42 + (i % 2 === 0 ? -18 : 22),
-    }));
-  }
-
-  if (layout === "dial") {
-    const cx = w * 0.42;
-    const cy = h * 0.5;
-    const r = Math.min(usableW, usableH) * 0.36;
-    return Array.from({ length: count }, (_, i) => {
-      const angle = -Math.PI * 0.85 + (i / Math.max(count - 1, 1)) * Math.PI * 1.3;
-      return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r * 0.72 };
-    });
-  }
-
-  if (layout === "mesh") {
-    const cols = 2;
-    return Array.from({ length: count }, (_, i) => {
-      const col = i % cols;
-      const row = Math.floor(i / cols);
-      const rows = Math.ceil(count / cols);
-      return {
-        x: padX + 40 + (usableW - 40) * (col / Math.max(cols - 1, 1)),
-        y: padY + 20 + (usableH - 20) * (row / Math.max(rows - 1, 1)),
-      };
-    });
-  }
-
-  if (layout === "radar") {
-    return Array.from({ length: count }, (_, i) => ({
-      x: padX + (usableW / Math.max(count - 1, 1)) * i,
-      y: h * 0.58 - Math.sin((i / Math.max(count - 1, 1)) * Math.PI) * 70,
-    }));
-  }
-
-  // flow
-  return Array.from({ length: count }, (_, i) => ({
-    x: padX + (usableW / Math.max(count - 1, 1)) * i,
-    y: h * 0.46 + Math.sin(i * 1.1) * 18,
-  }));
+function orbitPoints(count: number, mobile: boolean): Pt[] {
+  const r = mobile ? 108 : 138;
+  return Array.from({ length: count }, (_, i) => {
+    const angle = -Math.PI / 2 + (i / count) * Math.PI * 2;
+    return {
+      x: CX + Math.cos(angle) * r,
+      y: CY + Math.sin(angle) * r * (mobile ? 0.92 : 0.88),
+    };
+  });
 }
 
-function curvePath(a: Point, b: Point) {
+function quad(a: Pt, b: Pt) {
   const mx = (a.x + b.x) / 2;
   const my = (a.y + b.y) / 2;
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  const nx = (-dy) * 0.12;
-  const ny = dx * 0.08;
-  return `M ${a.x} ${a.y} Q ${mx + nx} ${my + ny} ${b.x} ${b.y}`;
+  // Pull control point toward center for hub spokes
+  const cx = mx * 0.35 + CX * 0.65;
+  const cy = my * 0.35 + CY * 0.65;
+  return `M ${a.x} ${a.y} Q ${cx} ${cy} ${b.x} ${b.y}`;
 }
 
-function NodeCard({
-  node,
-  point,
-  accent,
-  activeIndex,
-  index,
-  reduce,
-}: {
-  node: WorkflowNodeDef;
-  point: Point;
-  accent: HeroAccent;
-  activeIndex: number;
-  index: number;
-  reduce: boolean | null;
-}) {
-  const Icon = ICONS[node.icon] ?? Zap;
-  const pal = ACCENT[accent];
-  const isActive = index === activeIndex;
-  const isDone = index < activeIndex;
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const apply = () => setMobile(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+  return mobile;
+}
 
-  return (
-    <motion.div
-      className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-      style={{ left: point.x, top: point.y }}
-      animate={
-        reduce
-          ? undefined
-          : {
-              y: [0, isActive ? -6 : -3, 0],
-              scale: isActive ? [1, 1.04, 1] : 1,
-            }
-      }
-      transition={{
-        duration: isActive ? 2.4 : 4,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: index * 0.15,
-      }}
-    >
-      <div
-        className={cn(
-          "relative flex min-w-[88px] max-w-[110px] flex-col items-center gap-1.5 rounded-2xl border px-2.5 py-2.5 backdrop-blur-xl transition-shadow",
-          "bg-white/75 shadow-[0_8px_30px_rgba(15,23,42,0.08)] dark:bg-slate-900/70"
-        )}
-        style={{
-          borderColor: isActive || isDone ? pal.solid : "rgba(226,232,240,0.9)",
-          boxShadow: isActive
-            ? `0 12px 40px ${pal.glow}, 0 0 0 1px ${pal.solid}33`
-            : undefined,
-        }}
-      >
-        <div
-          className="flex h-9 w-9 items-center justify-center rounded-xl"
-          style={{ background: pal.soft, color: pal.solid }}
-        >
-          <Icon className="h-4 w-4" strokeWidth={2.25} />
-        </div>
-        <p className="text-center text-[11px] font-semibold leading-tight text-foreground">
-          {node.label}
-        </p>
-        <span
-          className="h-1.5 w-1.5 rounded-full"
-          style={{
-            background: isActive ? pal.solid : isDone ? "#10b981" : "#cbd5e1",
-            boxShadow: isActive ? `0 0 10px ${pal.solid}` : undefined,
-          }}
-        />
-      </div>
-    </motion.div>
+function AmbientParticles({ reduce }: { reduce: boolean | null }) {
+  const dots = useMemo(
+    () =>
+      Array.from({ length: 14 }, (_, i) => ({
+        id: i,
+        x: 8 + ((i * 37) % 84),
+        y: 10 + ((i * 53) % 80),
+        d: 4 + (i % 5),
+        delay: (i % 7) * 0.35,
+      })),
+    []
   );
-}
-
-function SparkBars({ color, reduce }: { color: string; reduce: boolean | null }) {
-  const heights = [28, 44, 36, 58, 42, 64, 50, 70, 48, 62, 40, 55];
+  if (reduce) return null;
   return (
-    <div className="flex h-16 items-end gap-1 px-1">
-      {heights.map((h, i) => (
-        <motion.div
-          key={i}
-          className="w-1.5 rounded-full"
-          style={{ background: color, opacity: 0.35 + (i % 5) * 0.1 }}
-          animate={reduce ? { height: h } : { height: [h * 0.55, h, h * 0.7, h] }}
-          transition={{ duration: 2.2 + (i % 4) * 0.2, repeat: Infinity, ease: "easeInOut", delay: i * 0.08 }}
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      {dots.map((d) => (
+        <motion.span
+          key={d.id}
+          className="absolute h-1 w-1 rounded-full bg-secondary/40"
+          style={{ left: `${d.x}%`, top: `${d.y}%` }}
+          animate={{
+            y: [0, -12, 0],
+            opacity: [0.15, 0.55, 0.15],
+            scale: [1, 1.4, 1],
+          }}
+          transition={{ duration: d.d, repeat: Infinity, ease: "easeInOut", delay: d.delay }}
         />
       ))}
     </div>
   );
 }
 
+function RolanHub({ reduce, pulse }: { reduce: boolean | null; pulse: boolean }) {
+  return (
+    <motion.div
+      className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+      style={{ perspective: 900 }}
+      animate={
+        reduce
+          ? undefined
+          : {
+              y: [0, -8, 0],
+              rotateY: [-8, 8, -8],
+              rotateX: [4, -4, 4],
+            }
+      }
+      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <motion.div
+        className="relative flex h-[88px] w-[88px] items-center justify-center rounded-full sm:h-[104px] sm:w-[104px]"
+        animate={
+          reduce
+            ? undefined
+            : {
+                boxShadow: pulse
+                  ? [
+                      "0 0 0 0 rgba(37,99,235,0.0)",
+                      "0 0 40px 8px rgba(37,99,235,0.35)",
+                      "0 0 0 0 rgba(37,99,235,0.0)",
+                    ]
+                  : [
+                      "0 12px 40px rgba(37,99,235,0.25)",
+                      "0 16px 48px rgba(6,182,212,0.28)",
+                      "0 12px 40px rgba(37,99,235,0.25)",
+                    ],
+              }
+        }
+        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-secondary/30 via-accent/20 to-secondary/10 blur-md" />
+        <div className="absolute -inset-3 rounded-full border border-secondary/20" />
+        <motion.div
+          className="absolute -inset-5 rounded-full border border-dashed border-accent/25"
+          animate={reduce ? undefined : { rotate: 360 }}
+          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        />
+        <div className="relative h-[72px] w-[72px] overflow-hidden rounded-full border border-white/70 bg-white/90 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl sm:h-[84px] sm:w-[84px] dark:border-white/10 dark:bg-slate-900/80">
+          <Image
+            src={LOGO_SRC}
+            alt="Rolan Automation"
+            fill
+            sizes="84px"
+            className="object-cover"
+            priority={false}
+          />
+        </div>
+      </motion.div>
+      <p className="mt-2 text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary">
+        Rolan
+      </p>
+    </motion.div>
+  );
+}
+
 export function WorkflowHeroCanvas({ workflow }: { workflow: ServiceWorkflowDef }) {
   const reduce = useReducedMotion();
+  const mobile = useIsMobile();
   const gid = useId().replace(/:/g, "");
-  const pal = ACCENT[workflow.accent];
-  const W = 560;
-  const H = 360;
 
-  const positions = useMemo(
-    () => layoutPositions(workflow.layout, workflow.nodes.length, W, H),
-    [workflow.layout, workflow.nodes.length]
-  );
+  const nodes = useMemo(() => {
+    const max = mobile ? Math.min(5, workflow.nodes.length) : Math.min(8, workflow.nodes.length);
+    return workflow.nodes.slice(0, max);
+  }, [workflow.nodes, mobile]);
 
-  const idToIndex = useMemo(() => {
-    const m = new Map<string, number>();
-    workflow.nodes.forEach((n, i) => m.set(n.id, i));
-    return m;
-  }, [workflow.nodes]);
+  const points = useMemo(() => orbitPoints(nodes.length, mobile), [nodes.length, mobile]);
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [pathIdx, setPathIdx] = useState(0);
+  const [hoverId, setHoverId] = useState<string | null>(null);
   const [activityIdx, setActivityIdx] = useState(0);
+
+  const activePath = useMemo(() => {
+    if (hoverId) {
+      // Prefer a path that includes hovered node; else synthesize hub path
+      const match = workflow.paths.find((p) => p.includes(hoverId));
+      return match ?? [hoverId];
+    }
+    return workflow.paths[pathIdx % workflow.paths.length] ?? [];
+  }, [hoverId, pathIdx, workflow.paths]);
+
+  const activeSet = useMemo(() => new Set(activePath), [activePath]);
+
+  useEffect(() => {
+    if (reduce || hoverId) return;
+    const t = setInterval(() => {
+      setPathIdx((i) => (i + 1) % Math.max(workflow.paths.length, 1));
+    }, 3200);
+    return () => clearInterval(t);
+  }, [workflow.paths.length, reduce, hoverId]);
 
   useEffect(() => {
     if (reduce) return;
     const t = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % workflow.nodes.length);
-    }, 1600);
-    return () => clearInterval(t);
-  }, [workflow.nodes.length, reduce]);
-
-  useEffect(() => {
-    if (reduce || workflow.activities.length === 0) return;
-    const t = setInterval(() => {
-      setActivityIdx((i) => (i + 1) % workflow.activities.length);
-    }, 2400);
+      setActivityIdx((i) => (i + 1) % Math.max(workflow.activities.length, 1));
+    }, 2600);
     return () => clearInterval(t);
   }, [workflow.activities.length, reduce]);
 
-  const paths = workflow.edges
-    .map((e) => {
-      const fi = idToIndex.get(e.from);
-      const ti = idToIndex.get(e.to);
-      if (fi == null || ti == null) return null;
-      return { key: `${e.from}-${e.to}`, d: curvePath(positions[fi], positions[ti]) };
-    })
-    .filter(Boolean) as { key: string; d: string }[];
+  const hub: Pt = { x: CX, y: CY };
+  const idToIndex = useMemo(() => {
+    const m = new Map<string, number>();
+    nodes.forEach((n, i) => m.set(n.id, i));
+    return m;
+  }, [nodes]);
 
+  const spokes = nodes.map((n, i) => ({
+    id: n.id,
+    d: quad(points[i], hub),
+    active: activeSet.has(n.id),
+  }));
+
+  // Sequential edges along active path (node → next node via hub visually as packets)
+  const pathEdges = useMemo(() => {
+    const edges: { key: string; d: string }[] = [];
+    for (let i = 0; i < activePath.length - 1; i++) {
+      const a = idToIndex.get(activePath[i]);
+      const b = idToIndex.get(activePath[i + 1]);
+      if (a == null || b == null) continue;
+      edges.push({ key: `${activePath[i]}-${activePath[i + 1]}`, d: quad(points[a], points[b]) });
+    }
+    return edges;
+  }, [activePath, idToIndex, points]);
+
+  const hovered = nodes.find((n) => n.id === hoverId);
+  const storyNode =
+    hovered ?? nodes.find((n) => n.id === activePath[activePath.length - 1]) ?? nodes[0];
   const activity = workflow.activities[activityIdx] ?? workflow.activities[0];
 
   return (
     <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
       <motion.div
-        className="pointer-events-none absolute -right-6 -top-8 h-40 w-40 rounded-full blur-3xl"
-        style={{ background: pal.glow }}
-        animate={reduce ? undefined : { opacity: [0.35, 0.65, 0.35], scale: [1, 1.12, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="pointer-events-none absolute -right-8 -top-10 h-44 w-44 rounded-full bg-secondary/20 blur-3xl"
+        animate={reduce ? undefined : { opacity: [0.35, 0.7, 0.35], scale: [1, 1.15, 1] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         aria-hidden
       />
       <motion.div
-        className="pointer-events-none absolute -bottom-10 -left-8 h-36 w-36 rounded-full blur-3xl"
-        style={{ background: "rgba(6,182,212,0.25)" }}
-        animate={reduce ? undefined : { opacity: [0.3, 0.55, 0.3], scale: [1.05, 0.95, 1.05] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="pointer-events-none absolute -bottom-12 -left-10 h-40 w-40 rounded-full bg-accent/20 blur-3xl"
+        animate={reduce ? undefined : { opacity: [0.3, 0.6, 0.3], scale: [1.1, 0.95, 1.1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         aria-hidden
       />
 
-      <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/55 shadow-[0_20px_60px_rgba(15,23,42,0.1)] backdrop-blur-2xl dark:border-white/10 dark:bg-slate-950/50">
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-3xl border border-white/70",
+          "bg-white/60 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-2xl",
+          "dark:border-white/10 dark:bg-slate-950/55"
+        )}
+      >
         <div
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0 opacity-[0.45]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(37,99,235,0.14) 1px, transparent 0)",
-            backgroundSize: "22px 22px",
+              "radial-gradient(circle at 1px 1px, rgba(37,99,235,0.12) 1px, transparent 0)",
+            backgroundSize: "20px 20px",
           }}
           aria-hidden
         />
+        <AmbientParticles reduce={reduce} />
 
-        <div className="relative flex items-center justify-between gap-3 border-b border-border/60 px-4 py-3">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
-              Live workflow
+        <div className="relative z-10 flex items-start justify-between gap-3 border-b border-border/50 px-4 py-3">
+          <div className="min-w-0">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary">
+              Powered by Rolan
             </p>
-            <p className="mt-0.5 text-sm font-semibold text-foreground">{workflow.caption}</p>
+            <p className="mt-0.5 truncate text-sm font-semibold text-foreground">{workflow.caption}</p>
           </div>
           {workflow.metric && (
-            <div
-              className="rounded-2xl border px-3 py-2 text-right backdrop-blur-md"
-              style={{ borderColor: `${pal.solid}33`, background: pal.soft }}
-            >
-              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">
+            <div className="shrink-0 rounded-2xl border border-secondary/20 bg-secondary/10 px-3 py-1.5 text-right backdrop-blur-md">
+              <p className="text-[9px] font-semibold uppercase tracking-wider text-muted">
                 {workflow.metric.label}
               </p>
-              <p className="text-lg font-bold tabular-nums" style={{ color: pal.solid }}>
-                {workflow.metric.value}
-              </p>
+              <p className="text-base font-bold tabular-nums text-secondary">{workflow.metric.value}</p>
               {workflow.metric.delta && (
                 <p className="text-[10px] font-medium text-muted">{workflow.metric.delta}</p>
               )}
@@ -540,7 +267,7 @@ export function WorkflowHeroCanvas({ workflow }: { workflow: ServiceWorkflowDef 
           )}
         </div>
 
-        <div className="relative aspect-[560/360] w-full">
+        <div className="relative aspect-[560/400] w-full">
           <svg
             className="absolute inset-0 h-full w-full"
             viewBox={`0 0 ${W} ${H}`}
@@ -548,112 +275,184 @@ export function WorkflowHeroCanvas({ workflow }: { workflow: ServiceWorkflowDef 
             aria-hidden
           >
             <defs>
-              <linearGradient id={`line-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={pal.solid} stopOpacity="0.15" />
-                <stop offset="50%" stopColor={pal.line} stopOpacity="0.9" />
-                <stop offset="100%" stopColor={pal.solid} stopOpacity="0.15" />
+              <linearGradient id={`spoke-${gid}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#2563eb" stopOpacity="0.15" />
+                <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="#2563eb" stopOpacity="0.15" />
               </linearGradient>
+              <filter id={`glow-${gid}`}>
+                <feGaussianBlur stdDeviation="2.5" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
             </defs>
 
-            {workflow.layout === "radar" && (
-              <g opacity="0.35">
-                {[0.2, 0.4, 0.6, 0.8].map((s) => (
-                  <ellipse
-                    key={s}
-                    cx={W / 2}
-                    cy={H * 0.55}
-                    rx={W * 0.38 * s}
-                    ry={H * 0.28 * s}
-                    fill="none"
-                    stroke={pal.solid}
-                    strokeWidth="1"
-                  />
-                ))}
-              </g>
-            )}
+            {/* Soft orbit ring */}
+            <ellipse
+              cx={CX}
+              cy={CY}
+              rx={mobile ? 108 : 138}
+              ry={mobile ? 100 : 122}
+              fill="none"
+              stroke="rgba(37,99,235,0.12)"
+              strokeDasharray="4 6"
+            />
 
-            {paths.map((p, i) => (
-              <g key={p.key}>
-                <motion.path
-                  d={p.d}
+            {spokes.map((s) => (
+              <motion.path
+                key={s.id}
+                d={s.d}
+                fill="none"
+                stroke={`url(#spoke-${gid})`}
+                strokeWidth={s.active ? 2.25 : 1.25}
+                strokeLinecap="round"
+                initial={false}
+                animate={{ opacity: s.active ? 0.95 : 0.28 }}
+                transition={{ duration: 0.45 }}
+              />
+            ))}
+
+            {pathEdges.map((e, i) => (
+              <g key={e.key}>
+                <path
+                  d={e.d}
                   fill="none"
-                  stroke={`url(#line-${gid})`}
-                  strokeWidth="2"
+                  stroke="#06b6d4"
+                  strokeWidth="1.5"
+                  strokeOpacity="0.35"
                   strokeLinecap="round"
-                  initial={{ pathLength: 0, opacity: 0.35 }}
-                  animate={{ pathLength: 1, opacity: [0.35, 0.85, 0.35] }}
-                  transition={{
-                    pathLength: { duration: 1.4, delay: i * 0.12 },
-                    opacity: { duration: 3, repeat: Infinity, delay: i * 0.2 },
-                  }}
                 />
                 {!reduce && (
-                  <motion.circle
-                    r="4"
-                    fill={pal.solid}
-                    filter={`drop-shadow(0 0 6px ${pal.glow})`}
-                  >
+                  <circle r="3.5" fill="#2563eb" filter={`url(#glow-${gid})`}>
                     <animateMotion
-                      dur={`${2.4 + (i % 3) * 0.4}s`}
+                      dur={`${1.6 + i * 0.25}s`}
                       repeatCount="indefinite"
-                      path={p.d}
+                      path={e.d}
                     />
-                  </motion.circle>
+                  </circle>
                 )}
               </g>
             ))}
+
+            {/* Packets on hub spokes for active nodes */}
+            {!reduce &&
+              spokes
+                .filter((s) => s.active)
+                .map((s, i) => (
+                  <circle key={`pkt-${s.id}`} r="3" fill="#06b6d4" filter={`url(#glow-${gid})`}>
+                    <animateMotion dur={`${2 + (i % 3) * 0.35}s`} repeatCount="indefinite" path={s.d} />
+                  </circle>
+                ))}
           </svg>
 
-          {workflow.nodes.map((node, i) => (
-            <NodeCard
-              key={node.id}
-              node={node}
-              point={positions[i]}
-              accent={workflow.accent}
-              activeIndex={activeIndex}
-              index={i}
-              reduce={reduce}
-            />
-          ))}
+          <RolanHub reduce={reduce} pulse={!!hoverId || activePath.length > 0} />
+
+          {nodes.map((node, i) => {
+            const pt = points[i];
+            const active = activeSet.has(node.id);
+            const isHover = hoverId === node.id;
+            return (
+              <motion.button
+                key={node.id}
+                type="button"
+                className="absolute z-30 -translate-x-1/2 -translate-y-1/2 focus:outline-none"
+                style={{ left: `${(pt.x / W) * 100}%`, top: `${(pt.y / H) * 100}%` }}
+                onMouseEnter={() => setHoverId(node.id)}
+                onMouseLeave={() => setHoverId(null)}
+                onFocus={() => setHoverId(node.id)}
+                onBlur={() => setHoverId(null)}
+                animate={
+                  reduce
+                    ? undefined
+                    : {
+                        y: [0, active || isHover ? -7 : -3, 0],
+                        scale: isHover ? 1.08 : active ? 1.04 : 1,
+                      }
+                }
+                transition={{
+                  duration: isHover ? 1.8 : 3.6 + (i % 3) * 0.4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.12,
+                }}
+                aria-label={node.label}
+              >
+                <div
+                  className={cn(
+                    "flex flex-col items-center gap-1 rounded-2xl border px-2 py-2 backdrop-blur-xl transition-shadow",
+                    "bg-white/80 shadow-[0_8px_28px_rgba(15,23,42,0.08)] dark:bg-slate-900/75",
+                    active || isHover ? "border-secondary/50" : "border-white/70 dark:border-white/10"
+                  )}
+                  style={{
+                    boxShadow:
+                      active || isHover
+                        ? "0 12px 36px rgba(37,99,235,0.22), 0 0 0 1px rgba(37,99,235,0.2)"
+                        : undefined,
+                  }}
+                >
+                  <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-background-alt/80">
+                    {node.brand ? (
+                      <BrandLogo name={node.brand} size={22} />
+                    ) : (
+                      <span className="text-[10px] font-bold text-secondary">{node.label.slice(0, 2)}</span>
+                    )}
+                    {(active || isHover) && (
+                      <motion.span
+                        className="absolute inset-0 rounded-xl ring-2 ring-secondary/40"
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 1.4, repeat: Infinity }}
+                      />
+                    )}
+                  </span>
+                  <span className="max-w-[64px] truncate text-[9px] font-semibold text-foreground sm:text-[10px]">
+                    {node.label}
+                  </span>
+                </div>
+              </motion.button>
+            );
+          })}
         </div>
 
-        <div className="relative grid gap-3 border-t border-border/60 p-3 sm:grid-cols-[1.2fr_0.8fr]">
-          <div className="overflow-hidden rounded-2xl border border-border/70 bg-white/60 p-3 backdrop-blur-md dark:bg-slate-900/50">
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted">
+        <div className="relative z-10 grid gap-2 border-t border-border/50 p-3 sm:grid-cols-2">
+          <div className="rounded-2xl border border-border/60 bg-white/65 p-3 backdrop-blur-md dark:bg-slate-900/55">
+            <p className="mb-1 text-[9px] font-semibold uppercase tracking-wider text-muted">
+              Live path
+            </p>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={storyNode?.id + (hoverId ?? pathIdx)}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.28 }}
+              >
+                <p className="text-sm font-semibold text-foreground">{storyNode?.label}</p>
+                <p className="mt-0.5 text-xs text-muted">{storyNode?.story}</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <div className="rounded-2xl border border-border/60 bg-white/65 p-3 backdrop-blur-md dark:bg-slate-900/55">
+            <p className="mb-1 text-[9px] font-semibold uppercase tracking-wider text-muted">
               Activity
             </p>
-            <motion.div
-              key={activityIdx}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              className="flex items-start gap-2.5"
-            >
-              <span
-                className="mt-1 h-2 w-2 shrink-0 rounded-full"
-                style={{
-                  background:
-                    activity?.tone === "warn"
-                      ? "#f59e0b"
-                      : activity?.tone === "ok"
-                        ? "#10b981"
-                        : pal.solid,
-                }}
-              />
-              <div>
-                <p className="text-sm font-semibold text-foreground">{activity?.title}</p>
-                <p className="text-xs text-muted">{activity?.meta}</p>
-              </div>
-            </motion.div>
-          </div>
-
-          <div className="rounded-2xl border border-border/70 bg-white/60 p-3 backdrop-blur-md dark:bg-slate-900/50">
-            <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted">
-              {workflow.layout === "radar" || workflow.layout === "dial"
-                ? "Live signal"
-                : "Throughput"}
-            </p>
-            <SparkBars color={pal.solid} reduce={reduce} />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activityIdx}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.28 }}
+                className="flex items-start gap-2"
+              >
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">{activity?.title}</p>
+                  <p className="text-xs text-muted">{activity?.meta}</p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
