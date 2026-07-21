@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -46,7 +46,7 @@ export function PortfolioPreview() {
                     loading="lazy"
                   />
                   <div
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/45 via-foreground/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-foreground/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-80"
                     aria-hidden
                   />
                 </div>

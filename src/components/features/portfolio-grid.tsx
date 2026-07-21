@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -84,14 +84,9 @@ export function PortfolioGrid() {
                     loading="lazy"
                   />
                   <div
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/45 via-foreground/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-foreground/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-80"
                     aria-hidden
                   />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4">
-                    <p className="truncate text-sm font-semibold text-white drop-shadow-sm">
-                      {project.title}
-                    </p>
-                  </div>
                 </div>
                 <div className="p-5 sm:p-6 md:p-8">
                   <div className="mb-3 flex flex-wrap gap-2">
@@ -131,7 +126,7 @@ export function PortfolioGrid() {
                       <ul className="space-y-1">
                         {project.results.map((r) => (
                           <li key={r} className="text-success">
-                            ✓ {r}
+                            âœ“ {r}
                           </li>
                         ))}
                       </ul>
