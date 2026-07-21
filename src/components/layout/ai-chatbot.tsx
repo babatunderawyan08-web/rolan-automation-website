@@ -19,6 +19,7 @@ type UiMessage = {
 
 const QUICK_ACTIONS = [
   { label: "Book Consultation", href: "/book-consultation", external: false },
+  { label: "Book Appointment", href: "/book-appointment", external: false },
   {
     label: "WhatsApp",
     href: `https://wa.me/${SITE.whatsapp}`,

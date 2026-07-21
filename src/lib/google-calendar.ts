@@ -1,5 +1,10 @@
 import { google } from "googleapis";
 
+/**
+ * Google Calendar via service account JWT.
+ * Production setup: docs/google-calendar-setup.md
+ */
+
 function env(name: string): string {
   const raw = process.env[name];
   if (raw == null) return "";

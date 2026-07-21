@@ -45,6 +45,7 @@ function buildIndex(): SearchItem[] {
 
   const extraPages = [
     { label: "Book Consultation", href: "/book-consultation", description: "Request a free automation consultation" },
+    { label: "Book Appointment", href: "/book-appointment", description: "Schedule a video or audio appointment online" },
     { label: "FAQ", href: "/faq", description: "Frequently asked questions" },
     { label: "Case Studies", href: "/case-studies", description: "Client results and project case studies" },
     { label: "Privacy Policy", href: "/privacy", description: "Privacy policy" },

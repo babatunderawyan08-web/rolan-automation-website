@@ -228,6 +228,9 @@ export function Navbar() {
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
           )}
+          <Button variant="outline" size="sm" className="hidden min-h-11 lg:inline-flex" asChild>
+            <Link href="/book-appointment">Book Appointment</Link>
+          </Button>
           <Button variant="accent" size="sm" className="hidden min-h-11 md:inline-flex" asChild>
             <Link href="/book-consultation">Book Consultation</Link>
           </Button>
@@ -289,10 +292,15 @@ export function Navbar() {
                 )}
               </li>
             ))}
-            <li className="pt-3">
+            <li className="pt-3 space-y-2">
               <Button variant="accent" className="w-full min-h-12" asChild>
                 <Link href="/book-consultation" onClick={() => setOpen(false)}>
                   Book Free Consultation
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full min-h-12" asChild>
+                <Link href="/book-appointment" onClick={() => setOpen(false)}>
+                  Book Appointment
                 </Link>
               </Button>
             </li>

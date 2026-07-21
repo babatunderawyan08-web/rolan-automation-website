@@ -1,4 +1,4 @@
-import type { BookingDetails, ConsultationFormData } from "@/lib/consultation-schema";
+import type { AppointmentDetails, AppointmentFormData } from "@/lib/appointment-schema";
 
 /** Common IANA time zones for the booking selector */
 export const BOOKING_TIMEZONES = [
@@ -40,7 +40,6 @@ export function zonedDateTimeToUtc(
   const [year, month, day] = date.split("-").map(Number);
   const [hour, minute] = time.split(":").map(Number);
 
-  // Iterate to resolve the correct UTC instant for the wall time in timeZone
   let guess = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
   for (let i = 0; i < 3; i++) {
     const parts = getTimeZoneParts(guess, timeZone);
@@ -95,14 +94,17 @@ export function formatInTimeZone(
   return new Intl.DateTimeFormat("en-US", { timeZone, ...options }).format(date);
 }
 
-export function buildBookingDetails(
-  data: Pick<ConsultationFormData, "date" | "time" | "timeZone" | "duration" | "consultationType">,
+export function buildAppointmentDetails(
+  data: Pick<
+    AppointmentFormData,
+    "date" | "time" | "timeZone" | "duration" | "consultationType"
+  >,
   extras?: {
     meetLink?: string | null;
     htmlLink?: string | null;
     eventId?: string | null;
   }
-): BookingDetails {
+): AppointmentDetails {
   const start = zonedDateTimeToUtc(data.date, data.time, data.timeZone);
   const end = addMinutes(start, data.duration);
 
@@ -153,6 +155,28 @@ export function generateDaySlots(
   return slots;
 }
 
+/** Dates (YYYY-MM-DD) in the given time zone that still have at least one candidate slot. */
+export function generateAvailableDates(
+  timeZone: string,
+  durationMinutes: number,
+  daysAhead = 60
+): string[] {
+  const dates: string[] = [];
+  const now = new Date();
+
+  for (let offset = 0; offset < daysAhead; offset++) {
+    const probe = new Date(now.getTime() + offset * 24 * 60 * 60_000);
+    const parts = getTimeZoneParts(probe, timeZone);
+    const date = `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
+    if (dates.includes(date)) continue;
+    if (generateDaySlots(date, timeZone, durationMinutes).length > 0) {
+      dates.push(date);
+    }
+  }
+
+  return dates;
+}
+
 export function buildIcs(options: {
   title: string;
   description: string;
@@ -168,7 +192,7 @@ export function buildIcs(options: {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//ROLAN AUTOMATION//Consultation//EN",
+    "PRODID:-//ROLAN AUTOMATION//Appointment//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:REQUEST",
     "BEGIN:VEVENT",

@@ -22,6 +22,8 @@ const footerLinks = {
     { label: "Blog", href: "/blog" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
+    { label: "Book Appointment", href: "/book-appointment" },
+    { label: "Book Consultation", href: "/book-consultation" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },

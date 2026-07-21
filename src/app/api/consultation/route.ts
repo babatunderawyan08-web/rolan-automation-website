@@ -1,22 +1,6 @@
 import { NextResponse } from "next/server";
-import {
-  buildBookingDetails,
-  buildIcs,
-  zonedDateTimeToUtc,
-  addMinutes,
-} from "@/lib/booking";
-import { SITE } from "@/lib/constants";
 import { getVisitorIp, sendConsultationEmail } from "@/lib/consultation-email";
-import {
-  buildConsultationMessage,
-  consultationSchema,
-} from "@/lib/consultation-schema";
-import {
-  createCalendarEvent,
-  getBusyIntervals,
-  isGoogleCalendarConfigured,
-  isSlotFree,
-} from "@/lib/google-calendar";
+import { buildConsultationMessage, consultationSchema } from "@/lib/consultation-schema";
 
 function formatError(error: unknown): string {
   if (error instanceof Error) {
@@ -114,146 +98,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Invalid form data" }, { status: 400 });
   }
 
-  const data = parsed.data;
-
-  if (!isGoogleCalendarConfigured()) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error:
-          "Online booking is temporarily unavailable. Please email contact@rolanautomation.com.",
-      },
-      { status: 503 }
-    );
-  }
-
-  const start = zonedDateTimeToUtc(data.date, data.time, data.timeZone);
-  const end = addMinutes(start, data.duration);
-  const now = Date.now();
-
-  if (start.getTime() <= now + 15 * 60_000) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Please choose a time at least 15 minutes from now.",
-        code: "SLOT_TOO_SOON",
-      },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const busy = await getBusyIntervals(
-      addMinutes(start, -1).toISOString(),
-      addMinutes(end, 1).toISOString()
-    );
-
-    if (!isSlotFree(start, end, busy)) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error:
-            "That time slot was just booked. Please choose another available time.",
-          code: "SLOT_UNAVAILABLE",
-        },
-        { status: 409 }
-      );
-    }
-  } catch (error) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: `Unable to verify availability: ${formatError(error)}`,
-      },
-      { status: 502 }
-    );
-  }
-
-  const typeLabel =
-    data.consultationType === "video"
-      ? "Video Consultation (Google Meet)"
-      : "Audio Consultation";
-
-  const description = [
-    `Consultation with ${data.name.trim()}`,
-    `Type: ${typeLabel}`,
-    `Service: ${data.service}`,
-    `Email: ${data.email.trim()}`,
-    `Phone: ${data.phone?.trim() || "Not provided"}`,
-    `Company: ${data.company?.trim() || "Not provided"}`,
-    "",
-    "Project details:",
-    data.message.trim(),
-  ].join("\n");
-
-  let event: Awaited<ReturnType<typeof createCalendarEvent>>;
-  try {
-    event = await createCalendarEvent({
-      summary: `${typeLabel} — ${data.name.trim()}`,
-      description,
-      startIso: start.toISOString(),
-      endIso: end.toISOString(),
-      timeZone: data.timeZone,
-      attendeeEmail: data.email.trim(),
-      attendeeName: data.name.trim(),
-      createMeet: data.consultationType === "video",
-    });
-  } catch (error) {
-    const detail = formatError(error);
-    if (
-      detail.toLowerCase().includes("conflict") ||
-      detail.toLowerCase().includes("duplicate")
-    ) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "That time slot is no longer available. Please pick another.",
-          code: "SLOT_UNAVAILABLE",
-        },
-        { status: 409 }
-      );
-    }
-    return NextResponse.json(
-      {
-        ok: false,
-        error: `Unable to create calendar event: ${detail}`,
-      },
-      { status: 502 }
-    );
-  }
-
-  const booking = buildBookingDetails(data, {
-    meetLink: event.meetLink,
-    htmlLink: event.htmlLink,
-    eventId: event.eventId,
-  });
-
-  const organizerEmail =
-    env("CONTACT_EMAIL") ||
-    env("CONSULTATION_EMAIL_TO") ||
-    env("SMTP_FROM") ||
-    env("SMTP_USER") ||
-    "contact@rolanautomation.com";
-
-  const icsContent = buildIcs({
-    title: `${typeLabel} — ${SITE.name}`,
-    description: [
-      description,
-      booking.meetLink ? `\nMeet link: ${booking.meetLink}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n"),
-    location:
-      booking.meetLink ||
-      (data.consultationType === "audio" ? "Audio consultation" : undefined),
-    start,
-    end,
-    organizerEmail,
-    attendeeEmail: data.email.trim(),
-    url: booking.meetLink || booking.htmlLink,
-  });
-
-  const text = buildConsultationMessage(data, booking);
+  const text = buildConsultationMessage(parsed.data);
   const emailMeta = {
     submittedAt: new Date().toISOString(),
     visitorIp: getVisitorIp(request),
@@ -277,10 +122,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    emailResult = await sendConsultationEmail(data, emailMeta, {
-      booking,
-      icsContent,
-    });
+    emailResult = await sendConsultationEmail(parsed.data, emailMeta);
   } catch (error) {
     emailResult = {
       ok: false,
@@ -290,16 +132,38 @@ export async function POST(request: Request) {
     };
   }
 
-  // Calendar event is the booking source of truth — treat as success even if notify fails
-  return NextResponse.json({
-    ok: true,
-    booked: true,
-    booking,
-    telegram: telegramResult.ok,
-    email: emailResult.ok,
-    emailInternal: emailResult.internal,
-    emailConfirmation: emailResult.confirmation,
-    ...(emailResult.error ? { emailError: emailResult.error } : {}),
-    ...(telegramResult.error ? { telegramError: telegramResult.error } : {}),
-  });
+  const telegramOk = telegramResult.ok;
+  const emailOk = emailResult.ok;
+
+  if (telegramOk || emailOk) {
+    return NextResponse.json({
+      ok: true,
+      telegram: telegramOk,
+      email: emailOk,
+      emailInternal: emailResult.internal,
+      emailConfirmation: emailResult.confirmation,
+      ...(emailResult.error ? { emailError: emailResult.error } : {}),
+      ...(telegramResult.error ? { telegramError: telegramResult.error } : {}),
+    });
+  }
+
+  const parts = [
+    telegramResult.error ? `Telegram: ${telegramResult.error}` : null,
+    emailResult.error ? `Email: ${emailResult.error}` : null,
+  ].filter(Boolean);
+
+  return NextResponse.json(
+    {
+      ok: false,
+      telegram: false,
+      email: false,
+      error:
+        parts.length > 0
+          ? parts.join(" | ")
+          : "Unable to deliver your request. Please try again shortly.",
+      telegramError: telegramResult.error,
+      emailError: emailResult.error,
+    },
+    { status: 502 }
+  );
 }

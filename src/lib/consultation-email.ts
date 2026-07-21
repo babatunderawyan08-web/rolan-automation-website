@@ -1,10 +1,10 @@
-import nodemailer from "nodemailer";
+﻿import nodemailer from "nodemailer";
 import { SITE } from "@/lib/constants";
-import type { BookingDetails, ConsultationFormData } from "@/lib/consultation-schema";
+import type { ConsultationFormData } from "@/lib/consultation-schema";
 
 const EMAIL_TO = "contact@rolanautomation.com";
-const INTERNAL_SUBJECT = "📅 New Consultation Booking - ROLAN AUTOMATION";
-const CONFIRMATION_SUBJECT = "Your consultation is confirmed — ROLAN AUTOMATION";
+const INTERNAL_SUBJECT = "≡ƒÜÇ New Consultation Request - ROLAN AUTOMATION";
+const CONFIRMATION_SUBJECT = "We received your consultation request — ROLAN AUTOMATION";
 
 /** Brand tokens aligned with globals.css */
 const BRAND = {
@@ -42,13 +42,11 @@ function escapeHtml(value: string): string {
 function formatSubmittedAt(iso: string): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
-  return (
-    date.toLocaleString("en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
-      timeZone: "UTC",
-    }) + " UTC"
-  );
+  return date.toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "UTC",
+  }) + " UTC";
 }
 
 function logoUrl(): string {
@@ -170,7 +168,7 @@ function emailShell(options: {
                 ${escapeHtml(SITE.name)}
               </p>
               <p style="margin:0 0 12px;color:${BRAND.muted};font-size:12px;line-height:1.6;">
-                ${escapeHtml(SITE.tagline)} ·
+                ${escapeHtml(SITE.tagline)} ┬╖
                 <a href="${escapeHtml(siteUrl())}" style="color:${BRAND.blue};text-decoration:none;">${escapeHtml(SITE.url.replace(/^https?:\/\//, ""))}</a>
               </p>
               <p style="margin:0;color:${BRAND.muted};font-size:11px;line-height:1.6;">
@@ -186,41 +184,15 @@ function emailShell(options: {
 </html>`;
 }
 
-function consultationFields(
-  data: ConsultationFormData,
-  meta: ConsultationEmailMeta,
-  includeMeta: boolean,
-  booking?: BookingDetails
-): { label: string; value: string; multiline?: boolean }[] {
-  const typeLabel =
-    data.consultationType === "video" ? "Video Consultation (Google Meet)" : "Audio Consultation";
-
-  const rows: { label: string; value: string; multiline?: boolean }[] = [
+function consultationFields(data: ConsultationFormData, meta: ConsultationEmailMeta, includeMeta: boolean) {
+  const rows = [
     { label: "Full Name", value: data.name.trim() },
     { label: "Email Address", value: data.email.trim() },
     { label: "Phone Number", value: data.phone?.trim() || "Not provided" },
     { label: "Company Name", value: data.company?.trim() || "Not provided" },
     { label: "Requested Service", value: data.service },
-    { label: "Consultation Type", value: typeLabel },
-    { label: "Duration", value: `${data.duration} minutes` },
+    { label: "Project Details", value: data.message.trim(), multiline: true },
   ];
-
-  if (booking) {
-    rows.push(
-      { label: "Meeting Date", value: booking.formattedDate },
-      { label: "Meeting Time", value: `${booking.formattedTime} (${booking.timeZone})` }
-    );
-    if (booking.meetLink) {
-      rows.push({ label: "Meeting Link", value: booking.meetLink });
-    }
-  } else {
-    rows.push(
-      { label: "Requested Date", value: data.date },
-      { label: "Requested Time", value: `${data.time} (${data.timeZone})` }
-    );
-  }
-
-  rows.push({ label: "Project Details", value: data.message.trim(), multiline: true });
 
   if (includeMeta) {
     rows.push(
@@ -234,77 +206,52 @@ function consultationFields(
 
 export function buildInternalEmailHtml(
   data: ConsultationFormData,
-  meta: ConsultationEmailMeta,
-  booking?: BookingDetails
+  meta: ConsultationEmailMeta
 ): string {
-  const meetCta =
-    booking?.meetLink
-      ? ctaButton(booking.meetLink, "Join Google Meet")
-      : ctaButton(
-          `mailto:${encodeURIComponent(data.email.trim())}?subject=${encodeURIComponent(`Re: Your consultation — ${SITE.name}`)}`,
-          "Reply to Client"
-        );
-
   const bodyHtml = `
     <p style="margin:0 0 20px;color:${BRAND.muted};font-size:15px;line-height:1.6;">
-      A new consultation booking was submitted on the website. Review the details below and join on time.
+      A new consultation request was submitted on the website. Review the details below and follow up promptly.
     </p>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 28px;">
-      ${detailRows(consultationFields(data, meta, true, booking))}
+      ${detailRows(consultationFields(data, meta, true))}
     </table>
-    ${meetCta}
+    ${ctaButton(`mailto:${encodeURIComponent(data.email.trim())}?subject=${encodeURIComponent(`Re: Your consultation request — ${SITE.name}`)}`, "Reply to Client")}
     <p style="margin:20px 0 0;text-align:center;">
       <a href="${escapeHtml(siteUrl("/book-consultation"))}" style="color:${BRAND.blue};font-size:13px;text-decoration:none;font-weight:600;">View booking page</a>
     </p>
   `;
 
   return emailShell({
-    preheader: `New booking from ${data.name.trim()} — ${booking?.formattedDate || data.date}`,
-    title: "New Consultation Booking",
+    preheader: `New consultation from ${data.name.trim()} — ${data.service}`,
+    title: "New Consultation Request",
     eyebrow: SITE.name,
     bodyHtml,
-    footerNote: "Internal notification from the ROLAN AUTOMATION booking form.",
+    footerNote: "Internal notification from the ROLAN AUTOMATION consultation form.",
   });
 }
 
-export function buildConfirmationEmailHtml(
-  data: ConsultationFormData,
-  booking?: BookingDetails
-): string {
+export function buildConfirmationEmailHtml(data: ConsultationFormData): string {
   const firstName = data.name.trim().split(/\s+/)[0] || "there";
-  const meetBlock = booking?.meetLink
-    ? `
-    <p style="margin:0 0 20px;color:${BRAND.muted};font-size:15px;line-height:1.65;">
-      Join your video consultation using the Google Meet link below. A calendar invite (.ics) is also attached.
-    </p>
-    ${ctaButton(booking.meetLink, "Join Google Meet")}
-    `
-    : `
-    <p style="margin:0 0 20px;color:${BRAND.muted};font-size:15px;line-height:1.65;">
-      This is an audio consultation. Our team will contact you at the scheduled time. A calendar invite (.ics) is attached.
-    </p>
-    `;
-
   const bodyHtml = `
     <p style="margin:0 0 16px;color:${BRAND.navy};font-size:16px;line-height:1.6;">
       Hi ${escapeHtml(firstName)},
     </p>
     <p style="margin:0 0 20px;color:${BRAND.muted};font-size:15px;line-height:1.65;">
-      Your consultation with <strong style="color:${BRAND.navy};">${escapeHtml(SITE.name)}</strong> is confirmed.
+      Thank you for booking a consultation with <strong style="color:${BRAND.navy};">${escapeHtml(SITE.name)}</strong>.
+      We have received your request and will review it shortly. You can expect a response within 48 hours.
     </p>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 12px;background:${BRAND.bg};border:1px solid ${BRAND.border};border-radius:12px;">
       <tr>
         <td style="padding:18px 20px;">
-          <p style="margin:0 0 6px;color:${BRAND.cyan};font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Confirmed appointment</p>
-          <p style="margin:0;color:${BRAND.navy};font-size:15px;font-weight:700;">${escapeHtml(booking?.formattedDate || data.date)}</p>
-          <p style="margin:6px 0 0;color:${BRAND.muted};font-size:14px;">${escapeHtml(booking ? `${booking.formattedTime} (${booking.timeZone})` : `${data.time} (${data.timeZone})`)} · ${data.duration} min</p>
+          <p style="margin:0 0 6px;color:${BRAND.cyan};font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Your request summary</p>
+          <p style="margin:0;color:${BRAND.navy};font-size:15px;font-weight:700;">${escapeHtml(data.service)}</p>
         </td>
       </tr>
     </table>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 28px;">
-      ${detailRows(consultationFields(data, { submittedAt: "", visitorIp: null }, false, booking))}
+      ${detailRows(consultationFields(data, { submittedAt: "", visitorIp: null }, false))}
     </table>
-    ${meetBlock}
+    ${ctaButton(siteUrl("/services"), "Explore Our Services")}
     <p style="margin:24px 0 0;color:${BRAND.muted};font-size:14px;line-height:1.65;text-align:center;">
       Questions? Email
       <a href="mailto:contact@rolanautomation.com" style="color:${BRAND.blue};text-decoration:none;font-weight:600;">contact@rolanautomation.com</a>
@@ -312,32 +259,26 @@ export function buildConfirmationEmailHtml(
   `;
 
   return emailShell({
-    preheader: `Your consultation is confirmed for ${booking?.formattedDate || data.date}`,
-    title: "Consultation Confirmed",
-    eyebrow: "You're booked",
+    preheader: "We received your consultation request and will respond within 48 hours.",
+    title: "Consultation Request Received",
+    eyebrow: "Thank you",
     bodyHtml,
-    footerNote: "You received this email because you booked a consultation on our website.",
+    footerNote: "You received this email because you submitted the consultation form on our website.",
   });
 }
 
 export function buildInternalEmailText(
   data: ConsultationFormData,
-  meta: ConsultationEmailMeta,
-  booking?: BookingDetails
+  meta: ConsultationEmailMeta
 ): string {
   return [
-    `${SITE.name} — New Consultation Booking`,
+    `${SITE.name} — New Consultation Request`,
     "",
     `Full Name: ${data.name.trim()}`,
     `Email Address: ${data.email.trim()}`,
     `Phone Number: ${data.phone?.trim() || "Not provided"}`,
     `Company Name: ${data.company?.trim() || "Not provided"}`,
     `Requested Service: ${data.service}`,
-    `Consultation Type: ${data.consultationType}`,
-    `Duration: ${data.duration} minutes`,
-    `Date: ${booking?.formattedDate || data.date}`,
-    `Time: ${booking ? `${booking.formattedTime} (${booking.timeZone})` : `${data.time} (${data.timeZone})`}`,
-    `Meet Link: ${booking?.meetLink || "N/A"}`,
     "",
     "Project Details:",
     data.message.trim(),
@@ -350,24 +291,26 @@ export function buildInternalEmailText(
   ].join("\n");
 }
 
-export function buildConfirmationEmailText(
-  data: ConsultationFormData,
-  booking?: BookingDetails
-): string {
+export function buildConfirmationEmailText(data: ConsultationFormData): string {
   const firstName = data.name.trim().split(/\s+/)[0] || "there";
   return [
     `Hi ${firstName},`,
     "",
-    `Your consultation with ${SITE.name} is confirmed.`,
+    `Thank you for booking a consultation with ${SITE.name}.`,
+    "We have received your request and will review it shortly. You can expect a response within 48 hours.",
     "",
-    `Date: ${booking?.formattedDate || data.date}`,
-    `Time: ${booking ? `${booking.formattedTime} (${booking.timeZone})` : `${data.time} (${data.timeZone})`}`,
-    `Type: ${data.consultationType === "video" ? "Video (Google Meet)" : "Audio"}`,
-    `Duration: ${data.duration} minutes`,
+    "Your request summary",
     `Service: ${data.service}`,
-    booking?.meetLink ? `Meet link: ${booking.meetLink}` : "Audio consultation — we will contact you.",
+    `Full Name: ${data.name.trim()}`,
+    `Email: ${data.email.trim()}`,
+    `Phone: ${data.phone?.trim() || "Not provided"}`,
+    `Company: ${data.company?.trim() || "Not provided"}`,
     "",
-    "A calendar invite (.ics) is attached to this email.",
+    "Project Details:",
+    data.message.trim(),
+    "",
+    `Explore services: ${siteUrl("/services")}`,
+    "Email: contact@rolanautomation.com",
     "",
     SITE.name,
     SITE.url,
@@ -381,12 +324,22 @@ function formatSmtpError(error: unknown): string {
       command?: string;
       response?: string;
       responseCode?: number;
+      errno?: number | string;
+      syscall?: string;
+      address?: string;
+      port?: number;
     };
-    const parts = [withCode.message];
+    const parts = [`message=${withCode.message}`];
+    if (withCode.name) parts.push(`name=${withCode.name}`);
     if (withCode.code) parts.push(`code=${withCode.code}`);
     if (withCode.command) parts.push(`command=${withCode.command}`);
     if (withCode.responseCode != null) parts.push(`responseCode=${withCode.responseCode}`);
     if (withCode.response) parts.push(`response=${withCode.response}`);
+    if (withCode.errno != null) parts.push(`errno=${withCode.errno}`);
+    if (withCode.syscall) parts.push(`syscall=${withCode.syscall}`);
+    if (withCode.address) parts.push(`address=${withCode.address}`);
+    if (withCode.port != null) parts.push(`port=${withCode.port}`);
+    if (withCode.stack) parts.push(`stack=${withCode.stack}`);
     return parts.join(" | ");
   }
   if (typeof error === "string") return error;
@@ -432,14 +385,20 @@ function getSmtpConfig() {
   return { host, port, user, pass, from, secure } as const;
 }
 
-function resolveBusinessInbox(): string {
-  return (
-    envTrim("CONTACT_EMAIL") ||
-    envTrim("CONSULTATION_EMAIL_TO") ||
-    envTrim("SMTP_FROM") ||
-    envTrim("SMTP_USER") ||
-    EMAIL_TO
-  );
+function resolveBusinessInbox(): { email: string; source: string } {
+  if (envTrim("CONTACT_EMAIL")) {
+    return { email: envTrim("CONTACT_EMAIL"), source: "CONTACT_EMAIL" };
+  }
+  if (envTrim("CONSULTATION_EMAIL_TO")) {
+    return { email: envTrim("CONSULTATION_EMAIL_TO"), source: "CONSULTATION_EMAIL_TO" };
+  }
+  if (envTrim("SMTP_FROM")) {
+    return { email: envTrim("SMTP_FROM"), source: "SMTP_FROM" };
+  }
+  if (envTrim("SMTP_USER")) {
+    return { email: envTrim("SMTP_USER"), source: "SMTP_USER" };
+  }
+  return { email: EMAIL_TO, source: "hardcoded-default" };
 }
 
 function interpretSmtpFailure(detail: string): string {
@@ -464,18 +423,32 @@ function interpretSmtpFailure(detail: string): string {
   return detail;
 }
 
-export type SendConsultationEmailOptions = {
-  booking?: BookingDetails;
-  icsContent?: string;
-};
-
 export async function sendConsultationEmail(
   data: ConsultationFormData,
-  meta: ConsultationEmailMeta,
-  options: SendConsultationEmailOptions = {}
+  meta: ConsultationEmailMeta
 ): Promise<ConsultationEmailResult> {
+  console.log("[consultation] Email request: resolving SMTP config");
+  console.log({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    user: process.env.SMTP_USER,
+    from: process.env.SMTP_FROM,
+    passwordLength: process.env.SMTP_PASS?.length,
+  });
+  console.log("[consultation] SMTP env present?", {
+    SMTP_HOST: Boolean(envTrim("SMTP_HOST")),
+    SMTP_PORT: Boolean(envTrim("SMTP_PORT")),
+    SMTP_USER: Boolean(envTrim("SMTP_USER")),
+    SMTP_PASS: Boolean(envTrim("SMTP_PASS")),
+    CONTACT_EMAIL: Boolean(envTrim("CONTACT_EMAIL")),
+    SMTP_FROM: Boolean(envTrim("SMTP_FROM")),
+  });
+
   const config = getSmtpConfig();
   if ("error" in config) {
+    console.error("[consultation] SMTP connection status: SKIPPED (config missing)");
+    console.error("[consultation] SMTP authentication result: SKIPPED (config missing)");
+    console.error("[consultation] SMTP error (exact):", config.error);
     return {
       ok: false,
       internal: false,
@@ -484,19 +457,25 @@ export async function sendConsultationEmail(
     };
   }
 
-  const toInternal = resolveBusinessInbox();
-  const { booking, icsContent } = options;
-  const icsAttachment = icsContent
-    ? [
-        {
-          filename: "consultation.ics",
-          content: icsContent,
-          contentType: "text/calendar; charset=utf-8; method=REQUEST",
-        },
-      ]
-    : undefined;
+  const inbox = resolveBusinessInbox();
+  if (!envTrim("CONTACT_EMAIL")) {
+    console.warn(
+      `[consultation] CONTACT_EMAIL is not set — sending business mail via ${inbox.source}=${inbox.email}`
+    );
+  }
 
   try {
+    console.log("[consultation] Nodemailer transporter config:", {
+      host: config.host,
+      port: config.port,
+      secure: true,
+      user: config.user,
+      from: config.from,
+      toBusiness: inbox.email,
+      toBusinessSource: inbox.source,
+    });
+
+    // Exact shape requested: process.env.SMTP_* with secure: true
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
@@ -511,50 +490,100 @@ export async function sendConsultationEmail(
     });
 
     try {
+      console.log("[consultation] SMTP verify(): starting connection + auth checkΓÇª");
       await transporter.verify();
+      console.log("[consultation] SMTP connection status: CONNECTED");
+      console.log("[consultation] SMTP authentication result: SUCCESS");
     } catch (verifyError) {
+      const detail = interpretSmtpFailure(formatSmtpError(verifyError));
+      console.error("[consultation] SMTP connection status: FAILED");
+      console.error("[consultation] SMTP authentication result: FAILED");
+      console.error("[consultation] SMTP error (exact Nodemailer):", detail);
       return {
         ok: false,
         internal: false,
         confirmation: false,
-        error: interpretSmtpFailure(formatSmtpError(verifyError)),
+        error: detail,
       };
     }
 
     const fromHeader = `"${SITE.name}" <${config.from}>`;
-    const dateLabel = booking?.formattedDate || data.date;
+    const businessPayload = {
+      from: fromHeader,
+      to: inbox.email, // CONTACT_EMAIL preferred
+      replyTo: data.email.trim(),
+      subject: INTERNAL_SUBJECT,
+      html: buildInternalEmailHtml(data, meta),
+      text: buildInternalEmailText(data, meta),
+    };
+    const confirmationPayload = {
+      from: fromHeader,
+      to: data.email.trim(),
+      replyTo: inbox.email,
+      subject: CONFIRMATION_SUBJECT,
+      html: buildConfirmationEmailHtml(data),
+      text: buildConfirmationEmailText(data),
+    };
+
+    console.log("[consultation] sendMail() BEFORE business email ΓåÆ", {
+      to: businessPayload.to,
+      from: businessPayload.from,
+      subject: businessPayload.subject,
+      contactEmailEnv: envTrim("CONTACT_EMAIL") || "(unset)",
+    });
+    console.log("[consultation] sendMail() BEFORE visitor confirmation ΓåÆ", {
+      to: confirmationPayload.to,
+      from: confirmationPayload.from,
+      subject: confirmationPayload.subject,
+    });
 
     const [internalResult, confirmationResult] = await Promise.allSettled([
-      transporter.sendMail({
-        from: fromHeader,
-        to: toInternal,
-        replyTo: data.email.trim(),
-        subject: `${INTERNAL_SUBJECT} — ${dateLabel}`,
-        html: buildInternalEmailHtml(data, meta, booking),
-        text: buildInternalEmailText(data, meta, booking),
-        attachments: icsAttachment,
-      }),
-      transporter.sendMail({
-        from: fromHeader,
-        to: data.email.trim(),
-        replyTo: toInternal,
-        subject: `${CONFIRMATION_SUBJECT} — ${dateLabel}`,
-        html: buildConfirmationEmailHtml(data, booking),
-        text: buildConfirmationEmailText(data, booking),
-        attachments: icsAttachment,
-      }),
+      transporter.sendMail(businessPayload),
+      transporter.sendMail(confirmationPayload),
     ]);
+
+    console.log("[consultation] sendMail() AFTER business email:", {
+      status: internalResult.status,
+      ...(internalResult.status === "fulfilled"
+        ? {
+            messageId: internalResult.value.messageId,
+            accepted: internalResult.value.accepted,
+            rejected: internalResult.value.rejected,
+            response: internalResult.value.response,
+          }
+        : { error: formatSmtpError(internalResult.reason) }),
+    });
+    console.log("[consultation] sendMail() AFTER visitor confirmation:", {
+      status: confirmationResult.status,
+      ...(confirmationResult.status === "fulfilled"
+        ? {
+            messageId: confirmationResult.value.messageId,
+            accepted: confirmationResult.value.accepted,
+            rejected: confirmationResult.value.rejected,
+            response: confirmationResult.value.response,
+          }
+        : { error: formatSmtpError(confirmationResult.reason) }),
+    });
 
     const internal = internalResult.status === "fulfilled";
     const confirmation = confirmationResult.status === "fulfilled";
     let error: string | undefined;
 
     if (internalResult.status === "rejected") {
-      error = interpretSmtpFailure(formatSmtpError(internalResult.reason));
+      const detail = interpretSmtpFailure(formatSmtpError(internalResult.reason));
+      console.error(
+        "[consultation] SMTP error (exact Nodemailer, business ΓåÆ CONTACT_EMAIL):",
+        detail
+      );
+      error = detail;
     }
 
     if (confirmationResult.status === "rejected") {
       const detail = interpretSmtpFailure(formatSmtpError(confirmationResult.reason));
+      console.error(
+        "[consultation] SMTP error (exact Nodemailer, visitor confirmation):",
+        detail
+      );
       error = error
         ? `${error}; Confirmation: ${detail}`
         : `Confirmation email failed: ${detail}`;
@@ -563,6 +592,15 @@ export async function sendConsultationEmail(
     const ok = internal || confirmation;
     if (!ok && !error) {
       error = "Failed to send consultation emails";
+      console.error("[consultation] SMTP error (exact):", error);
+    }
+
+    if (!ok) {
+      console.error("[consultation] SMTP final result: BOTH SENDS FAILED —", error);
+    } else if (error) {
+      console.warn("[consultation] SMTP final result: PARTIAL SUCCESS —", error);
+    } else {
+      console.log("[consultation] SMTP final result: ALL SENDS SUCCEEDED");
     }
 
     return {
@@ -572,11 +610,15 @@ export async function sendConsultationEmail(
       ...(error ? { error } : {}),
     };
   } catch (error) {
+    const detail = interpretSmtpFailure(formatSmtpError(error));
+    console.error("[consultation] SMTP connection status: FAILED (exception)");
+    console.error("[consultation] SMTP authentication result: UNKNOWN / FAILED");
+    console.error("[consultation] SMTP error (exact Nodemailer):", detail);
     return {
       ok: false,
       internal: false,
       confirmation: false,
-      error: interpretSmtpFailure(formatSmtpError(error)),
+      error: detail,
     };
   }
 }
