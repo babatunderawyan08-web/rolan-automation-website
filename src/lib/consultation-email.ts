@@ -319,12 +319,27 @@ export function buildConfirmationEmailText(data: ConsultationFormData): string {
 
 function formatSmtpError(error: unknown): string {
   if (error instanceof Error) {
-    const withCode = error as Error & { code?: string; response?: string; responseCode?: number };
-    const parts = [withCode.message];
+    const withCode = error as Error & {
+      code?: string;
+      command?: string;
+      response?: string;
+      responseCode?: number;
+      errno?: number | string;
+      syscall?: string;
+      address?: string;
+      port?: number;
+    };
+    const parts = [`message=${withCode.message}`];
+    if (withCode.name) parts.push(`name=${withCode.name}`);
     if (withCode.code) parts.push(`code=${withCode.code}`);
-    if (withCode.responseCode) parts.push(`responseCode=${withCode.responseCode}`);
+    if (withCode.command) parts.push(`command=${withCode.command}`);
+    if (withCode.responseCode != null) parts.push(`responseCode=${withCode.responseCode}`);
     if (withCode.response) parts.push(`response=${withCode.response}`);
-    if (withCode.stack) parts.push(withCode.stack);
+    if (withCode.errno != null) parts.push(`errno=${withCode.errno}`);
+    if (withCode.syscall) parts.push(`syscall=${withCode.syscall}`);
+    if (withCode.address) parts.push(`address=${withCode.address}`);
+    if (withCode.port != null) parts.push(`port=${withCode.port}`);
+    if (withCode.stack) parts.push(`stack=${withCode.stack}`);
     return parts.join(" | ");
   }
   if (typeof error === "string") return error;
@@ -335,16 +350,20 @@ function formatSmtpError(error: unknown): string {
   }
 }
 
+function envTrim(name: string): string {
+  const raw = process.env[name];
+  if (raw == null) return "";
+  return raw.trim().replace(/^['"]|['"]$/g, "");
+}
+
 function getSmtpConfig() {
-  const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT || "465");
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-  const from = process.env.SMTP_FROM || user;
-  const secure =
-    process.env.SMTP_SECURE !== undefined
-      ? process.env.SMTP_SECURE === "true"
-      : port === 465;
+  const host = envTrim("SMTP_HOST");
+  const portRaw = envTrim("SMTP_PORT");
+  const user = envTrim("SMTP_USER");
+  const pass = envTrim("SMTP_PASS");
+  const from = envTrim("SMTP_FROM") || user;
+  const port = Number(portRaw || "465");
+  const secure = true;
 
   const missing = [
     !host ? "SMTP_HOST" : null,
@@ -354,19 +373,82 @@ function getSmtpConfig() {
   ].filter(Boolean);
 
   if (missing.length > 0) {
-    return { error: `SMTP is not configured — missing ${missing.join(", ")}` } as const;
+    return {
+      error: `Missing environment variable: ${missing.join(", ")}`,
+    } as const;
   }
 
-  return { host: host!, port, user: user!, pass: pass!, from: from!, secure } as const;
+  if (!Number.isFinite(port) || port <= 0) {
+    return { error: `Invalid SMTP_PORT: ${portRaw}` } as const;
+  }
+
+  return { host, port, user, pass, from, secure } as const;
+}
+
+function resolveBusinessInbox(): { email: string; source: string } {
+  if (envTrim("CONTACT_EMAIL")) {
+    return { email: envTrim("CONTACT_EMAIL"), source: "CONTACT_EMAIL" };
+  }
+  if (envTrim("CONSULTATION_EMAIL_TO")) {
+    return { email: envTrim("CONSULTATION_EMAIL_TO"), source: "CONSULTATION_EMAIL_TO" };
+  }
+  if (envTrim("SMTP_FROM")) {
+    return { email: envTrim("SMTP_FROM"), source: "SMTP_FROM" };
+  }
+  if (envTrim("SMTP_USER")) {
+    return { email: envTrim("SMTP_USER"), source: "SMTP_USER" };
+  }
+  return { email: EMAIL_TO, source: "hardcoded-default" };
+}
+
+function interpretSmtpFailure(detail: string): string {
+  const lower = detail.toLowerCase();
+  if (
+    lower.includes("invalid login") ||
+    lower.includes("authentication failed") ||
+    lower.includes("535") ||
+    lower.includes("eauth")
+  ) {
+    return `SMTP authentication failed: ${detail}`;
+  }
+  if (lower.includes("etimedout") || lower.includes("timeout") || lower.includes("timed out")) {
+    return `SMTP connection timeout: ${detail}`;
+  }
+  if (lower.includes("econnrefused") || lower.includes("enotfound")) {
+    return `SMTP connection failed: ${detail}`;
+  }
+  if (lower.includes("recipient") || lower.includes("550") || lower.includes("rejected")) {
+    return `Email rejected: ${detail}`;
+  }
+  return detail;
 }
 
 export async function sendConsultationEmail(
   data: ConsultationFormData,
   meta: ConsultationEmailMeta
 ): Promise<ConsultationEmailResult> {
+  console.log("[consultation] Email request: resolving SMTP config");
+  console.log({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    user: process.env.SMTP_USER,
+    from: process.env.SMTP_FROM,
+    passwordLength: process.env.SMTP_PASS?.length,
+  });
+  console.log("[consultation] SMTP env present?", {
+    SMTP_HOST: Boolean(envTrim("SMTP_HOST")),
+    SMTP_PORT: Boolean(envTrim("SMTP_PORT")),
+    SMTP_USER: Boolean(envTrim("SMTP_USER")),
+    SMTP_PASS: Boolean(envTrim("SMTP_PASS")),
+    CONTACT_EMAIL: Boolean(envTrim("CONTACT_EMAIL")),
+    SMTP_FROM: Boolean(envTrim("SMTP_FROM")),
+  });
+
   const config = getSmtpConfig();
   if ("error" in config) {
-    console.error("[consultation] SMTP error:", config.error);
+    console.error("[consultation] SMTP connection status: SKIPPED (config missing)");
+    console.error("[consultation] SMTP authentication result: SKIPPED (config missing)");
+    console.error("[consultation] SMTP error (exact):", config.error);
     return {
       ok: false,
       internal: false,
@@ -375,61 +457,150 @@ export async function sendConsultationEmail(
     };
   }
 
+  const inbox = resolveBusinessInbox();
+  if (!envTrim("CONTACT_EMAIL")) {
+    console.warn(
+      `[consultation] CONTACT_EMAIL is not set — sending business mail via ${inbox.source}=${inbox.email}`
+    );
+  }
+
   try {
-    const transporter = nodemailer.createTransport({
+    console.log("[consultation] Nodemailer transporter config:", {
       host: config.host,
       port: config.port,
-      secure: config.secure,
-      auth: {
-        user: config.user,
-        pass: config.pass,
-      },
+      secure: true,
+      user: config.user,
+      from: config.from,
+      toBusiness: inbox.email,
+      toBusinessSource: inbox.source,
     });
 
-    const toInternal = process.env.CONSULTATION_EMAIL_TO || EMAIL_TO;
+    // Exact shape requested: process.env.SMTP_* with secure: true
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+      connectionTimeout: 20_000,
+      greetingTimeout: 20_000,
+      socketTimeout: 30_000,
+    });
+
+    try {
+      console.log("[consultation] SMTP verify(): starting connection + auth check…");
+      await transporter.verify();
+      console.log("[consultation] SMTP connection status: CONNECTED");
+      console.log("[consultation] SMTP authentication result: SUCCESS");
+    } catch (verifyError) {
+      const detail = interpretSmtpFailure(formatSmtpError(verifyError));
+      console.error("[consultation] SMTP connection status: FAILED");
+      console.error("[consultation] SMTP authentication result: FAILED");
+      console.error("[consultation] SMTP error (exact Nodemailer):", detail);
+      return {
+        ok: false,
+        internal: false,
+        confirmation: false,
+        error: detail,
+      };
+    }
+
     const fromHeader = `"${SITE.name}" <${config.from}>`;
+    const businessPayload = {
+      from: fromHeader,
+      to: inbox.email, // CONTACT_EMAIL preferred
+      replyTo: data.email.trim(),
+      subject: INTERNAL_SUBJECT,
+      html: buildInternalEmailHtml(data, meta),
+      text: buildInternalEmailText(data, meta),
+    };
+    const confirmationPayload = {
+      from: fromHeader,
+      to: data.email.trim(),
+      replyTo: inbox.email,
+      subject: CONFIRMATION_SUBJECT,
+      html: buildConfirmationEmailHtml(data),
+      text: buildConfirmationEmailText(data),
+    };
+
+    console.log("[consultation] sendMail() BEFORE business email →", {
+      to: businessPayload.to,
+      from: businessPayload.from,
+      subject: businessPayload.subject,
+      contactEmailEnv: envTrim("CONTACT_EMAIL") || "(unset)",
+    });
+    console.log("[consultation] sendMail() BEFORE visitor confirmation →", {
+      to: confirmationPayload.to,
+      from: confirmationPayload.from,
+      subject: confirmationPayload.subject,
+    });
 
     const [internalResult, confirmationResult] = await Promise.allSettled([
-      transporter.sendMail({
-        from: fromHeader,
-        to: toInternal,
-        replyTo: data.email.trim(),
-        subject: INTERNAL_SUBJECT,
-        html: buildInternalEmailHtml(data, meta),
-        text: buildInternalEmailText(data, meta),
-      }),
-      transporter.sendMail({
-        from: fromHeader,
-        to: data.email.trim(),
-        replyTo: toInternal,
-        subject: CONFIRMATION_SUBJECT,
-        html: buildConfirmationEmailHtml(data),
-        text: buildConfirmationEmailText(data),
-      }),
+      transporter.sendMail(businessPayload),
+      transporter.sendMail(confirmationPayload),
     ]);
+
+    console.log("[consultation] sendMail() AFTER business email:", {
+      status: internalResult.status,
+      ...(internalResult.status === "fulfilled"
+        ? {
+            messageId: internalResult.value.messageId,
+            accepted: internalResult.value.accepted,
+            rejected: internalResult.value.rejected,
+            response: internalResult.value.response,
+          }
+        : { error: formatSmtpError(internalResult.reason) }),
+    });
+    console.log("[consultation] sendMail() AFTER visitor confirmation:", {
+      status: confirmationResult.status,
+      ...(confirmationResult.status === "fulfilled"
+        ? {
+            messageId: confirmationResult.value.messageId,
+            accepted: confirmationResult.value.accepted,
+            rejected: confirmationResult.value.rejected,
+            response: confirmationResult.value.response,
+          }
+        : { error: formatSmtpError(confirmationResult.reason) }),
+    });
 
     const internal = internalResult.status === "fulfilled";
     const confirmation = confirmationResult.status === "fulfilled";
-
     let error: string | undefined;
 
-    if (!internal && internalResult.status === "rejected") {
-      const detail = formatSmtpError(internalResult.reason);
-      console.error("[consultation] SMTP error (internal):", detail);
-      error = `Internal email failed: ${detail}`;
+    if (internalResult.status === "rejected") {
+      const detail = interpretSmtpFailure(formatSmtpError(internalResult.reason));
+      console.error(
+        "[consultation] SMTP error (exact Nodemailer, business → CONTACT_EMAIL):",
+        detail
+      );
+      error = detail;
     }
-    if (!confirmation && confirmationResult.status === "rejected") {
-      const detail = formatSmtpError(confirmationResult.reason);
-      console.error("[consultation] SMTP error (confirmation):", detail);
+
+    if (confirmationResult.status === "rejected") {
+      const detail = interpretSmtpFailure(formatSmtpError(confirmationResult.reason));
+      console.error(
+        "[consultation] SMTP error (exact Nodemailer, visitor confirmation):",
+        detail
+      );
       error = error
-        ? `${error}; Confirmation email failed: ${detail}`
+        ? `${error}; Confirmation: ${detail}`
         : `Confirmation email failed: ${detail}`;
     }
 
     const ok = internal || confirmation;
     if (!ok && !error) {
       error = "Failed to send consultation emails";
-      console.error("[consultation] SMTP error:", error);
+      console.error("[consultation] SMTP error (exact):", error);
+    }
+
+    if (!ok) {
+      console.error("[consultation] SMTP final result: BOTH SENDS FAILED —", error);
+    } else if (error) {
+      console.warn("[consultation] SMTP final result: PARTIAL SUCCESS —", error);
+    } else {
+      console.log("[consultation] SMTP final result: ALL SENDS SUCCEEDED");
     }
 
     return {
@@ -439,8 +610,10 @@ export async function sendConsultationEmail(
       ...(error ? { error } : {}),
     };
   } catch (error) {
-    const detail = formatSmtpError(error);
-    console.error("[consultation] SMTP error:", detail);
+    const detail = interpretSmtpFailure(formatSmtpError(error));
+    console.error("[consultation] SMTP connection status: FAILED (exception)");
+    console.error("[consultation] SMTP authentication result: UNKNOWN / FAILED");
+    console.error("[consultation] SMTP error (exact Nodemailer):", detail);
     return {
       ok: false,
       internal: false,
