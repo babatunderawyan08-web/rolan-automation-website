@@ -72,74 +72,74 @@ export function PortfolioGrid() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, duration: 0.4 }}
             >
-              <motion.div
+              <motion.article
                 whileHover={{ y: -4 }}
                 className="group overflow-hidden rounded-2xl border border-border bg-card card-shadow transition-shadow hover:card-shadow-hover"
               >
-                <motion.div
-                  className="relative aspect-video overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.4 }}
-                >
+                <div className="relative aspect-video overflow-hidden bg-background-alt">
                   <img
                     src={project.image}
-                    alt={project.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    alt={`${project.title} project screenshot`}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    loading="lazy"
                   />
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                  <div
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/45 via-foreground/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90"
+                    aria-hidden
                   />
-                </motion.div>
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4">
+                    <p className="truncate text-sm font-semibold text-white drop-shadow-sm">
+                      {project.title}
+                    </p>
+                  </div>
+                </div>
                 <div className="p-5 sm:p-6 md:p-8">
-                  <motion.div
-                    className="mb-3 flex flex-wrap gap-2"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + i * 0.05 }}
-                  >
+                  <div className="mb-3 flex flex-wrap gap-2">
                     <Badge variant={category === "automation" ? "secondary" : "accent"}>
                       {category === "automation" ? "Automation" : "Call Center"}
                     </Badge>
                     <Badge variant="outline">{project.industry}</Badge>
-                  </motion.div>
+                  </div>
                   <h3 className="font-heading text-xl font-semibold">{project.title}</h3>
                   <div className="mt-4 space-y-3 text-sm">
                     <div>
-                      <span className="font-semibold text-secondary">Problem: </span>
+                      <span className="font-semibold text-secondary">Client challenge: </span>
                       <span className="text-muted">{project.problem}</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-secondary">Solution: </span>
+                      <span className="font-semibold text-secondary">Solution delivered: </span>
                       <span className="text-muted">{project.solution}</span>
                     </div>
-                    <motion.div
-                      className="flex flex-wrap gap-1.5 pt-2"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.15 + i * 0.05 }}
-                    >
-                      {project.technologies.map((t) => (
-                        <span
-                          key={t}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background-alt px-2.5 py-1 text-xs font-medium text-muted transition-colors hover:border-secondary/30 hover:text-foreground"
-                        >
-                          {hasBrandLogo(t) ? <BrandLogo name={t} size={14} className="rounded-sm" /> : null}
-                          {t}
-                        </span>
-                      ))}
-                    </motion.div>
-                    <ul className="space-y-1 pt-2">
-                      {project.results.map((r) => (
-                        <li key={r} className="text-success">✓ {r}</li>
-                      ))}
-                    </ul>
-                    <p className="pt-2 text-base font-bold text-success">{project.roi}</p>
+                    <div>
+                      <p className="mb-1.5 font-semibold text-secondary">Technologies used</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.technologies.map((t) => (
+                          <span
+                            key={t}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background-alt px-2.5 py-1 text-xs font-medium text-muted transition-colors hover:border-secondary/30 hover:text-foreground"
+                          >
+                            {hasBrandLogo(t) ? (
+                              <BrandLogo name={t} size={14} className="rounded-sm" />
+                            ) : null}
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="mb-1.5 font-semibold text-secondary">Business outcome</p>
+                      <ul className="space-y-1">
+                        {project.results.map((r) => (
+                          <li key={r} className="text-success">
+                            ✓ {r}
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="pt-2 text-base font-bold text-success">{project.roi}</p>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+              </motion.article>
             </motion.div>
           ))}
         </motion.div>

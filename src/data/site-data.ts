@@ -138,7 +138,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["OpenAI", "n8n", "Zendesk", "Slack", "Python"],
     results: ["68% tickets auto-resolved", "First response under 2 min", "40% cost reduction"],
     roi: "310% ROI in 6 months",
-    image: "/projects/ai-support.svg",
+    image: "/projects/ai-support.png",
   },
   {
     id: "crm-automation",
@@ -150,7 +150,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["Make.com", "Claude", "GoHighLevel", "WhatsApp API", "Zapier"],
     results: ["4.2x increase in qualified leads", "67% faster response time", "$2.1M additional revenue"],
     roi: "520% ROI in 6 months",
-    image: "/projects/real-estate.svg",
+    image: "/projects/real-estate.png",
   },
   {
     id: "lead-gen",
@@ -162,7 +162,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["n8n", "Apollo API", "HubSpot", "Clearbit", "Google Sheets"],
     results: ["3x more qualified leads", "90% data accuracy", "25 hrs/week saved"],
     roi: "290% ROI in 5 months",
-    image: "/projects/lead-gen.svg",
+    image: "/projects/lead-gen.png",
   },
   {
     id: "appointment-booking",
@@ -174,7 +174,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["n8n", "OpenAI", "Twilio", "HubSpot", "Calendly"],
     results: ["78% reduction in wait times", "52% decrease in no-shows", "3x faster processing"],
     roi: "340% ROI in 8 months",
-    image: "/projects/healthcare.svg",
+    image: "/projects/healthcare.png",
   },
   {
     id: "whatsapp-auto",
@@ -186,7 +186,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["WhatsApp API", "Make.com", "Shopify", "OpenAI", "Airtable"],
     results: ["85% queries handled automatically", "24/7 response coverage", "4.8★ customer rating"],
     roi: "260% ROI in 4 months",
-    image: "/projects/whatsapp.svg",
+    image: "/projects/whatsapp.png",
   },
   {
     id: "email-auto",
@@ -198,7 +198,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["Zapier", "Mailgun", "Salesforce", "OpenAI", "Google Docs"],
     results: ["94% automation rate", "Zero missed follow-ups", "18 hrs/week saved"],
     roi: "220% ROI in 5 months",
-    image: "/projects/email.svg",
+    image: "/projects/email.png",
   },
   {
     id: "api-integration",
@@ -210,7 +210,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["n8n", "Node.js", "PostgreSQL", "Twilio", "REST APIs"],
     results: ["85% reduction in dispatch time", "22% fuel savings", "99.2% on-time delivery"],
     roi: "280% ROI in 10 months",
-    image: "/projects/logistics.svg",
+    image: "/projects/logistics.png",
   },
   {
     id: "bpa",
@@ -222,7 +222,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["Zapier", "Gemini", "Google Workspace", "Stripe", "Supabase"],
     results: ["Enrollment time reduced to 3 days", "89% parent satisfaction", "60% staff time saved"],
     roi: "250% ROI in 9 months",
-    image: "/projects/education.svg",
+    image: "/projects/education.png",
   },
   {
     id: "ai-voice-workflow",
@@ -234,7 +234,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["OpenAI", "Twilio", "3CX", "HubSpot", "Python"],
     results: ["73% tier-1 calls automated", "Hold time reduced to 2 min", "92% CSAT score"],
     roi: "380% ROI in 7 months",
-    image: "/projects/ai-voice.svg",
+    image: "/projects/ai-voice.png",
   },
   {
     id: "3cx-install",
@@ -246,7 +246,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["3CX", "SIP Trunks", "Yealink", "HubSpot", "AWS"],
     results: ["150 agents onboarded", "99.9% uptime", "45% telecom cost savings"],
     roi: "320% ROI in 8 months",
-    image: "/projects/3cx.svg",
+    image: "/projects/3cx.png",
   },
   {
     id: "vicidial-deploy",
@@ -258,7 +258,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["VICIdial", "Asterisk", "Salesforce", "MySQL", "SIP Trunks"],
     results: ["3.1x contact rate", "41% more conversations/day", "100% DNC compliance"],
     roi: "410% ROI in 12 months",
-    image: "/projects/vicidial.svg",
+    image: "/projects/vicidial.png",
   },
   {
     id: "freepbx-config",
@@ -270,7 +270,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["FreePBX", "Asterisk", "Twilio SIP", "Grandstream", "AWS"],
     results: ["70% cost reduction", "40 extensions live", "Full recording compliance"],
     roi: "240% ROI in 6 months",
-    image: "/projects/freepbx.svg",
+    image: "/projects/freepbx.png",
   },
   {
     id: "cloud-pbx",
@@ -282,7 +282,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["3CX", "SIP Trunks", "VPN", "Active Directory", "Yealink"],
     results: ["12 sites unified", "Centralized reporting", "35% cost savings"],
     roi: "270% ROI in 9 months",
-    image: "/projects/cloud-pbx.svg",
+    image: "/projects/cloud-pbx.png",
   },
   {
     id: "sip-trunk",
@@ -294,7 +294,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["3CX", "Dual SIP Trunks", "SD-WAN", "Wireshark", "Softphones"],
     results: ["MOS score 4.3", "99.99% call completion", "Zero downtime in 6 months"],
     roi: "200% ROI in 4 months",
-    image: "/projects/sip.svg",
+    image: "/projects/sip.png",
   },
   {
     id: "ivr-setup",
@@ -306,7 +306,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["3CX", "Custom IVR", "HubSpot", "Skills Queues", "Slack Alerts"],
     results: ["30% fewer transfers", "ASA under 30 seconds", "18% CSAT improvement"],
     roi: "230% ROI in 5 months",
-    image: "/projects/ivr.svg",
+    image: "/projects/ivr.png",
   },
   {
     id: "queue-mgmt",
@@ -318,7 +318,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["3CX", "Queue Logic", "CRM", "Analytics Dashboard", "Twilio"],
     results: ["Hold time cut 75%", "Abandon rate down 40%", "SLA met 98% of time"],
     roi: "260% ROI in 6 months",
-    image: "/projects/queue.svg",
+    image: "/projects/queue.png",
   },
   {
     id: "call-recording",
@@ -330,7 +330,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["3CX Recording", "S3", "Elasticsearch", "Salesforce", "AES Encryption"],
     results: ["100% calls recorded", "Search: hours → seconds", "Passed compliance audit"],
     roi: "210% ROI in 5 months",
-    image: "/projects/recording.svg",
+    image: "/projects/recording.png",
   },
   {
     id: "crm-pbx",
@@ -342,7 +342,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["3CX", "HubSpot", "REST API", "Webhooks", "Custom Plugin"],
     results: ["100% calls logged", "Screen-pop on every inbound", "22% faster handle time"],
     roi: "300% ROI in 7 months",
-    image: "/projects/crm-pbx.svg",
+    image: "/projects/crm-pbx.png",
   },
   {
     id: "outbound-cc",
@@ -354,7 +354,7 @@ export const portfolio: PortfolioProject[] = [
     technologies: ["VICIdial", "Asterisk", "CRM", "Predictive Dialer", "SIP Trunks"],
     results: ["120 calls/agent/day", "2.8x conversion rate", "Full compliance reporting"],
     roi: "350% ROI in 8 months",
-    image: "/projects/outbound.svg",
+    image: "/projects/outbound.png",
   },
 ];
 
