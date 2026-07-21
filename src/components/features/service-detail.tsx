@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "@/components/shared/brand-logo";
 import { ServiceHeroMedia } from "@/components/features/service-heroes";
+import { ThreeCXCarousel } from "@/components/features/threecx-carousel";
 import { hasBrandLogo } from "@/lib/brand-icons";
 import { getServiceSample } from "@/data/service-samples";
 import { getRelatedServices } from "@/lib/services";
@@ -19,6 +20,7 @@ type ServiceDetailProps = {
 export function ServiceDetail({ service }: ServiceDetailProps) {
   const sample = getServiceSample(service.id, service.title);
   const related = getRelatedServices(service);
+  const is3CX = service.id === "3cx";
 
   return (
     <>
@@ -28,7 +30,7 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
         subtitle={service.description}
         cta={{ label: "Book Free Consultation", href: "/book-consultation" }}
         secondaryCta={{ label: "View Full Portfolio", href: "/portfolio" }}
-        media={<ServiceHeroMedia serviceId={service.id} />}
+        media={is3CX ? <ThreeCXCarousel /> : <ServiceHeroMedia serviceId={service.id} />}
       />
 
       <section className="section-padding">
