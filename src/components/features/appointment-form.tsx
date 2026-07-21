@@ -5,16 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  CalendarPlus,
   Check,
   CheckCircle2,
   Clock,
   ExternalLink,
   Phone,
-  Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea, Label } from "@/components/ui/input";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { z } from "zod";
 import { BOOKING_TIMEZONES } from "@/lib/booking";
 import {
@@ -171,7 +170,7 @@ function AppointmentSuccess({
           rel="noopener noreferrer"
           className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:underline"
         >
-          <Video className="h-4 w-4" aria-hidden />
+          <BrandLogo name="Google Meet" size={16} />
           Open Google Meet
           <ExternalLink className="h-3.5 w-3.5" aria-hidden />
         </a>
@@ -194,7 +193,7 @@ function AppointmentSuccess({
             );
           }}
         >
-          <CalendarPlus className="h-4 w-4" aria-hidden />
+          <BrandLogo name="Google Calendar" size={16} />
           Add to Calendar
         </Button>
         <Button
@@ -463,7 +462,7 @@ export function AppointmentForm() {
                       )}
                     >
                       {type === "video" ? (
-                        <Video className="h-4 w-4 text-secondary" aria-hidden />
+                        <BrandLogo name="Google Meet" size={16} />
                       ) : (
                         <Phone className="h-4 w-4 text-secondary" aria-hidden />
                       )}

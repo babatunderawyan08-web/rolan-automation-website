@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Share2, Globe, Video, Camera } from "lucide-react";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { AnimatedLogo } from "@/components/shared/animated-logo";
 import { SITE } from "@/lib/constants";
 import { Input } from "@/components/ui/input";
@@ -40,10 +40,10 @@ export function Footer() {
             <AnimatedLogo size="md" />
             <p className="mt-4 max-w-sm text-sm text-muted leading-relaxed">{SITE.description}</p>
             <div className="mt-6 flex gap-2">
-              <a href={SITE.social.linkedin} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="LinkedIn"><Share2 className="h-5 w-5" /></a>
-              <a href={SITE.social.twitter} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="Twitter"><Globe className="h-5 w-5" /></a>
-              <a href={SITE.social.youtube} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="YouTube"><Video className="h-5 w-5" /></a>
-              <a href={SITE.social.instagram} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="Instagram"><Camera className="h-5 w-5" /></a>
+              <a href={SITE.social.linkedin} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="LinkedIn"><BrandLogo name="LinkedIn" size={20} /></a>
+              <a href={SITE.social.twitter} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="Twitter"><BrandLogo name="Twitter" size={20} /></a>
+              <a href={SITE.social.youtube} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="YouTube"><BrandLogo name="YouTube" size={20} /></a>
+              <a href={SITE.social.instagram} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-card hover:text-secondary" aria-label="Instagram"><BrandLogo name="Instagram" size={20} /></a>
             </div>
           </div>
 

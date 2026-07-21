@@ -12,25 +12,10 @@ import { SiteSearch } from "@/components/layout/site-search";
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS } from "@/lib/constants";
 import { services, callCenterServices } from "@/data/site-data";
-import { hasBrandLogo } from "@/lib/brand-icons";
+import { hasBrandLogo, SERVICE_BRAND } from "@/lib/brand-icons";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import type { Service } from "@/types";
-
-/** Prefer official brand marks when available; otherwise Lucide service icons. */
-const SERVICE_BRAND: Record<string, string> = {
-  zapier: "Zapier",
-  make: "Make",
-  n8n: "n8n",
-  openai: "OpenAI",
-  claude: "Claude",
-  gemini: "Gemini",
-  whatsapp: "WhatsApp",
-  "3cx": "3CX",
-  vicidial: "VICIdial",
-  freepbx: "FreePBX",
-  asterisk: "Asterisk",
-};
 
 function ServiceMenuIcon({ service }: { service: Service }) {
   const brand = SERVICE_BRAND[service.id];

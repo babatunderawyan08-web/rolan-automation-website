@@ -1,6 +1,7 @@
-import { Calendar, CheckCircle2, Phone, Video } from "lucide-react";
+import { CheckCircle2, Phone } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
 import { AppointmentForm } from "@/components/features/appointment-form";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { FadeIn } from "@/components/shared/animations";
 import { createMetadata } from "@/lib/seo";
 
@@ -42,7 +43,7 @@ export default function BookAppointmentPage() {
               </ul>
               <div className="mt-8 space-y-4 rounded-2xl border border-border bg-background-alt p-6">
                 <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-secondary" />
+                  <BrandLogo name="Google Calendar" size={20} />
                   <p className="font-semibold">How it works</p>
                 </div>
                 <ol className="space-y-3 text-sm text-muted">
@@ -61,7 +62,7 @@ export default function BookAppointmentPage() {
                 </ol>
                 <div className="grid gap-3 pt-2 sm:grid-cols-2">
                   <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm">
-                    <Video className="h-4 w-4 shrink-0 text-secondary" />
+                    <BrandLogo name="Google Meet" size={16} />
                     Google Meet for video
                   </div>
                   <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm">

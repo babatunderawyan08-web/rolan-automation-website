@@ -39,9 +39,17 @@ import {
   siGooglesheets,
   siGoogledocs,
   siGoogledrive,
+  siGooglemeet,
+  siGooglecalendar,
+  siGoogleforms,
+  siTrello,
+  siAsana,
   siZendesk,
   siShopify,
   siCalendly,
+  siX,
+  siYoutube,
+  siInstagram,
 } from "simple-icons";
 
 export type BrandMark = {
@@ -61,8 +69,7 @@ function fromSI(icon: SimpleIcon): BrandMark {
 }
 
 /**
- * Official SVG files in /public/logos.
- * Replace placeholder files with vendor assets when available.
+ * Official SVG/PNG files in /public/logos.
  */
 export const BRAND_FILES: Record<string, BrandFile> = {
   openai: { title: "OpenAI", src: "/logos/openai.svg" },
@@ -75,6 +82,9 @@ export const BRAND_FILES: Record<string, BrandFile> = {
   "3cx recording": { title: "3CX", src: "/logos/3cx.png" },
   vicidial: { title: "VICIdial", src: "/logos/vicidial.png" },
   freepbx: { title: "FreePBX", src: "/logos/freepbx.svg" },
+  "monday.com": { title: "monday.com", src: "/logos/monday.svg" },
+  monday: { title: "monday.com", src: "/logos/monday.svg" },
+  pipedrive: { title: "Pipedrive", src: "/logos/pipedrive.svg" },
 };
 
 /** Remaining custom marks used elsewhere (not Technology section fakes). */
@@ -116,12 +126,16 @@ const SI_MAP: Record<string, BrandMark> = {
   airtable: fromSI(siAirtable),
   notion: fromSI(siNotion),
   clickup: fromSI(siClickup),
+  trello: fromSI(siTrello),
+  asana: fromSI(siAsana),
   google: fromSI(siGoogle),
   "google workspace": fromSI(siGoogle),
   "google sheets": fromSI(siGooglesheets),
   "google docs": fromSI(siGoogledocs),
   "google drive": fromSI(siGoogledrive),
-  "google forms": fromSI(siGoogle),
+  "google forms": fromSI(siGoogleforms),
+  "google meet": fromSI(siGooglemeet),
+  "google calendar": fromSI(siGooglecalendar),
   docker: fromSI(siDocker),
   postgresql: fromSI(siPostgresql),
   mongodb: fromSI(siMongodb),
@@ -149,6 +163,10 @@ const SI_MAP: Record<string, BrandMark> = {
   zendesk: fromSI(siZendesk),
   shopify: fromSI(siShopify),
   calendly: fromSI(siCalendly),
+  twitter: fromSI(siX),
+  x: fromSI(siX),
+  youtube: fromSI(siYoutube),
+  instagram: fromSI(siInstagram),
 };
 
 const ALL: Record<string, BrandMark> = {
@@ -184,6 +202,26 @@ export function normalizeBrandKey(name: string): string {
   return normalizeKey(name);
 }
 
+/**
+ * Map site-data service ids → brand logo names for menus and service cards.
+ * Generic capability services (workflow, CRM, etc.) keep Lucide icons.
+ */
+export const SERVICE_BRAND: Record<string, string> = {
+  zapier: "Zapier",
+  make: "Make.com",
+  n8n: "n8n",
+  openai: "OpenAI",
+  claude: "Claude",
+  gemini: "Gemini",
+  whatsapp: "WhatsApp",
+  email: "Gmail",
+  appointments: "Google Calendar",
+  "3cx": "3CX",
+  vicidial: "VICIdial",
+  freepbx: "FreePBX",
+  asterisk: "Asterisk",
+};
+
 /** Featured logos for the Technology marquee (Automation + Call Center). */
 export const TECH_SHOWCASE_LOGOS = [
   "Workflow Automation",
@@ -193,12 +231,25 @@ export const TECH_SHOWCASE_LOGOS = [
   "n8n",
   "HubSpot",
   "Salesforce",
+  "Pipedrive",
   "Zoho",
+  "Notion",
+  "ClickUp",
+  "Trello",
+  "Asana",
+  "monday.com",
   "Google Workspace",
+  "Google Sheets",
+  "Google Forms",
+  "Google Meet",
+  "Google Calendar",
+  "Gmail",
   "Microsoft 365",
   "3CX",
   "VICIdial",
   "FreePBX",
   "Asterisk",
   "Twilio",
+  "WhatsApp",
+  "Telegram",
 ] as const;

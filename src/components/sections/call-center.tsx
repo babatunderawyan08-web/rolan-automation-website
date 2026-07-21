@@ -8,16 +8,10 @@ import { DynamicIcon } from "@/components/shared/dynamic-icon";
 import { BrandLogo } from "@/components/shared/brand-logo";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/shared/animations";
 import { Badge } from "@/components/ui/badge";
-import { hasBrandLogo } from "@/lib/brand-icons";
+import { hasBrandLogo, SERVICE_BRAND } from "@/lib/brand-icons";
 import { SoftwareShowcase, type ShowcaseSlide } from "@/components/features/software-showcase";
 
 /** Brand marks for list icons — 3CX may appear in the list, never in the showcase */
-const SERVICE_BRAND: Record<string, string> = {
-  "3cx": "3CX",
-  vicidial: "VICIdial",
-  freepbx: "FreePBX",
-  asterisk: "Asterisk",
-};
 
 /** Call-center product screens — no 3CX (has its own landing page) */
 const CALL_CENTER_SLIDES: ShowcaseSlide[] = [

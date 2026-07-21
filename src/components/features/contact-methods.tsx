@@ -10,9 +10,9 @@ const methods = [
   {
     title: "WhatsApp",
     brand: "WhatsApp",
-    info: "+234 703 482 1995",
+    info: SITE.phone,
     description: "Chat with us directly for quick project inquiries and support.",
-    href: "https://wa.me/2347034821995",
+    href: `https://wa.me/${SITE.whatsapp}`,
     external: true,
   },
   {
