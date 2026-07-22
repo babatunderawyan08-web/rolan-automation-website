@@ -6,7 +6,7 @@ import { FadeIn } from "@/components/shared/animations";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "@/components/shared/brand-logo";
-import { ServiceHeroMedia } from "@/components/features/service-heroes";
+import { ServiceLiveTour } from "@/components/features/live-tour";
 import { hasBrandLogo } from "@/lib/brand-icons";
 import { getServiceSample } from "@/data/service-samples";
 import { getRelatedServices } from "@/lib/services";
@@ -28,7 +28,7 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
         subtitle={service.description}
         cta={{ label: "Book Free Consultation", href: "/book-consultation" }}
         secondaryCta={{ label: "View Full Portfolio", href: "/portfolio" }}
-        media={<ServiceHeroMedia serviceId={service.id} />}
+        media={<ServiceLiveTour serviceId={service.id} />}
       />
 
       <section className="section-padding">
