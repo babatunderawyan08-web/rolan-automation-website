@@ -16,6 +16,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      { source: "/services/3cx", destination: "/portfolio/voice", permanent: false },
+      { source: "/services/vicidial", destination: "/portfolio", permanent: false },
+      { source: "/services/freepbx", destination: "/portfolio", permanent: false },
+      { source: "/services/asterisk", destination: "/portfolio", permanent: false },
+      { source: "/services/pbx", destination: "/portfolio", permanent: false },
+      { source: "/services/voip", destination: "/portfolio/voice", permanent: false },
+      { source: "/services/predictive", destination: "/portfolio", permanent: false },
+      { source: "/services/autodialer", destination: "/portfolio", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;

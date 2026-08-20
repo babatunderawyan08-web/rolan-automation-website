@@ -17,7 +17,7 @@ export default function TermsPage() {
           <h2 className="font-heading text-foreground text-xl font-bold">Agreement</h2>
           <p>By accessing {SITE.url}, you agree to these Terms of Service. If you disagree, please do not use our website or services.</p>
           <h2 className="font-heading text-foreground text-xl font-bold mt-8">Services</h2>
-          <p>{SITE.name} provides automation consulting, development, and call center solutions. Specific terms for each engagement are outlined in individual project agreements.</p>
+          <p>{SITE.name} designs and builds web applications and digital products. Specific terms for each engagement are outlined in individual project agreements.</p>
           <h2 className="font-heading text-foreground text-xl font-bold mt-8">Intellectual Property</h2>
           <p>All website content, branding, and proprietary methodologies remain the property of {SITE.name}. Client-specific deliverables are governed by project agreements.</p>
           <h2 className="font-heading text-foreground text-xl font-bold mt-8">Limitation of Liability</h2>

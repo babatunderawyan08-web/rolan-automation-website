@@ -25,7 +25,7 @@ export function LoadingScreen() {
           className="text-center"
         >
           <p className="font-heading text-lg font-bold tracking-tight">ROLAN</p>
-          <p className="text-xs font-semibold tracking-[0.2em] text-secondary uppercase">Automation</p>
+          <p className="text-xs font-semibold tracking-[0.2em] text-secondary uppercase">Studio</p>
         </motion.div>
         <div className="h-1 w-36 overflow-hidden rounded-full bg-background-alt">
           <motion.div

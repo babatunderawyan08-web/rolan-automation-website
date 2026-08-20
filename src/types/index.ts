@@ -17,7 +17,7 @@ export type PortfolioProject = {
   id: string;
   title: string;
   industry: string;
-  category: "automation" | "call-center";
+  category: "automation" | "call-center" | "product";
   problem: string;
   solution: string;
   technologies: string[];

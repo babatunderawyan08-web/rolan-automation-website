@@ -9,15 +9,15 @@ import { createMetadata } from "@/lib/seo";
 export const metadata = createMetadata({
   title: "Book Consultation",
   description:
-    "Send an automation inquiry to ROLAN AUTOMATION. Get a custom roadmap within 48 hours.",
+    "Share a product idea with ROLAN. The studio follows up with next steps.",
   path: "/book-consultation",
 });
 
 const benefits = [
-  "Free strategy discussion",
-  "Custom automation roadmap",
-  "ROI estimate for your business",
-  "No obligation, no pressure",
+  "Product direction discussion",
+  "Recommended approach and scope",
+  "A clear next step",
+  "No obligation",
   "Response within 48 hours",
 ];
 
@@ -26,8 +26,8 @@ export default function BookConsultationPage() {
     <>
       <PageHero
         eyebrow="Free Consultation"
-        title="Tell us about your automation goals"
-        subtitle="Share a few details about your project. Our team will review your inquiry and follow up within 48 hours."
+        title="Tell us about the product"
+        subtitle="Share a few details. The studio will review and follow up with a clear next step."
       />
       <section className="section-padding">
         <div className="container mx-auto max-w-7xl px-4">

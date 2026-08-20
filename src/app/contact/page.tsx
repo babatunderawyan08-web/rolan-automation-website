@@ -6,7 +6,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   title: "Contact",
-  description: "Get in touch with ROLAN AUTOMATION via WhatsApp, Telegram, Discord, or email. We respond within 24 hours.",
+  description: "Get in touch with ROLAN via WhatsApp, Telegram, Discord, or email.",
   path: "/contact",
 });
 

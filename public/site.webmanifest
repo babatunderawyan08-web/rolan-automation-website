@@ -1,11 +1,11 @@
 {
-  "name": "ROLAN AUTOMATION",
+  "name": "ROLAN",
   "short_name": "ROLAN",
-  "description": "AI Automation Agency",
+  "description": "Creative technology studio building premium web applications.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#2563eb",
+  "background_color": "#070B14",
+  "theme_color": "#3B82F6",
   "icons": [
     {
       "src": "/icons/icon-192.png",

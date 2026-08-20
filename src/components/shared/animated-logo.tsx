@@ -94,7 +94,7 @@ function LogoWordmark({ title, sub }: { title: string; sub: string }) {
         ))}
       </div>
       <span className={cn("mt-1 font-semibold uppercase tracking-[0.28em] text-accent", sub)}>
-        Automation
+        Studio
       </span>
       <span
         className="mt-1.5 block h-px w-0 bg-gradient-to-r from-secondary via-accent to-transparent transition-all duration-500 group-hover:w-full"

@@ -1,64 +1,62 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Play, Shield, Star } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FadeIn } from "@/components/shared/animations";
-import { HeroIllustration } from "@/components/sections/hero-illustration";
+import { HeroStage } from "@/components/sections/hero-stage";
 
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden gradient-mesh pt-20 sm:pt-24 md:pt-28">
+      <div className="pointer-events-none absolute inset-0 grid-fade" aria-hidden />
       <div className="absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute -top-40 -right-40 h-72 w-72 rounded-full bg-secondary/10 blur-3xl animate-pulse-glow sm:h-96 sm:w-96" />
-        <div className="absolute -bottom-40 -left-40 h-72 w-72 rounded-full bg-accent/10 blur-3xl animate-pulse-glow sm:h-96 sm:w-96" />
+        <div className="absolute -top-40 -right-40 h-72 w-72 rounded-full bg-secondary/15 blur-3xl animate-pulse-glow sm:h-96 sm:w-96" />
+        <div className="absolute -bottom-40 -left-40 h-72 w-72 rounded-full bg-accent/12 blur-3xl animate-pulse-glow sm:h-96 sm:w-96" />
       </div>
 
       <div className="container relative mx-auto max-w-7xl px-4 pb-12 pt-8 sm:pb-16 sm:pt-10 md:pb-20 md:pt-16">
-        <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,44%)_minmax(0,56%)] lg:gap-10 xl:gap-14">
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,46%)_minmax(0,54%)] lg:gap-12 xl:gap-16">
           <FadeIn>
-            <Badge variant="secondary" className="mb-4 sm:mb-6">
-              Trusted by 180+ businesses worldwide
+            <Badge variant="secondary" className="mb-4 border border-secondary/20 bg-secondary/10 text-secondary sm:mb-6">
+              Creative technology studio
             </Badge>
-            <h1 className="font-heading text-[1.85rem] font-bold leading-[1.12] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-              Enterprise automation that{" "}
-              <span className="gradient-text">drives real ROI</span>
+            <h1 className="font-heading text-[1.85rem] font-bold leading-[1.12] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">
+              Web applications with the finish of a{" "}
+              <span className="gradient-text">real product</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted sm:mt-6 sm:text-lg md:text-xl">
-              AI automation, workflow engineering, and call center solutions —
-              built for businesses that refuse to settle for ordinary.
+              ROLAN designs and builds premium digital products — dashboards, operations systems, and AI-powered applications you can actually use.
             </p>
             <div className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:w-auto sm:flex-row sm:flex-wrap sm:gap-4">
               <Button variant="accent" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
-                <Link href="/book-consultation">
-                  Book Free Consultation <ArrowRight className="h-4 w-4" />
+                <Link href="/portfolio">
+                  Explore live demos <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
-                <Link href="/book-appointment">Book Appointment</Link>
-              </Button>
-              <Button variant="ghost" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
-                <Link href="/portfolio">
-                  <Play className="h-4 w-4" /> View Portfolio
+                <Link href="/demo/voice">
+                  <Play className="h-4 w-4" /> Open a product
                 </Link>
               </Button>
             </div>
-            <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                ))}
-                <span className="ml-2 text-sm text-muted">4.9/5 from 120+ reviews</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted">
-                <Shield className="h-4 w-4 shrink-0 text-success" /> SOC 2 aligned practices
-              </div>
+            <div className="mt-8 grid max-w-lg grid-cols-3 gap-4 sm:mt-10">
+              {[
+                { value: "6", label: "Live products" },
+                { value: "12+", label: "Interactive views" },
+                { value: "100%", label: "Built in-house" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <p className="font-heading text-xl font-bold sm:text-2xl">{stat.value}</p>
+                  <p className="mt-1 text-[11px] uppercase tracking-wide text-muted sm:text-xs">{stat.label}</p>
+                </div>
+              ))}
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.2} direction="right" className="w-full">
-            <HeroIllustration />
+          <FadeIn delay={0.15} direction="right" className="w-full">
+            <HeroStage />
           </FadeIn>
         </div>
       </div>
