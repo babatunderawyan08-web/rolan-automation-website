@@ -8,7 +8,7 @@ const principles = [
   {
     icon: PanelsTopLeft,
     title: "Built to be used",
-    description: "Real navigation, states, actions, and flows — not just screens designed to look good in a presentation.",
+    description: "Real navigation, states, actions, and flows, not just screens designed to look good in a presentation.",
   },
   {
     icon: LayoutDashboard,

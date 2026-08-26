@@ -1,5 +1,5 @@
 export const CHAT_WELCOME =
-  "Hi — welcome to ROLAN. Ask about the products, live demos, or starting a project.";
+  "Hi. Welcome to ROLAN. Ask about the products, live demos, or starting a project.";
 
 export const CHAT_FALLBACK =
   "I can connect you with the studio. Would you like to start a project, open the portfolio, or book a call?";
@@ -17,7 +17,7 @@ export const CHAT_KNOWLEDGE: KnowledgeEntry[] = [
     title: "ROLAN studio",
     keywords: ["rolan", "studio", "who", "about", "brand"],
     answer:
-      "ROLAN is a creative technology studio that designs and builds premium web applications. The public work is six industry platforms you can open and use — property, food ordering, logistics, learning, clinic, and finance.",
+      "ROLAN is a creative technology studio that designs and builds premium web applications. The public work is six industry platforms you can open and use: property, food ordering, logistics, learning, clinic, and finance.",
   },
   {
     id: "work",

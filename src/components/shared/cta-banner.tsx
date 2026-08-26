@@ -14,7 +14,7 @@ export function CTABanner() {
                 Have a product in mind?
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base text-white/80 sm:text-lg">
-                ROLAN builds web applications that feel finished — interactive, useful, and ready to show.
+                ROLAN builds web applications that feel finished: interactive, useful, and ready to show.
               </p>
               <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <Button size="lg" className="w-full bg-white text-secondary hover:bg-white/90 sm:w-auto" asChild>

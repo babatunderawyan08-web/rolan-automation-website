@@ -1,15 +1,15 @@
 const CAPABILITIES = [
   {
     name: "Websites",
-    note: "Designed sites for a specific offer — pages, type, and structure that belong to one business, not a swapped-out template.",
+    note: "Designed sites for a specific offer: pages, type, and structure that belong to one business, not a swapped-out template.",
   },
   {
     name: "Web applications",
-    note: "Interactive tools people actually use — dashboards, search, saved state, accounts, and flows that continue beyond the first click.",
+    note: "Interactive tools people actually use: dashboards, search, saved state, accounts, and flows that continue beyond the first click.",
   },
   {
     name: "Digital products",
-    note: "Complete product experiences with coherent navigation, states, workflows, and a clear product point of view — so the interface feels like software, not a brochure.",
+    note: "Complete product experiences with coherent navigation, states, workflows, and a clear product point of view, so the interface feels like software, not a brochure.",
   },
   {
     name: "SaaS-style platforms",
@@ -17,7 +17,7 @@ const CAPABILITIES = [
   },
   {
     name: "AI integrations",
-    note: "Practical AI built inside the product or workflow when it removes a real step — assistants, generation, classification, search, or intelligent actions. Not just a chatbot floating on the side of a website.",
+    note: "Practical AI built inside the product or workflow when it removes a real step: assistants, generation, classification, search, or intelligent actions. Not just a chatbot floating on the side of a website.",
   },
   {
     name: "Automation systems",
