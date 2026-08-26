@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
-import { SITE } from "@/lib/constants";
 
 /** Exact ROLAN mark — circular crop, no color overlays. */
 const LOGO_SRC = "/images/rolan-logo.png";
@@ -15,6 +14,7 @@ type AnimatedLogoProps = {
   showText?: boolean;
   size?: "sm" | "md" | "lg";
   href?: string;
+  ariaLabel?: string;
 };
 
 const sizes = {
@@ -94,7 +94,7 @@ function LogoWordmark({ title, sub }: { title: string; sub: string }) {
         ))}
       </div>
       <span className={cn("mt-1 font-semibold uppercase tracking-[0.28em] text-accent", sub)}>
-        Automation
+        Studio
       </span>
       <span
         className="mt-1.5 block h-px w-0 bg-gradient-to-r from-secondary via-accent to-transparent transition-all duration-500 group-hover:w-full"
@@ -109,6 +109,7 @@ export function AnimatedLogo({
   showText = true,
   size = "md",
   href = "/",
+  ariaLabel = "ROLAN Studio home",
 }: AnimatedLogoProps) {
   const cfg = sizes[size];
 
@@ -125,7 +126,11 @@ export function AnimatedLogo({
 
   if (href) {
     return (
-      <Link href={href} aria-label={SITE.name} className="shrink-0">
+      <Link
+        href={href}
+        aria-label={ariaLabel}
+        className="inline-flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
         {content}
       </Link>
     );

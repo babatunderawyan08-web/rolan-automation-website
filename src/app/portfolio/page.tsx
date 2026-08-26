@@ -1,11 +1,11 @@
 import { PageHero } from "@/components/shared/page-hero";
-import { PortfolioGrid } from "@/components/features/portfolio-grid";
+import { ProductGallery } from "@/components/products/product-gallery";
 import { CTABanner } from "@/components/shared/cta-banner";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
-  title: "Portfolio",
-  description: "Explore ROLAN AUTOMATION portfolio — real automation and call center projects with measurable ROI.",
+  title: "Work",
+  description: "Explore ROLAN's product portfolio — six interactive web applications with live demos.",
   path: "/portfolio",
 });
 
@@ -13,13 +13,13 @@ export default function PortfolioPage() {
   return (
     <>
       <PageHero
-        eyebrow="Portfolio"
-        title="Projects that deliver measurable ROI"
-        subtitle="Explore our portfolio of automation and call center projects across industries."
+        eyebrow="Work"
+        title="Applications you can open and use"
+        subtitle="A gallery of realistic products across property, food, logistics, learning, clinic, and finance — each with a working live demo."
       />
-      <section className="section-padding">
+      <section className="section-padding pt-0">
         <div className="container mx-auto max-w-7xl px-4">
-          <PortfolioGrid />
+          <ProductGallery />
         </div>
       </section>
       <CTABanner />

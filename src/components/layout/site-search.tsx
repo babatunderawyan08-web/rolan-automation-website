@@ -8,14 +8,16 @@ import {
   useMemo,
   useRef,
   useState,
-  startTransition,
+  type RefObject,
 } from "react";
 import { highlightMatch, searchSite, type SearchResult } from "@/lib/site-search";
 import { cn } from "@/lib/utils";
 
 type SiteSearchProps = {
   className?: string;
+  inputRef?: RefObject<HTMLInputElement | null>;
   onNavigate?: () => void;
+  onClose?: () => void;
 };
 
 function HighlightedText({ text, query }: { text: string; query: string }) {
@@ -38,7 +40,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   );
 }
 
-export function SiteSearch({ className, onNavigate }: SiteSearchProps) {
+export function SiteSearch({ className, inputRef, onNavigate, onClose }: SiteSearchProps) {
   const inputId = useId();
   const listId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -46,10 +48,7 @@ export function SiteSearch({ className, onNavigate }: SiteSearchProps) {
   const deferredQuery = useDeferredValue(query);
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const results = useMemo(
-    () => searchSite(deferredQuery, 8),
-    [deferredQuery]
-  );
+  const results = useMemo(() => searchSite(deferredQuery, 8), [deferredQuery]);
 
   const showDropdown = deferredQuery.trim().length > 0;
   const showNoResults = showDropdown && results.length === 0;
@@ -57,7 +56,7 @@ export function SiteSearch({ className, onNavigate }: SiteSearchProps) {
   useEffect(() => {
     const onPointerDown = (event: MouseEvent) => {
       if (!rootRef.current?.contains(event.target as Node)) {
-        startTransition(() => setQuery(""));
+        setQuery("");
       }
     };
     document.addEventListener("mousedown", onPointerDown);
@@ -69,9 +68,19 @@ export function SiteSearch({ className, onNavigate }: SiteSearchProps) {
     onNavigate?.();
   };
 
+  const handleEscape = () => {
+    setQuery("");
+    onClose?.();
+  };
+
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      handleEscape();
+      return;
+    }
+
     if (!showDropdown || results.length === 0) {
-      if (event.key === "Escape") setQuery("");
       return;
     }
 
@@ -88,30 +97,30 @@ export function SiteSearch({ className, onNavigate }: SiteSearchProps) {
         handleSelect();
         window.location.assign(item.href);
       }
-    } else if (event.key === "Escape") {
-      setQuery("");
     }
   };
 
   return (
-    <div ref={rootRef} className={cn("relative mx-auto w-full max-w-xl", className)}>
+    <div ref={rootRef} className={cn("relative w-full", className)}>
       <input
         id={inputId}
+        ref={inputRef}
         type="search"
         value={query}
-        onChange={(e) => { setQuery(e.target.value); setActiveIndex(-1); }}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setActiveIndex(-1);
+        }}
         onKeyDown={onKeyDown}
-        placeholder="Search blog, services..."
-        className="w-full rounded-xl border border-border bg-background px-4 py-2 text-sm outline-none transition-colors focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+        placeholder="Search ROLAN..."
+        className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none transition-colors focus-visible:border-secondary focus-visible:ring-2 focus-visible:ring-secondary/30"
         autoComplete="off"
         role="combobox"
         aria-expanded={showDropdown}
         aria-controls={showDropdown ? listId : undefined}
         aria-autocomplete="list"
         aria-activedescendant={
-          activeIndex >= 0 && results[activeIndex]
-            ? `${listId}-option-${activeIndex}`
-            : undefined
+          activeIndex >= 0 && results[activeIndex] ? `${listId}-option-${activeIndex}` : undefined
         }
       />
 
@@ -133,7 +142,7 @@ export function SiteSearch({ className, onNavigate }: SiteSearchProps) {
                     href={item.href}
                     onClick={handleSelect}
                     className={cn(
-                      "block px-4 py-2.5 transition-colors hover:bg-background-alt",
+                      "block px-4 py-2.5 transition-colors hover:bg-background-alt focus-visible:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-secondary/30",
                       index === activeIndex && "bg-background-alt"
                     )}
                   >

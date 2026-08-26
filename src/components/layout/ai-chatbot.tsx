@@ -118,7 +118,7 @@ export function AiChatbot() {
           <motion.div
             id={panelId}
             role="dialog"
-            aria-label="ROLAN AUTOMATION chat assistant"
+            aria-label="ROLAN chat assistant"
             aria-modal="false"
             initial={{ opacity: 0, y: 24, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -225,7 +225,7 @@ export function AiChatbot() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about automation, 3CX, Zapier…"
+                  placeholder="Ask about products, demos, or a project…"
                   maxLength={1000}
                   disabled={pending}
                   className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3.5 text-sm outline-none transition-colors placeholder:text-muted/70 focus:border-secondary focus:ring-2 focus:ring-secondary/20 disabled:opacity-60"

@@ -2,89 +2,44 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useSyncExternalStore } from "react";
-import { motion } from "framer-motion";
-import { Menu, X, Moon, Sun, Search, ChevronDown, Bot, PhoneCall } from "lucide-react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Menu, Moon, Search, Sun, X } from "lucide-react";
 import { AnimatedLogo } from "@/components/shared/animated-logo";
-import { BrandLogo } from "@/components/shared/brand-logo";
-import { DynamicIcon } from "@/components/shared/dynamic-icon";
 import { SiteSearch } from "@/components/layout/site-search";
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS } from "@/lib/constants";
-import { services, callCenterServices } from "@/data/site-data";
-import { hasBrandLogo, SERVICE_BRAND } from "@/lib/brand-icons";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
-import type { Service } from "@/types";
 
-function ServiceMenuIcon({ service }: { service: Service }) {
-  const brand = SERVICE_BRAND[service.id];
-  if (brand && hasBrandLogo(brand)) {
-    return <BrandLogo name={brand} size={16} className="rounded-sm" />;
-  }
-  return <DynamicIcon name={service.icon} className="h-4 w-4 shrink-0" />;
-}
+const navFocusRing =
+  "rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
-function MegaHeading({
-  label,
-  variant,
-}: {
-  label: string;
-  variant: "automation" | "call-center";
-}) {
-  const Icon = variant === "automation" ? Bot : PhoneCall;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="mb-4"
-    >
-      <div
-        className={cn(
-          "mb-2.5 h-px w-full",
-          variant === "automation" ? "mega-rule-automation" : "mega-rule-callcenter"
-        )}
-      />
-      <div className="flex items-center gap-2">
-        <span
-          className={cn(
-            "flex h-6 w-6 items-center justify-center rounded-md",
-            variant === "automation" ? "bg-secondary/10 text-secondary" : "bg-accent/10 text-accent"
-          )}
-        >
-          <Icon className="h-3.5 w-3.5" />
-        </span>
-        <p
-          className={cn(
-            "text-xs font-semibold uppercase tracking-[0.14em]",
-            variant === "automation" ? "mega-heading-automation" : "mega-heading-callcenter"
-          )}
-        >
-          {label}
-        </p>
-      </div>
-      <div
-        className={cn(
-          "mt-2.5 h-px w-full",
-          variant === "automation" ? "mega-rule-automation" : "mega-rule-callcenter"
-        )}
-      />
-    </motion.div>
-  );
+function isNavActive(pathname: string, href: string) {
+  if (pathname === href) return true;
+  if (href === "/") return false;
+  return pathname.startsWith(`${href}/`);
 }
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [megaOpen, setMegaOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
+    () => false
+  );
+  const isLargeScreen = useSyncExternalStore(
+    (onStoreChange) => {
+      const media = window.matchMedia("(min-width: 1024px)");
+      media.addEventListener("change", onStoreChange);
+      return () => media.removeEventListener("change", onStoreChange);
+    },
+    () => window.matchMedia("(min-width: 1024px)").matches,
     () => false
   );
   const [navPath, setNavPath] = useState(pathname);
@@ -92,14 +47,45 @@ export function Navbar() {
   if (pathname !== navPath) {
     setNavPath(pathname);
     setOpen(false);
+    setSearchOpen(false);
   }
 
+  const closeSearch = useCallback(() => {
+    setSearchOpen(false);
+    requestAnimationFrame(() => searchButtonRef.current?.focus());
+  }, []);
+
+  const openSearch = useCallback(() => {
+    setOpen(false);
+    setSearchOpen(true);
+  }, []);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const timer = window.setTimeout(() => searchInputRef.current?.focus(), 50);
+    return () => window.clearTimeout(timer);
+  }, [searchOpen, isLargeScreen]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeSearch();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [searchOpen, closeSearch]);
+
+  const searchPanelId = "site-header-search";
 
   return (
     <header
@@ -108,184 +94,186 @@ export function Navbar() {
         scrolled ? "glass shadow-sm" : "bg-transparent"
       )}
     >
-      <nav className="container mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 md:h-20">
-        <AnimatedLogo size="sm" className="min-w-0 sm:hidden" />
-        <AnimatedLogo size="md" className="hidden sm:flex" />
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-card focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40"
+      >
+        Skip to main content
+      </a>
 
-        <ul className="hidden items-center gap-1 lg:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href} className="relative" onMouseEnter={() => link.mega && setMegaOpen(true)} onMouseLeave={() => link.mega && setMegaOpen(false)}>
-              <Link
-                href={link.href}
+      <nav
+        className="container mx-auto grid h-16 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 md:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6"
+        aria-label="Main"
+      >
+        <div className="flex min-w-0 items-center lg:justify-self-start">
+          <AnimatedLogo size="sm" className="sm:hidden" href="/" ariaLabel="ROLAN Studio home" />
+          <AnimatedLogo size="md" className="hidden sm:flex" href="/" ariaLabel="ROLAN Studio home" />
+        </div>
+
+        <div className="hidden min-w-0 items-center justify-center lg:flex">
+          {searchOpen && isLargeScreen ? (
+            <div className="flex w-full max-w-lg items-start gap-2">
+              <SiteSearch
+                className="min-w-0 flex-1"
+                inputRef={searchInputRef}
+                onNavigate={closeSearch}
+                onClose={closeSearch}
+              />
+              <button
+                type="button"
+                onClick={closeSearch}
                 className={cn(
-                  "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-secondary",
-                  pathname === link.href ? "text-secondary" : "text-muted"
+                  "inline-flex h-11 shrink-0 items-center gap-1.5 px-3 text-sm font-medium text-muted transition-colors hover:text-foreground",
+                  navFocusRing
                 )}
+                aria-label="Close search"
               >
-                {link.label}
-                {link.mega && <ChevronDown className="h-3.5 w-3.5" />}
-              </Link>
-              {link.mega && megaOpen && (
-                <div
-                  className="absolute left-1/2 top-full z-50 w-[640px] -translate-x-1/2 pt-2"
-                  onMouseEnter={() => setMegaOpen(true)}
-                  onMouseLeave={() => setMegaOpen(false)}
-                >
-                  <div className="rounded-2xl border border-border bg-card p-6 card-shadow-hover">
-                    <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <MegaHeading label="Automation" variant="automation" />
-                        <ul className="space-y-1">
-                          {services.slice(0, 8).map((s, i) => (
-                            <li key={s.id}>
-                              <motion.div
-                                initial={{ opacity: 0, x: -8 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.04 * i, duration: 0.25 }}
-                              >
-                                <Link
-                                  href={`/services/${s.id}`}
-                                  onClick={() => setMegaOpen(false)}
-                                  className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-muted transition-colors hover:bg-background-alt hover:text-foreground"
-                                >
-                                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                                    <ServiceMenuIcon service={s} />
-                                  </span>
-                                  {s.title}
-                                </Link>
-                              </motion.div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <MegaHeading label="Call Center" variant="call-center" />
-                        <ul className="space-y-1">
-                          {callCenterServices.slice(0, 8).map((s, i) => (
-                            <li key={s.id}>
-                              <motion.div
-                                initial={{ opacity: 0, x: 8 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.04 * i, duration: 0.25 }}
-                              >
-                                <Link
-                                  href={`/services/${s.id}`}
-                                  onClick={() => setMegaOpen(false)}
-                                  className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-muted transition-colors hover:bg-background-alt hover:text-foreground"
-                                >
-                                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                                    <ServiceMenuIcon service={s} />
-                                  </span>
-                                  {s.title}
-                                </Link>
-                              </motion.div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    <div className="mt-4 border-t border-border pt-4">
-                      <Link href="/services" className="text-sm font-medium text-secondary hover:underline">View all services →</Link>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+                <span aria-hidden className="text-base leading-none">
+                  ×
+                </span>
+                Close
+              </button>
+            </div>
+          ) : !searchOpen ? (
+            <ul className="flex items-center gap-0.5">
+              {NAV_LINKS.map((link) => {
+                const active = isNavActive(pathname, link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-secondary",
+                        navFocusRing,
+                        active ? "text-secondary" : "text-muted"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
+        </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2 lg:justify-self-end">
           <button
+            ref={searchButtonRef}
             type="button"
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="hidden h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-background-alt md:inline-flex"
+            onClick={() => (searchOpen ? closeSearch() : openSearch())}
+            className={cn(
+              "inline-flex h-11 w-11 items-center justify-center text-muted transition-colors hover:bg-background-alt hover:text-foreground",
+              navFocusRing,
+              searchOpen && "sr-only"
+            )}
             aria-label="Search"
+            aria-expanded={searchOpen}
+            aria-controls={searchOpen ? searchPanelId : undefined}
           >
             <Search className="h-5 w-5" />
           </button>
+
           {mounted && (
             <button
               type="button"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted hover:bg-background-alt"
+              className={cn(
+                "inline-flex h-11 w-11 items-center justify-center text-muted transition-colors hover:bg-background-alt hover:text-foreground",
+                navFocusRing
+              )}
               aria-label="Toggle theme"
             >
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
           )}
-          <Button variant="outline" size="sm" className="hidden min-h-11 md:inline-flex" asChild>
-            <Link href="/book-appointment">Book Appointment</Link>
-          </Button>
-          <Button variant="accent" size="sm" className="hidden min-h-11 md:inline-flex" asChild>
-            <Link href="/book-consultation">Book Consultation</Link>
-          </Button>
-          <button
-            type="button"
-            onClick={() => setOpen(!open)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg lg:hidden"
-            aria-label="Toggle menu"
-          >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+
+          {!searchOpen && (
+            <>
+              <Button variant="outline" size="sm" className="hidden min-h-11 md:inline-flex" asChild>
+                <Link href="/portfolio">Explore work</Link>
+              </Button>
+              <Button variant="accent" size="sm" className="hidden min-h-11 md:inline-flex" asChild>
+                <Link href="/contact">Start a project</Link>
+              </Button>
+              <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                className={cn("inline-flex h-11 w-11 items-center justify-center lg:hidden", navFocusRing)}
+                aria-label={open ? "Close menu" : "Open menu"}
+                aria-expanded={open}
+              >
+                {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
-      {searchOpen && (
-        <div className="border-t border-border bg-card px-4 py-3">
-          <SiteSearch onNavigate={() => setSearchOpen(false)} />
+      {searchOpen && !isLargeScreen && (
+        <div
+          id={searchPanelId}
+          className="border-t border-border bg-card px-4 py-3 lg:hidden"
+          role="search"
+          aria-label="Site search"
+        >
+          <div className="mx-auto flex max-w-xl items-start gap-2">
+            <SiteSearch
+              className="min-w-0 flex-1"
+              inputRef={searchInputRef}
+              onNavigate={closeSearch}
+              onClose={closeSearch}
+            />
+            <button
+              type="button"
+              onClick={closeSearch}
+              className={cn(
+                "inline-flex h-11 shrink-0 items-center gap-1.5 px-3 text-sm font-medium text-muted transition-colors hover:text-foreground",
+                navFocusRing
+              )}
+              aria-label="Close search"
+            >
+              <span aria-hidden className="text-base leading-none">
+                ×
+              </span>
+              Close
+            </button>
+          </div>
         </div>
       )}
 
-      {open && (
+      {open && !searchOpen && (
         <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-border bg-card px-4 py-4 lg:hidden">
           <ul className="space-y-1">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={cn(
-                    "block rounded-lg px-3 py-3.5 text-sm font-medium transition-colors hover:bg-background-alt",
-                    pathname === link.href && "bg-background-alt text-secondary"
-                  )}
-                  onClick={() => setOpen(false)}
-                >
-                  {link.label}
-                </Link>
-                {link.mega && (
-                  <ul className="mb-2 ml-2 mt-1 space-y-0.5 border-l border-border pl-3">
-                    {services.slice(0, 4).map((s) => (
-                      <li key={s.id}>
-                        <Link
-                          href={`/services/${s.id}`}
-                          className="block rounded-lg px-2 py-2.5 text-sm text-muted hover:bg-background-alt hover:text-foreground"
-                          onClick={() => setOpen(false)}
-                        >
-                          {s.title}
-                        </Link>
-                      </li>
-                    ))}
-                    <li>
-                      <Link
-                        href="/services"
-                        className="block rounded-lg px-2 py-2.5 text-sm font-medium text-secondary"
-                        onClick={() => setOpen(false)}
-                      >
-                        View all services →
-                      </Link>
-                    </li>
-                  </ul>
-                )}
-              </li>
-            ))}
-            <li className="pt-3 space-y-2">
+            {NAV_LINKS.map((link) => {
+              const active = isNavActive(pathname, link.href);
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "block rounded-lg px-3 py-3.5 text-sm font-medium transition-colors hover:bg-background-alt focus-visible:bg-background-alt",
+                      navFocusRing,
+                      active && "bg-background-alt text-secondary"
+                    )}
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+            <li className="space-y-2 pt-3">
               <Button variant="accent" className="w-full min-h-12" asChild>
-                <Link href="/book-consultation" onClick={() => setOpen(false)}>
-                  Book Free Consultation
+                <Link href="/contact" onClick={() => setOpen(false)}>
+                  Start a project
                 </Link>
               </Button>
               <Button variant="outline" className="w-full min-h-12" asChild>
                 <Link href="/book-appointment" onClick={() => setOpen(false)}>
-                  Book Appointment
+                  Book a call
                 </Link>
               </Button>
             </li>

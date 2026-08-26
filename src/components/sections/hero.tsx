@@ -1,67 +1,100 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Play, Shield, Star } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { FadeIn } from "@/components/shared/animations";
-import { HeroIllustration } from "@/components/sections/hero-illustration";
+import { HeroPortrait } from "@/components/sections/hero-portrait";
+import { cn } from "@/lib/utils";
+
+const STACK = [
+  "Next.js",
+  "React",
+  "TypeScript",
+  "Supabase",
+  "PostgreSQL",
+  "OpenAI",
+  "n8n",
+  "Make",
+  "Zapier",
+  "Vercel",
+  "Figma",
+  "GitHub",
+  "Stripe",
+  "Twilio",
+] as const;
+
+const INVERT_ON_DARK = new Set(["Next.js", "GitHub", "Vercel"]);
 
 export function HeroSection() {
+  const reduce = useReducedMotion();
+  const ticker = [...STACK, ...STACK];
+
   return (
-    <section className="relative overflow-hidden gradient-mesh pt-20 sm:pt-24 md:pt-28">
-      <div className="absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute -top-40 -right-40 h-72 w-72 rounded-full bg-secondary/10 blur-3xl animate-pulse-glow sm:h-96 sm:w-96" />
-        <div className="absolute -bottom-40 -left-40 h-72 w-72 rounded-full bg-accent/10 blur-3xl animate-pulse-glow sm:h-96 sm:w-96" />
-      </div>
-
-      <div className="container relative mx-auto max-w-7xl px-4 pb-12 pt-8 sm:pb-16 sm:pt-10 md:pb-20 md:pt-16">
-        <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,44%)_minmax(0,56%)] lg:gap-10 xl:gap-14">
-          <FadeIn>
-            <Badge variant="secondary" className="mb-4 sm:mb-6">
-              Trusted by 180+ businesses worldwide
-            </Badge>
-            <h1 className="font-heading text-[1.85rem] font-bold leading-[1.12] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-              Enterprise automation that{" "}
-              <span className="gradient-text">drives real ROI</span>
-            </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted sm:mt-6 sm:text-lg md:text-xl">
-              AI automation, workflow engineering, and call center solutions —
-              built for businesses that refuse to settle for ordinary.
+    <section className="relative overflow-x-clip pt-20 sm:pt-24 md:pt-28">
+      <div className="container relative mx-auto max-w-7xl px-4">
+        <div className="grid items-center gap-10 py-8 sm:gap-12 sm:py-10 lg:grid-cols-12 lg:gap-6 lg:py-8">
+          <div className="lg:col-span-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted">
+              Rolan · Digital product builder
             </p>
-            <div className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:w-auto sm:flex-row sm:flex-wrap sm:gap-4">
-              <Button variant="accent" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
-                <Link href="/book-consultation">
-                  Book Free Consultation <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
+            <h1 className="mt-5 max-w-[14ch] font-heading text-[2.4rem] font-semibold leading-[0.96] tracking-tight sm:text-5xl md:text-6xl lg:text-[3.65rem] xl:text-[4.15rem]">
+              I take an idea and turn it into something you can use.
+            </h1>
+            <p className="mt-6 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+              Ideas, business problems, and product concepts become working websites, web applications, and digital products. AI and automation can live inside that work when they help. They are not the identity of it.
+            </p>
+            <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button variant="outline" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
-                <Link href="/book-appointment">Book Appointment</Link>
+                <a href="#selected-work">View selected work</a>
               </Button>
-              <Button variant="ghost" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
-                <Link href="/portfolio">
-                  <Play className="h-4 w-4" /> View Portfolio
+              <Button variant="default" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
+                <Link href="/contact">
+                  Start a project <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
-            <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                ))}
-                <span className="ml-2 text-sm text-muted">4.9/5 from 120+ reviews</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted">
-                <Shield className="h-4 w-4 shrink-0 text-success" /> SOC 2 aligned practices
-              </div>
-            </div>
-          </FadeIn>
+          </div>
 
-          <FadeIn delay={0.2} direction="right" className="w-full">
-            <HeroIllustration />
-          </FadeIn>
+          <div className="flex justify-center lg:col-span-7 lg:justify-end">
+            <HeroPortrait />
+          </div>
         </div>
       </div>
+
+      <div className="border-t border-border">
+        {reduce ? (
+          <div className="container mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-3 px-4 py-5">
+            {STACK.map((name) => (
+              <MarqueeItem key={name} name={name} />
+            ))}
+          </div>
+        ) : (
+          <div className="relative overflow-hidden py-5">
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-background to-transparent sm:w-20" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-background to-transparent sm:w-20" />
+            <div className="flex w-max animate-marquee-slow items-center">
+              {ticker.map((name, index) => (
+                <MarqueeItem key={`${name}-${index}`} name={name} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </section>
+  );
+}
+
+function MarqueeItem({ name }: { name: string }) {
+  return (
+    <span className="mx-4 inline-flex shrink-0 items-center gap-2.5 sm:mx-6">
+      <BrandLogo
+        name={name}
+        size={22}
+        className={cn(INVERT_ON_DARK.has(name) && "dark:brightness-0 dark:invert")}
+      />
+      <span className="whitespace-nowrap text-sm font-medium text-muted">{name}</span>
+    </span>
   );
 }

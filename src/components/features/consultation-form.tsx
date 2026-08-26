@@ -261,7 +261,7 @@ export function ConsultationForm() {
             <Label htmlFor="consult-message">Project Details</Label>
             <Textarea
               id="consult-message"
-              placeholder="Describe your automation or call center needs..."
+              placeholder="Describe the product or application you want to build..."
               className="mt-1.5"
               {...register("message")}
             />

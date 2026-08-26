@@ -1,13 +1,12 @@
 import { z } from "zod";
 
 export const CONSULTATION_SERVICES = [
-  "AI & Workflow Automation",
-  "Call Center Solutions",
-  "CRM & API Integration",
-  "3CX Setup",
-  "VICIdial Installation",
-  "FreePBX / Asterisk",
-  "Other / Not sure yet",
+  "Web application / product",
+  "AI inside a product",
+  "Operations dashboard",
+  "Booking or support system",
+  "Real estate platform",
+  "Something else",
 ] as const;
 
 export const consultationSchema = z.object({

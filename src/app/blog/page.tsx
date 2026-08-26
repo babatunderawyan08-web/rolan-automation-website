@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   title: "Blog",
-  description: "Automation insights, AI trends, call center technology, and business process optimization from ROLAN AUTOMATION.",
+  description: "Notes on product design, application craft, and selected ROLAN work.",
   path: "/blog",
 });
 
@@ -18,7 +18,7 @@ export default function BlogPage() {
       <PageHero
         eyebrow="Blog"
         title="Insights & expertise"
-        subtitle="Stay ahead with the latest in automation, AI, call center tech, and business optimization."
+        subtitle="Writing on product interfaces, applied intelligence, and building software that feels finished."
       />
       <section className="section-padding">
         <div className="container mx-auto max-w-7xl px-4">

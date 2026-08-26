@@ -50,6 +50,9 @@ import {
   siX,
   siYoutube,
   siInstagram,
+  siFigma,
+  siGithub,
+  siVercel,
 } from "simple-icons";
 
 export type BrandMark = {
@@ -167,6 +170,9 @@ const SI_MAP: Record<string, BrandMark> = {
   x: fromSI(siX),
   youtube: fromSI(siYoutube),
   instagram: fromSI(siInstagram),
+  figma: fromSI(siFigma),
+  github: fromSI(siGithub),
+  vercel: fromSI(siVercel),
 };
 
 const ALL: Record<string, BrandMark> = {
@@ -224,32 +230,18 @@ export const SERVICE_BRAND: Record<string, string> = {
 
 /** Featured logos for the Technology marquee (Automation + Call Center). */
 export const TECH_SHOWCASE_LOGOS = [
-  "Workflow Automation",
   "OpenAI",
-  "Zapier",
-  "Make.com",
-  "n8n",
-  "HubSpot",
-  "Salesforce",
-  "Pipedrive",
-  "Zoho",
-  "Notion",
-  "ClickUp",
-  "Trello",
-  "Asana",
-  "monday.com",
-  "Google Workspace",
-  "Google Sheets",
-  "Google Forms",
-  "Google Meet",
-  "Google Calendar",
-  "Gmail",
-  "Microsoft 365",
-  "3CX",
-  "VICIdial",
-  "FreePBX",
-  "Asterisk",
   "Twilio",
+  "Stripe",
+  "Supabase",
+  "Vercel",
+  "Figma",
+  "Notion",
+  "Google Calendar",
+  "Google Workspace",
+  "PostgreSQL",
+  "React",
+  "TypeScript",
   "WhatsApp",
   "Telegram",
 ] as const;

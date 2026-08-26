@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 export const metadata = createMetadata({
   title: "Book Appointment",
   description:
-    "Book a video or audio appointment with ROLAN AUTOMATION. Choose an available date and time — confirmed instantly on Google Calendar.",
+    "Book a video or audio appointment with ROLAN. Choose an available date and time — confirmed on Google Calendar.",
   path: "/book-appointment",
 });
 

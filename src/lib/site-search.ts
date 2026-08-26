@@ -1,4 +1,5 @@
 import { NAV_LINKS } from "@/lib/constants";
+import { PRODUCTS } from "@/data/products";
 import {
   blogPosts,
   callCenterServices,
@@ -44,7 +45,7 @@ function buildIndex(): SearchItem[] {
   }
 
   const extraPages = [
-    { label: "Book Consultation", href: "/book-consultation", description: "Request a free automation consultation" },
+    { label: "Book Consultation", href: "/book-consultation", description: "Share a product idea with the studio" },
     { label: "Book Appointment", href: "/book-appointment", description: "Schedule a video or audio appointment online" },
     { label: "FAQ", href: "/faq", description: "Frequently asked questions" },
     { label: "Case Studies", href: "/case-studies", description: "Client results and project case studies" },
@@ -60,6 +61,27 @@ function buildIndex(): SearchItem[] {
       href: page.href,
       category: "Pages",
       keywords: normalize(`${page.label} ${page.description}`),
+    });
+  }
+
+  for (const product of PRODUCTS) {
+    items.push({
+      id: `product-${product.slug}`,
+      title: product.name,
+      description: product.tagline,
+      href: `/portfolio/${product.slug}`,
+      category: "Portfolio",
+      keywords: normalize(
+        `${product.name} ${product.productLine} ${product.industry} ${product.tagline} ${product.problem} ${product.solution} demo`
+      ),
+    });
+    items.push({
+      id: `demo-${product.slug}`,
+      title: `${product.name} live demo`,
+      description: product.tagline,
+      href: `/demo/${product.slug}`,
+      category: "Portfolio",
+      keywords: normalize(`${product.name} live demo ${product.productLine}`),
     });
   }
 

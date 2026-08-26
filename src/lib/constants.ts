@@ -1,8 +1,9 @@
 export const SITE = {
-  name: "ROLAN AUTOMATION",
-  tagline: "AI Automation Agency",
+  name: "ROLAN",
+  legalName: "ROLAN Studio",
+  tagline: "Creative Technology Studio",
   description:
-    "Premium AI automation, workflow engineering, call center solutions, and CRM integrations for businesses that demand excellence.",
+    "ROLAN designs and builds premium web applications: industry platforms for property, food, logistics, learning, clinic, and finance.",
   url: "https://rolanautomation.com",
   email: "contact@rolanautomation.com",
   phone: "+1 825 859 4136",
@@ -20,13 +21,26 @@ export const SITE = {
   },
 } as const;
 
-export const NAV_LINKS: { label: string; href: string; mega?: boolean }[] = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services", mega: true },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Industries", href: "/industries" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog" },
+export const NAV_LINKS: { label: string; href: string }[] = [
+  { label: "Work", href: "/portfolio" },
+  { label: "Studio", href: "/about" },
+  { label: "Capabilities", href: "/services" },
   { label: "Contact", href: "/contact" },
+];
+
+export const STUDIO_STACK = [
+  "Next.js",
+  "React",
+  "TypeScript",
+  "Tailwind CSS",
+  "Framer Motion",
+  "Supabase",
+  "PostgreSQL",
+  "OpenAI",
+  "Twilio",
+  "Stripe",
+  "Node.js",
+  "Recharts",
+  "Vercel",
+  "Figma",
 ] as const;
