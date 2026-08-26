@@ -29,7 +29,14 @@ export function ProductGallery() {
               {product.industry} · {product.productLine}
             </p>
             <h2 className="mt-3 font-heading text-3xl font-bold">{product.name}</h2>
-            <p className="mt-3 text-muted">{product.tagline}</p>
+            <p className="mt-3 text-muted">
+              <span className="font-medium text-foreground">Demonstrates. </span>
+              {product.demonstrates}
+            </p>
+            <p className="mt-2 text-muted">
+              <span className="font-medium text-foreground">Best automation / AI integration. </span>
+              {product.automation}
+            </p>
             <p className="mt-4 text-sm leading-relaxed text-muted">
               <span className="font-medium text-foreground">Problem. </span>
               {product.problem}

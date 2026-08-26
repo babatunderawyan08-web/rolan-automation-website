@@ -3,7 +3,7 @@ export const SITE = {
   legalName: "ROLAN Studio",
   tagline: "Creative Technology Studio",
   description:
-    "ROLAN designs and builds premium web applications — intelligent products for operations, customer experience, and growth.",
+    "ROLAN designs and builds premium web applications — industry platforms for property, food, logistics, learning, clinic, and finance.",
   url: "https://rolanautomation.com",
   email: "contact@rolanautomation.com",
   phone: "+1 825 859 4136",

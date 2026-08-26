@@ -224,6 +224,17 @@ body {
   animation: ticker 14s linear infinite;
 }
 
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+.wave-bar {
+  transform-origin: center;
+  animation: wave-bar var(--wave-duration, 1.6s) ease-in-out infinite;
+  animation-delay: var(--wave-delay, 0s);
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -233,6 +244,21 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--muted);
   border-radius: 4px;
+}
+
+.animate-orbit {
+  animation: orbit-spin 18s linear infinite;
+}
+
+.hero-portrait-head {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

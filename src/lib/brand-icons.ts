@@ -50,6 +50,9 @@ import {
   siX,
   siYoutube,
   siInstagram,
+  siFigma,
+  siGithub,
+  siVercel,
 } from "simple-icons";
 
 export type BrandMark = {
@@ -167,6 +170,9 @@ const SI_MAP: Record<string, BrandMark> = {
   x: fromSI(siX),
   youtube: fromSI(siYoutube),
   instagram: fromSI(siInstagram),
+  figma: fromSI(siFigma),
+  github: fromSI(siGithub),
+  vercel: fromSI(siVercel),
 };
 
 const ALL: Record<string, BrandMark> = {

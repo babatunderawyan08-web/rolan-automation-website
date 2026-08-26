@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { ArrowLeft, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { AnimatedLogo } from "@/components/shared/animated-logo";
+import { LiveBars } from "@/components/shared/live-bars";
 import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 
@@ -116,8 +117,8 @@ export function DemoShell({ product, items, active, onChange, children }: DemoSh
       </div>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-[#070b14]/95 px-2 py-2 backdrop-blur md:hidden">
-        <div className="grid grid-cols-4 gap-1">
-          {items.slice(0, 4).map((item) => (
+        <div className={cn("grid gap-1", items.length >= 5 ? "grid-cols-5" : items.length === 3 ? "grid-cols-3" : "grid-cols-4")}>
+          {items.slice(0, 5).map((item) => (
             <button
               key={item.id}
               type="button"
@@ -129,13 +130,18 @@ export function DemoShell({ product, items, active, onChange, children }: DemoSh
               style={active === item.id ? { color: product.accent } : undefined}
             >
               <item.icon className="h-4 w-4" />
-              {item.label}
+              <span className="max-w-full truncate px-0.5">{item.label}</span>
             </button>
           ))}
         </div>
       </nav>
     </div>
   );
+}
+
+function sparkValues(label: string) {
+  const seed = label.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return Array.from({ length: 8 }, (_, index) => 22 + ((seed * (index + 2)) % 42));
 }
 
 export function DemoStat({
@@ -156,6 +162,9 @@ export function DemoStat({
         {value}
       </p>
       {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
+      <div className="mt-3 h-7">
+        <LiveBars values={sparkValues(label)} className="gap-1" />
+      </div>
     </div>
   );
 }

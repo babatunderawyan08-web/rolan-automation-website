@@ -14,6 +14,7 @@ import {
   YAxis,
 } from "recharts";
 import { DemoShell, DemoStat } from "@/components/demos/demo-shell";
+import { useLiveSeries } from "@/components/shared/live-bars";
 import type { Product } from "@/data/products";
 
 const REVENUE = [
@@ -47,7 +48,12 @@ const REPORTS = [
 export function PulseDemo({ product }: { product: Product }) {
   const [view, setView] = useState("overview");
   const [range, setRange] = useState<"6m" | "30d">("6m");
-  const data = useMemo(() => (range === "6m" ? REVENUE : REVENUE.slice(-3).map((row, i) => ({ ...row, value: row.value - 12 + i * 4 }))), [range]);
+  const rangeData = useMemo(
+    () => (range === "6m" ? REVENUE : REVENUE.slice(-3).map((row, i) => ({ ...row, value: row.value - 12 + i * 4 }))),
+    [range]
+  );
+  const overviewData = useLiveSeries(REVENUE);
+  const revenueData = useLiveSeries(rangeData);
 
   return (
     <DemoShell
@@ -71,7 +77,7 @@ export function PulseDemo({ product }: { product: Product }) {
           </div>
           <div className="h-64 rounded-3xl border border-white/8 bg-white/4 p-4">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={REVENUE}>
+              <AreaChart data={overviewData}>
                 <defs>
                   <linearGradient id="pulse" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor={product.accent} stopOpacity={0.4} />
@@ -82,7 +88,7 @@ export function PulseDemo({ product }: { product: Product }) {
                 <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
                 <YAxis stroke="#64748b" fontSize={12} />
                 <Tooltip contentStyle={{ background: "#0b1220", border: "1px solid rgba(255,255,255,0.08)" }} />
-                <Area type="monotone" dataKey="value" stroke={product.accent} fill="url(#pulse)" />
+                <Area type="monotone" dataKey="value" stroke={product.accent} fill="url(#pulse)" isAnimationActive animationDuration={900} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -106,12 +112,12 @@ export function PulseDemo({ product }: { product: Product }) {
           </div>
           <div className="h-72 rounded-3xl border border-white/8 bg-white/4 p-4">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data}>
+              <BarChart data={revenueData}>
                 <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
                 <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
                 <YAxis stroke="#64748b" fontSize={12} />
                 <Tooltip contentStyle={{ background: "#0b1220", border: "1px solid rgba(255,255,255,0.08)" }} />
-                <Bar dataKey="value" fill={product.accent} radius={[8, 8, 0, 0]} />
+                <Bar dataKey="value" fill={product.accent} radius={[8, 8, 0, 0]} isAnimationActive animationDuration={900} />
               </BarChart>
             </ResponsiveContainer>
           </div>

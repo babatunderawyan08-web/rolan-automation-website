@@ -20,12 +20,12 @@ const capabilities = [
   {
     icon: LayoutDashboard,
     title: "Operational platforms",
-    description: "Inventory, bookings, property, and support systems with realistic data models and workflows.",
+    description: "Property, food, logistics, clinic, and learning systems with realistic data models and workflows.",
   },
   {
     icon: Sparkles,
     title: "Applied AI",
-    description: "Voice agents, support drafts, and decision support placed inside the product — not as a gimmick.",
+    description: "Assistants, tutors, and insight cards placed inside the product — not as a gimmick.",
   },
   {
     icon: Smartphone,

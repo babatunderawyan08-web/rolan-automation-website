@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
-import { SITE } from "@/lib/constants";
 
 /** Exact ROLAN mark — circular crop, no color overlays. */
 const LOGO_SRC = "/images/rolan-logo.png";
@@ -15,6 +14,7 @@ type AnimatedLogoProps = {
   showText?: boolean;
   size?: "sm" | "md" | "lg";
   href?: string;
+  ariaLabel?: string;
 };
 
 const sizes = {
@@ -109,6 +109,7 @@ export function AnimatedLogo({
   showText = true,
   size = "md",
   href = "/",
+  ariaLabel = "ROLAN Studio home",
 }: AnimatedLogoProps) {
   const cfg = sizes[size];
 
@@ -125,7 +126,11 @@ export function AnimatedLogo({
 
   if (href) {
     return (
-      <Link href={href} aria-label={SITE.name} className="shrink-0">
+      <Link
+        href={href}
+        aria-label={ariaLabel}
+        className="inline-flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
         {content}
       </Link>
     );

@@ -17,56 +17,56 @@ export const CHAT_KNOWLEDGE: KnowledgeEntry[] = [
     title: "ROLAN studio",
     keywords: ["rolan", "studio", "who", "about", "brand"],
     answer:
-      "ROLAN is a creative technology studio that designs and builds premium web applications. The public work is six live products you can open and use — voice, inventory, real estate, support, booking, and analytics.",
+      "ROLAN is a creative technology studio that designs and builds premium web applications. The public work is six industry platforms you can open and use — property, food ordering, logistics, learning, clinic, and finance.",
   },
   {
     id: "work",
     title: "Portfolio",
     keywords: ["portfolio", "work", "projects", "products", "demo", "demos"],
     answer:
-      "The Work page showcases six applications. Each has a product page and an Explore live demo experience with realistic sample data. Start at /portfolio or jump into /demo/voice.",
+      "The Work page showcases six applications. Each has a product page and an Explore live demo experience with realistic sample data. Start at /portfolio or jump into /demo/property.",
   },
   {
-    id: "voice",
-    title: "ROLAN Voice",
-    keywords: ["voice", "phone", "receptionist", "call", "agent"],
+    id: "property",
+    title: "Property Platform",
+    keywords: ["property", "real estate", "listing", "listings", "estates", "viewing", "agent", "whatsapp"],
     answer:
-      "ROLAN Voice is an AI phone agent demo: incoming calls, live transcripts, appointment booking, lead capture, and analytics. Open /demo/voice to try it.",
+      "Property Platform demonstrates marketplace + dashboards. Best automation / AI integration: AI property assistant + WhatsApp lead automation. Open /demo/property.",
   },
   {
-    id: "inventory",
-    title: "ROLAN Stock",
-    keywords: ["inventory", "stock", "orders", "warehouse"],
+    id: "food",
+    title: "Food Ordering",
+    keywords: ["food", "order", "restaurant", "menu", "cart", "kitchen", "inventory", "ecommerce"],
     answer:
-      "ROLAN Stock is an inventory and order system with products, stock levels, low-stock alerts, and sales analytics. Demo: /demo/inventory.",
+      "Food Ordering demonstrates e-commerce + multi-role system. Best automation / AI integration: AI order assistant + automated notifications. Demo: /demo/food.",
   },
   {
-    id: "estates",
-    title: "ROLAN Estates",
-    keywords: ["real estate", "property", "listings", "estates"],
+    id: "logistics",
+    title: "Logistics Platform",
+    keywords: ["logistics", "shipment", "shipping", "delivery", "driver", "tracking", "freight", "support"],
     answer:
-      "ROLAN Estates is a property platform for listings, leads, agents, and portfolio analytics. Demo: /demo/estates.",
+      "Logistics Platform demonstrates tracking + real-time status. Best automation / AI integration: automated delivery notifications + AI support. Demo: /demo/logistics.",
   },
   {
-    id: "desk",
-    title: "ROLAN Desk",
-    keywords: ["support", "tickets", "helpdesk", "desk"],
+    id: "learning",
+    title: "Learning Platform",
+    keywords: ["learning", "course", "courses", "lesson", "tutor", "certificate", "education", "lms"],
     answer:
-      "ROLAN Desk is an AI support workspace: tickets, AI reply drafts, customer profiles, assignment, and CSAT analytics. Demo: /demo/desk.",
+      "Learning Platform demonstrates LMS + user roles. Best automation / AI integration: AI tutor + automated certificates. Demo: /demo/learning.",
   },
   {
-    id: "book",
-    title: "ROLAN Book",
-    keywords: ["booking", "appointment", "calendar", "schedule"],
+    id: "clinic",
+    title: "Clinic Platform",
+    keywords: ["clinic", "appointment", "booking", "calendar", "schedule", "doctor", "patient", "voice", "book", "receptionist"],
     answer:
-      "ROLAN Book is a scheduling product with a weekly calendar, open slots, video/audio meetings, and notifications. Demo: /demo/book. To book a real call with the studio, use /book-appointment.",
+      "Clinic Platform demonstrates booking + multi-user system. Best automation / AI integration: AI receptionist + reminders. It is a fictional demo, not a medical service. Demo: /demo/clinic.",
   },
   {
-    id: "pulse",
-    title: "ROLAN Pulse",
-    keywords: ["analytics", "dashboard", "metrics", "pulse", "reports"],
+    id: "finance",
+    title: "Finance App",
+    keywords: ["finance", "ledger", "budget", "transactions", "analytics", "pulse", "reports", "cash", "insights"],
     answer:
-      "ROLAN Pulse is an operations analytics dashboard with live KPIs, charts, reports, and team performance. Demo: /demo/pulse.",
+      "Finance App demonstrates dashboard + data visualization. Best automation / AI integration: AI financial insights + smart alerts. Demo: /demo/finance.",
   },
   {
     id: "contact",
@@ -109,7 +109,7 @@ export function buildSystemPrompt(): string {
 
 Tone: professional, clear, concise. Keep answers under 120 words unless asked for detail.
 
-You help visitors explore live product demos and start a project. Do not present ROLAN as a 3CX or call-center installer.
+You help visitors explore live product demos and start a project. Do not present ROLAN as a 3CX or call-center installer. The clinic product is a fictional demo, not a medical service.
 
 Knowledge:
 ${topics}

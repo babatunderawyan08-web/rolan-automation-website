@@ -39,7 +39,7 @@ export default function AboutPage() {
                 ROLAN started as a place to make software that actually looks like software — not a brochure pretending to be a portfolio.
               </p>
               <p className="mt-4 leading-relaxed text-muted">
-                The studio now ships complete product experiences: voice operations, inventory, real estate, support, scheduling, and analytics. AI is used where it improves the product, not as the whole story.
+                The studio now ships complete product experiences: property, food ordering, logistics, learning, clinic, and finance platforms. AI is used where it improves the product, not as the whole story.
               </p>
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {values.map((value) => (

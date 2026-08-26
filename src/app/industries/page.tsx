@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export const metadata = createMetadata({
   title: "Industries",
-  description: "ROLAN builds web applications for operations, real estate, support, scheduling, and analytics teams.",
+  description: "ROLAN builds web applications for property, food, logistics, learning, clinic, and finance teams.",
   path: "/industries",
 });
 
