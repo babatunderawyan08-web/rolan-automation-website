@@ -47,7 +47,7 @@ export function HeroSection() {
             </p>
             <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button variant="outline" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
-                <a href="#selected-work">View selected work</a>
+                <Link href="/portfolio">View selected work</Link>
               </Button>
               <Button variant="default" size="lg" className="w-full min-h-12 sm:w-auto" asChild>
                 <Link href="/contact">
