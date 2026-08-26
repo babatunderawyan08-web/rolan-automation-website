@@ -10,7 +10,7 @@ export { getVisitorIp };
 
 const EMAIL_TO = "contact@rolanautomation.com";
 const INTERNAL_SUBJECT = "📅 New Appointment Booking - ROLAN AUTOMATION";
-const CONFIRMATION_SUBJECT = "Your appointment is confirmed — ROLAN AUTOMATION";
+const CONFIRMATION_SUBJECT = "Your appointment is confirmed, ROLAN AUTOMATION";
 
 const BRAND = {
   navy: "#0f172a",
@@ -174,7 +174,7 @@ function buildInternalHtml(
     : "";
 
   return emailShell({
-    preheader: `New appointment — ${appointment.formattedDate}`,
+    preheader: `New appointment: ${appointment.formattedDate}`,
     title: "New Appointment Booking",
     eyebrow: SITE.name,
     bodyHtml: `
@@ -243,7 +243,7 @@ function buildInternalText(
   appointment: AppointmentDetails
 ): string {
   return [
-    `${SITE.name} — New Appointment`,
+    `${SITE.name}: New Appointment`,
     "",
     `Name: ${data.name.trim()}`,
     `Email: ${data.email.trim()}`,
@@ -274,7 +274,7 @@ function buildConfirmationText(
     `Duration: ${data.duration} minutes`,
     appointment.meetLink
       ? `Meet link: ${appointment.meetLink}`
-      : "Audio call — we will contact you.",
+      : "Audio call: we will contact you.",
     "",
     "A calendar invite (.ics) is attached.",
     "",
@@ -379,7 +379,7 @@ export async function sendAppointmentEmail(
         from: fromHeader,
         to: toInternal,
         replyTo: data.email.trim(),
-        subject: `${INTERNAL_SUBJECT} — ${dateLabel}`,
+        subject: `${INTERNAL_SUBJECT}, ${dateLabel}`,
         html: buildInternalHtml(data, appointment),
         text: buildInternalText(data, appointment),
         attachments,
@@ -388,7 +388,7 @@ export async function sendAppointmentEmail(
         from: fromHeader,
         to: data.email.trim(),
         replyTo: toInternal,
-        subject: `${CONFIRMATION_SUBJECT} — ${dateLabel}`,
+        subject: `${CONFIRMATION_SUBJECT}, ${dateLabel}`,
         html: buildConfirmationHtml(data, appointment),
         text: buildConfirmationText(data, appointment),
         attachments,

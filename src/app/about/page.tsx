@@ -12,7 +12,7 @@ export const metadata = createMetadata({
 });
 
 const values = [
-  { title: "Product craft", desc: "Interfaces should feel finished — considered motion, clear hierarchy, and real workflows." },
+  { title: "Product craft", desc: "Interfaces should feel finished: considered motion, clear hierarchy, and real workflows." },
   { title: "Usefulness", desc: "Every screen exists to do a job: book, track, reply, decide." },
   { title: "Clarity", desc: "No theatre. The work should explain itself when someone opens a demo." },
   { title: "Ownership", desc: "Applications are designed as products, not one-off marketing pages." },
@@ -36,7 +36,7 @@ export default function AboutPage() {
             <FadeIn delay={0.15} direction="right" className="flex flex-col justify-center">
               <h2 className="font-heading text-3xl font-bold">The practice</h2>
               <p className="mt-4 leading-relaxed text-muted">
-                ROLAN started as a place to make software that actually looks like software — not a brochure pretending to be a portfolio.
+                ROLAN started as a place to make software that actually looks like software, not a brochure pretending to be a portfolio.
               </p>
               <p className="mt-4 leading-relaxed text-muted">
                 The studio now ships complete product experiences: property, food ordering, logistics, learning, clinic, and finance platforms. AI is used where it improves the product, not as the whole story.

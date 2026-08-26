@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
             <h2 className="font-heading text-foreground text-2xl font-bold mt-8">Key Takeaways</h2>
             <ul className="mt-4 space-y-2 list-disc pl-6">
-              <li>Automation is no longer optional — it&apos;s a competitive necessity</li>
+              <li>Automation is no longer optional: it&apos;s a competitive necessity</li>
               <li>Start with high-impact, low-complexity workflows for quick wins</li>
               <li>Measure ROI from day one with clear KPIs and dashboards</li>
               <li>Choose platforms that scale with your business growth</li>

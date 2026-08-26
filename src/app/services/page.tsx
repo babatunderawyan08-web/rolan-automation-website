@@ -7,7 +7,7 @@ import { LayoutDashboard, PanelsTopLeft, Sparkles, Smartphone } from "lucide-rea
 
 export const metadata = createMetadata({
   title: "Capabilities",
-  description: "ROLAN designs and builds premium web applications — product interfaces, operational systems, and applied intelligence.",
+  description: "ROLAN designs and builds premium web applications: product interfaces, operational systems, and applied intelligence.",
   path: "/services",
 });
 
@@ -25,7 +25,7 @@ const capabilities = [
   {
     icon: Sparkles,
     title: "Applied AI",
-    description: "Assistants, tutors, and insight cards placed inside the product — not as a gimmick.",
+    description: "Assistants, tutors, and insight cards placed inside the product, not as a gimmick.",
   },
   {
     icon: Smartphone,
@@ -40,7 +40,7 @@ export default function ServicesPage() {
       <PageHero
         eyebrow="Capabilities"
         title="What the studio actually builds"
-        subtitle="Complete web applications — not service menus. Explore the live products to see the work."
+        subtitle="Complete web applications, not service menus. Explore the live products to see the work."
         cta={{ label: "See the work", href: "/portfolio" }}
       />
       <section className="section-padding pt-0">
