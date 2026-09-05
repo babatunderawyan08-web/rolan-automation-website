@@ -1,0 +1,282 @@
+@property --mrrolan-border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: #f4f7fb;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.photo {
+  object-fit: cover;
+  object-position: 50% 12%;
+  z-index: 0;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(6, 12, 24, 0.55) 0%,
+      rgba(6, 12, 24, 0.28) 24%,
+      rgba(6, 12, 24, 0.42) 52%,
+      rgba(6, 12, 24, 0.82) 100%
+    );
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.frameTrack {
+  position: absolute;
+  inset: 0;
+  padding: 5px;
+  background:
+    conic-gradient(
+      from var(--mrrolan-border-angle),
+      rgba(37, 99, 235, 0.12) 0deg,
+      rgba(37, 99, 235, 0.12) 292deg,
+      #1d4ed8 318deg,
+      #60a5fa 338deg,
+      #93c5fd 348deg,
+      #2563eb 360deg
+    );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.85));
+  animation: mrrolan-border-travel 5.5s linear infinite;
+}
+
+@keyframes mrrolan-border-travel {
+  to {
+    --mrrolan-border-angle: 360deg;
+  }
+}
+
+.stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  width: min(100%, 430px);
+  margin: 0 auto;
+  padding: 32px 22px calc(22px + env(safe-area-inset-bottom, 0px));
+}
+
+.intro {
+  text-align: center;
+}
+
+.name {
+  margin: 0;
+  font-size: clamp(2.1rem, 8vw, 2.7rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.headline {
+  margin: 12px auto 0;
+  max-width: 16.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.connectBlock {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.connect,
+.follow {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 10px 18px 10px 12px;
+  border-radius: 18px;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  margin-top: -8px;
+  border-radius: 14px;
+  box-shadow:
+    0 10px 16px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.whatsapp .icon {
+  color: #fff;
+  background: #25d366;
+}
+
+.call .icon {
+  color: #2563eb;
+  background: #fff;
+}
+
+.call .icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.website .icon {
+  color: #fff;
+  background: #2563eb;
+}
+
+.telegram .icon {
+  color: #fff;
+  background: #229ed9;
+}
+
+.buttonText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.buttonLabel {
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.buttonDetail {
+  margin-top: 2px;
+  font-size: 0.84rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.followBlock {
+  margin-top: 22px;
+}
+
+.socials {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.social {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  text-decoration: none;
+}
+
+.socialIcon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-top: -7px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.28) inset;
+}
+
+.socialIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.tiktok .socialIcon {
+  color: #fff;
+  background: #000;
+}
+
+.facebook .socialIcon {
+  color: #fff;
+  background: #1877f2;
+}
+
+.motto {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+@media (max-height: 720px) {
+  .stage {
+    padding-top: 22px;
+  }
+
+  .button {
+    min-height: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frameTrack {
+    animation: none;
+    background: linear-gradient(#2563eb, #60a5fa) border-box;
+  }
+}
