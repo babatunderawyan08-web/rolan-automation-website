@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { siFacebook, siTelegram, siTiktok, siWhatsapp } from "simple-icons";
 import photo from "./background.jpg";
+import { EdgeLight } from "./edge-light";
 import { HideDevBadge } from "./hide-dev-badge";
 import styles from "./mrrolan.module.css";
 
@@ -119,9 +120,7 @@ export default function MrRolanPage() {
         className={styles.photo}
       />
       <div className={styles.veil} />
-      <div className={styles.frame} aria-hidden="true">
-        <div className={styles.frameTrack} />
-      </div>
+      <EdgeLight />
 
       <main className={styles.stage}>
         <header className={styles.intro}>
