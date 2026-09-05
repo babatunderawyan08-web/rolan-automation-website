@@ -52,9 +52,7 @@ export function EdgeLight() {
           viewBox={`0 0 ${box.w} ${box.h}`}
           fill="none"
         >
-          <path className={styles.lineTail} d={path} pathLength="100" />
-          <path className={styles.lineMid} d={path} pathLength="100" />
-          <path className={styles.lineHead} d={path} pathLength="100" />
+          <path className={styles.oneLine} d={path} pathLength="100" />
         </svg>
       ) : null}
     </div>
