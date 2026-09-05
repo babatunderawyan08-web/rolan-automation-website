@@ -12,8 +12,9 @@ import { CustomCursor } from "@/components/layout/custom-cursor";
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isDemo = pathname.startsWith("/demo");
+  const isMrRolan = pathname === "/mrrolan";
 
-  if (isDemo) {
+  if (isDemo || isMrRolan) {
     return (
       <>
         <CustomCursor />
