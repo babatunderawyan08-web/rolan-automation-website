@@ -6,16 +6,16 @@ import { HideDevBadge } from "./hide-dev-badge";
 import styles from "./mrrolan.module.css";
 
 export const metadata: Metadata = {
-  title: "MR ROLAN",
-  description: "Interested in learning digital skills online?",
+  title: "Start Your Online Business",
+  description: "Learn in-demand digital skills and start earning online.",
   robots: { index: false, follow: false },
 };
 
-function BrandIcon({ path, title, fill }: { path: string; title: string; fill?: string }) {
+function BrandIcon({ path, title }: { path: string; title: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <title>{title}</title>
-      <path d={path} fill={fill ?? "currentColor"} />
+      <path d={path} fill="currentColor" />
     </svg>
   );
 }
@@ -93,16 +93,16 @@ const connections = [
 
 const socials = [
   {
-    href: "https://www.tiktok.com/@meyouwin",
-    label: "TikTok",
-    className: styles.tiktok,
-    icon: <TikTokIcon />,
-  },
-  {
     href: "https://www.facebook.com/profile.php?id=61589999955259",
     label: "Facebook",
     className: styles.facebook,
     icon: <BrandIcon path={siFacebook.path} title="Facebook" />,
+  },
+  {
+    href: "https://www.tiktok.com/@meyouwin",
+    label: "TikTok",
+    className: styles.tiktok,
+    icon: <TikTokIcon />,
   },
 ] as const;
 
@@ -125,50 +125,72 @@ export default function MrRolanPage() {
 
       <main className={styles.stage}>
         <header className={styles.intro}>
-          <h1 className={styles.name}>MR ROLAN</h1>
-          <p className={styles.headline}>Interested in learning digital skills online?</p>
+          <h1 className={styles.headline}>
+            <span>Start your</span>
+            <span className={styles.accent}>Online</span>
+            <span>Business</span>
+          </h1>
+          <p className={styles.subhead}>
+            Learn in-demand digital skills and start earning online.
+          </p>
         </header>
 
-        <section className={styles.connectBlock} aria-label="Connect with me">
-          <p className={styles.connect}>Connect with me</p>
-          <div className={styles.actions}>
-            {connections.map((link) => (
-              <a
-                key={link.href}
-                className={`${styles.button} ${link.className}`}
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              >
-                <span className={styles.icon}>{link.icon}</span>
-                <span className={styles.buttonText}>
-                  <span className={styles.buttonLabel}>{link.label}</span>
-                  <span className={styles.buttonDetail}>{link.detail}</span>
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
+        <div className={styles.lower}>
+          <section className={styles.skills} aria-label="Skills you can learn">
+            <p className={styles.kicker}>Skills you can learn</p>
+            <ul className={styles.skillList}>
+              <li>Web Design</li>
+              <li>Video Editing</li>
+              <li>Game &amp; App Creation</li>
+              <li>And More</li>
+            </ul>
+            <p className={styles.promise}>
+              Build skills.
+              <br />
+              Build income.
+            </p>
+          </section>
 
-        <section className={styles.followBlock} aria-label="Follow me">
-          <p className={styles.follow}>Follow me</p>
-          <div className={styles.socials}>
-            {socials.map((link) => (
-              <a
-                key={link.href}
-                className={`${styles.social} ${link.className}`}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-              >
-                <span className={styles.socialIcon}>{link.icon}</span>
-              </a>
-            ))}
-          </div>
-        </section>
+          <section className={styles.connectBlock} aria-label="Connect">
+            <div className={styles.actions}>
+              {connections.map((link) => (
+                <a
+                  key={`${link.label}-${link.href}`}
+                  className={`${styles.button} ${link.className}`}
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                >
+                  <span className={styles.icon}>{link.icon}</span>
+                  <span className={styles.buttonText}>
+                    <span className={styles.buttonLabel}>{link.label}</span>
+                    <span className={styles.buttonDetail}>{link.detail}</span>
+                  </span>
+                </a>
+              ))}
+            </div>
+          </section>
 
-        <p className={styles.motto}>Learn Today • Earn Tomorrow</p>
+          <section className={styles.followBlock} aria-label="Follow me">
+            <p className={styles.follow}>Follow me</p>
+            <div className={styles.socials}>
+              {socials.map((link) => (
+                <a
+                  key={`social-${link.label}`}
+                  className={`${styles.social} ${link.className}`}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                >
+                  <span className={styles.socialIcon}>{link.icon}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <p className={styles.motto}>Learn Today • Earn Tomorrow</p>
+        </div>
       </main>
     </div>
   );
