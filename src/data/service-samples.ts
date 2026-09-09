@@ -51,7 +51,7 @@ export const serviceSamples: Record<string, ServiceSample> = {
   ),
   business: sample(
     "business",
-    "Cross-department automation for operations, finance, HR, and admin — built to scale with your business.",
+    "Cross-department automation for operations, finance, HR, and admin, built to scale with your business.",
     ["Department workflow audit", "SOP automation", "Approval chains", "Reporting automation", "Documentation"],
     {
       client: "GrowthStack",
@@ -135,7 +135,7 @@ export const serviceSamples: Record<string, ServiceSample> = {
   ),
   "3cx": sample(
     "3cx",
-    "Full 3CX PBX deployment — licensing, extensions, queues, IVR, and CRM integration.",
+    "Full 3CX PBX deployment: licensing, extensions, queues, IVR, and CRM integration.",
     ["3CX licensing & install", "24-60 simultaneous calls", "IVR & queue setup", "CRM click-to-dial", "Go-live support"],
     {
       client: "CloudServe",
@@ -261,7 +261,7 @@ export function getServiceSample(serviceId: string, fallbackTitle: string): Serv
       solution: `We delivered a custom ${fallbackTitle.toLowerCase()} solution with automation, monitoring, and clear documentation.`,
       technologies: ["n8n", "API Integrations", "Slack", "CRM", "Dashboards"],
       results: ["50%+ time saved", "Fewer manual errors", "Measurable ROI within 90 days"],
-      timeline: "3–4 weeks",
+      timeline: "3 to 4 weeks",
     }
   );
 }

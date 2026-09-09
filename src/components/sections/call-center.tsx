@@ -34,7 +34,7 @@ export function CallCenterSection() {
         <SectionHeader
           eyebrow="Call Center Solutions"
           title="Enterprise telephony & call center infrastructure"
-          subtitle="VICIdial, FreePBX, Asterisk, IVR, queues, and CRM-integrated call flows — built and managed by specialists."
+          subtitle="VICIdial, FreePBX, Asterisk, IVR, queues, and CRM-integrated call flows, built and managed by specialists."
         />
         <div className="mb-8 flex flex-wrap justify-center gap-2">
           {["VICIdial Expert", "FreePBX Specialist", "Asterisk Developer", "VoIP Specialist"].map(

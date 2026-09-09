@@ -18,7 +18,7 @@ const pillars = [
   { label: "Mission", text: "Eliminate manual work so businesses can focus on growth." },
   { label: "Vision", text: "A world where every business runs on intelligent automation." },
   { label: "Values", text: "Excellence, transparency, security, and measurable results." },
-  { label: "Approach", text: "Discover, design, build, launch — with you at every step." },
+  { label: "Approach", text: "Discover, design, build, launch, with you at every step." },
 ];
 
 export function AboutPreview() {

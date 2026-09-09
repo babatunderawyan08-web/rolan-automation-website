@@ -199,7 +199,7 @@ export const PRODUCTS: Product[] = [
     problem:
       "Patients book by phone, availability is tribal knowledge, and reminders never go out until someone remembers.",
     solution:
-      "A calm clinic product for availability, booking, staff schedules, visit history, and reminder automation — presented as a fictional demo, not a medical service.",
+      "A calm clinic product for availability, booking, staff schedules, visit history, and reminder automation, presented as a fictional demo, not a medical service.",
     features: [
       "Appointment booking",
       "Doctor availability",

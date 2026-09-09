@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 export const metadata = createMetadata({
   title: "Book Appointment",
   description:
-    "Book a video or audio appointment with ROLAN. Choose an available date and time — confirmed on Google Calendar.",
+    "Book a video or audio appointment with ROLAN. Choose an available date and time, confirmed on Google Calendar.",
   path: "/book-appointment",
 });
 
@@ -57,7 +57,7 @@ export default function BookAppointmentPage() {
                   </li>
                   <li className="flex gap-3">
                     <span className="font-semibold text-foreground">3.</span>
-                    Confirm — we create the event, email you details, and notify our team.
+                    Confirm: we create the event, email you details, and notify our team.
                   </li>
                 </ol>
                 <div className="grid gap-3 pt-2 sm:grid-cols-2">

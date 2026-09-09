@@ -56,7 +56,7 @@ export function ClinicDemo({ product }: { product: Product }) {
       ]}
     >
       <p className="mb-4 rounded-xl border border-teal-400/20 bg-teal-400/10 px-3 py-2 text-xs text-teal-100">
-        Fictional clinic demo. Sample names only — not a medical service and not real patient data.
+        Fictional clinic demo. Sample names only. Not a medical service and not real patient data.
       </p>
 
       {view === "book" && (

@@ -35,7 +35,7 @@ const methods = [
     title: "Email",
     brand: "Gmail",
     info: SITE.email,
-    description: "Send us a detailed project brief — we reply within 24 hours.",
+    description: "Send us a detailed project brief. We reply within 24 hours.",
     href: `mailto:${SITE.email}`,
     external: false,
   },

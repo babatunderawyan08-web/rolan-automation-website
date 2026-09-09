@@ -4,7 +4,7 @@ import type { ConsultationFormData } from "@/lib/consultation-schema";
 
 const EMAIL_TO = "contact@rolanautomation.com";
 const INTERNAL_SUBJECT = "≡ƒÜÇ New Consultation Request - ROLAN AUTOMATION";
-const CONFIRMATION_SUBJECT = "We received your consultation request — ROLAN AUTOMATION";
+const CONFIRMATION_SUBJECT = "We received your consultation request, ROLAN AUTOMATION";
 
 /** Brand tokens aligned with globals.css */
 const BRAND = {
@@ -215,14 +215,14 @@ export function buildInternalEmailHtml(
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 28px;">
       ${detailRows(consultationFields(data, meta, true))}
     </table>
-    ${ctaButton(`mailto:${encodeURIComponent(data.email.trim())}?subject=${encodeURIComponent(`Re: Your consultation request — ${SITE.name}`)}`, "Reply to Client")}
+    ${ctaButton(`mailto:${encodeURIComponent(data.email.trim())}?subject=${encodeURIComponent(`Re: Your consultation request, ${SITE.name}`)}`, "Reply to Client")}
     <p style="margin:20px 0 0;text-align:center;">
       <a href="${escapeHtml(siteUrl("/book-consultation"))}" style="color:${BRAND.blue};font-size:13px;text-decoration:none;font-weight:600;">View booking page</a>
     </p>
   `;
 
   return emailShell({
-    preheader: `New consultation from ${data.name.trim()} — ${data.service}`,
+    preheader: `New consultation from ${data.name.trim()}, ${data.service}`,
     title: "New Consultation Request",
     eyebrow: SITE.name,
     bodyHtml,
@@ -272,7 +272,7 @@ export function buildInternalEmailText(
   meta: ConsultationEmailMeta
 ): string {
   return [
-    `${SITE.name} — New Consultation Request`,
+    `${SITE.name}: New Consultation Request`,
     "",
     `Full Name: ${data.name.trim()}`,
     `Email Address: ${data.email.trim()}`,

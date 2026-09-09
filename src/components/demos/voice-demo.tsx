@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 
 const SCRIPT = [
   { who: "ai", text: "Good afternoon, Northshore Clinic. This is Ava. How can I help today?" },
-  { who: "caller", text: "Hi — I need to book a dental cleaning sometime next week." },
+  { who: "caller", text: "Hi, I need to book a dental cleaning sometime next week." },
   { who: "ai", text: "I can help with that. Thursday at 10:30 or Friday at 2:00 are open. Which works better?" },
   { who: "caller", text: "Thursday 10:30 is perfect. My name is Maya Chen." },
   { who: "ai", text: "Booked. I've captured Maya Chen for Thursday 10:30 and sent a confirmation." },

@@ -202,13 +202,13 @@ function BrowseView({
       ? [
           ["any", "Any rent"],
           ["low", "Under $2,500"],
-          ["mid", "$2,500–$5,000"],
+          ["mid", "$2,500 to $5,000"],
           ["high", "$5,000+"],
         ]
       : [
           ["any", "Any price"],
           ["low", "Under $750k"],
-          ["mid", "$750k–$1.5M"],
+          ["mid", "$750k to $1.5M"],
           ["high", "$1.5M+"],
         ];
 

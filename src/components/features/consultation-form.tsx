@@ -281,7 +281,7 @@ export function ConsultationForm() {
         </fieldset>
 
         <p className="text-center text-xs text-muted">
-          Your request is sent securely to our team — we&apos;ll follow up within 48 hours.
+          Your request is sent securely to our team. We&apos;ll follow up within 48 hours.
         </p>
       </form>
 

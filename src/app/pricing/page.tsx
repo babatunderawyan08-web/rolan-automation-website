@@ -14,7 +14,7 @@ const tiers = [
   {
     name: "Product sprint",
     price: "Scoped",
-    period: "2–4 weeks",
+    period: "2 to 4 weeks",
     description: "A focused build: one application surface with a working prototype.",
     features: ["Product definition", "Interactive UI", "One live demo flow", "Responsive delivery"],
   },
