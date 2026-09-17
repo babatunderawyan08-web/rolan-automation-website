@@ -240,6 +240,16 @@
   background: #000;
 }
 
+.linkedin .icon {
+  color: #fff;
+  background: #0a66c2;
+}
+
+.x .icon {
+  color: #fff;
+  background: #000;
+}
+
 .buttonText {
   display: flex;
   flex-direction: column;
