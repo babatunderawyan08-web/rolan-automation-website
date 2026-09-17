@@ -4,7 +4,7 @@ import { SITE } from "@/lib/constants";
 
 export const metadata = createMetadata({
   title: "Privacy Policy",
-  description: "ROLAN AUTOMATION privacy policy — how we collect, use, and protect your data.",
+  description: "ROLAN AUTOMATION privacy policy: how we collect, use, and protect your data.",
   path: "/privacy",
 });
 

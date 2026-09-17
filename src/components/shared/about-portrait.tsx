@@ -28,7 +28,7 @@ export function AboutPortrait({ className, badge = "Rolan · Founder" }: AboutPo
         <div className="relative min-h-0 flex-1">
           <Image
             src="/images/rolan-portrait.jpg"
-            alt="Rolan — AI Automation & Call Center Specialist"
+            alt="Rolan, AI Automation & Call Center Specialist"
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 520px"

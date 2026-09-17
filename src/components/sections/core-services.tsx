@@ -37,7 +37,7 @@ export function CoreServices() {
         <SectionHeader
           eyebrow="Services"
           title="Three ways we transform your operations"
-          subtitle="Focused expertise — explore full capabilities on our services page."
+          subtitle="Focused expertise. Explore full capabilities on our services page."
         />
         <div className="grid gap-6 md:grid-cols-3">
           {core.map((item, i) => {

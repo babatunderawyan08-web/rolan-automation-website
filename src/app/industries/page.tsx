@@ -17,7 +17,7 @@ export default function IndustriesPage() {
       <PageHero
         eyebrow="Industries"
         title="Products shaped by real operating environments"
-        subtitle="Each application is built around a specific industry workflow — then demonstrated as software, not a pitch deck."
+        subtitle="Each application is built around a specific industry workflow, then demonstrated as software, not a pitch deck."
         cta={{ label: "See products", href: "/portfolio" }}
       />
       <section className="section-padding pt-0">

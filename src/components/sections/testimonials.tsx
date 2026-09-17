@@ -31,7 +31,7 @@ export function TestimonialsSection() {
         <SectionHeader
           eyebrow="Testimonials"
           title="What our clients say"
-          subtitle="Don't take our word for it — hear from businesses we've transformed."
+          subtitle="Don't take our word for it. Hear from businesses we've transformed."
         />
         <div className="relative">
           <div ref={emblaRef} className="overflow-hidden">

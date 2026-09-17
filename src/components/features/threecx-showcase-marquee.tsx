@@ -25,7 +25,7 @@ export function ThreeCXShowcaseMarquee() {
           Live product tour
         </p>
         <p className="mb-8 text-center text-sm text-muted">
-          Real 3CX deployment screens — dashboards, trunks, queues, users, and more
+          Real 3CX deployment screens: dashboards, trunks, queues, users, and more
         </p>
       </div>
 

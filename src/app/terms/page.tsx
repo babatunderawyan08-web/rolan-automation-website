@@ -4,7 +4,7 @@ import { SITE } from "@/lib/constants";
 
 export const metadata = createMetadata({
   title: "Terms of Service",
-  description: "ROLAN AUTOMATION terms of service — the agreement governing use of our website and services.",
+  description: "ROLAN AUTOMATION terms of service: the agreement governing use of our website and services.",
   path: "/terms",
 });
 

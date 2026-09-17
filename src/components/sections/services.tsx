@@ -31,7 +31,7 @@ export function ServicesSection() {
         <SectionHeader
           eyebrow="Automation"
           title="Comprehensive automation solutions"
-          subtitle="From workflow automation to AI agents and CRM integrations — systems that remove manual work."
+          subtitle="From workflow automation to AI agents and CRM integrations: systems that remove manual work."
         />
 
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-12">

@@ -85,7 +85,7 @@ export function buildAppointmentTelegramMessage(
     "🔗 Meeting Link:",
     appointment.meetLink ||
       (data.consultationType === "audio"
-        ? "Audio call — we will contact you"
+        ? "Audio call: we will contact you"
         : "Calendar invite"),
     ...(appointment.htmlLink
       ? ["", "📆 Calendar Event:", appointment.htmlLink]

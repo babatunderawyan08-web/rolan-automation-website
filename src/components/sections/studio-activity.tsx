@@ -35,7 +35,7 @@ export function StudioActivity() {
           />
           <span>{event.text}</span>
           <span className="hidden font-medium sm:inline" style={{ color: product?.accent }}>
-            — {product?.name}
+            {product?.name}
           </span>
         </motion.p>
       </AnimatePresence>

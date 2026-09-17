@@ -65,8 +65,8 @@ function downloadIcs(appointment: AppointmentDetails) {
   const endStamp = appointment.endIso.replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
   const title =
     appointment.consultationType === "video"
-      ? "Video Call — ROLAN AUTOMATION"
-      : "Audio Call — ROLAN AUTOMATION";
+      ? "Video Call, ROLAN AUTOMATION"
+      : "Audio Call, ROLAN AUTOMATION";
   const description = appointment.meetLink
     ? `Meet link: ${appointment.meetLink}`
     : "Audio call";
@@ -110,8 +110,8 @@ function AppointmentSuccess({
       : "Audio Call";
   const calendarTitle =
     appointment.consultationType === "video"
-      ? "Video Call — ROLAN AUTOMATION"
-      : "Audio Call — ROLAN AUTOMATION";
+      ? "Video Call, ROLAN AUTOMATION"
+      : "Audio Call, ROLAN AUTOMATION";
 
   return (
     <motion.div
@@ -135,7 +135,7 @@ function AppointmentSuccess({
         Appointment Confirmed
       </h3>
       <p className="mt-2 text-base font-medium text-foreground">
-        You&apos;re all set — we look forward to speaking with you.
+        You&apos;re all set. We look forward to speaking with you.
       </p>
 
       <dl className="mt-6 w-full max-w-sm space-y-2.5 text-left">

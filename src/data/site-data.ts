@@ -370,7 +370,7 @@ export const whyChooseUs = [
   { title: "Certified Experts", description: "Team certified across Zapier, Make, n8n, 3CX, and major AI platforms.", icon: "Award" },
   { title: "Fast Delivery", description: "Most projects launched within 2-4 weeks with agile sprints and clear milestones.", icon: "Rocket" },
   { title: "24/7 Support", description: "Round-the-clock monitoring and support for mission-critical automations.", icon: "Clock" },
-  { title: "Custom Solutions", description: "No templates — every workflow is architected for your specific business.", icon: "Puzzle" },
+  { title: "Custom Solutions", description: "No templates. Every workflow is architected for your specific business.", icon: "Puzzle" },
   { title: "Affordable Pricing", description: "Enterprise quality at competitive rates with transparent, fixed-price quotes.", icon: "DollarSign" },
   { title: "Secure Systems", description: "SOC 2 aligned practices, encryption, and audit trails on every deployment.", icon: "Lock" },
   { title: "Scalable Solutions", description: "Architectures that grow from startup to enterprise without re-engineering.", icon: "TrendingUp" },
@@ -389,7 +389,7 @@ export const testimonials: Testimonial[] = [
 ];
 
 export const faqs: FAQ[] = [
-  { question: "What types of businesses do you work with?", answer: "We serve businesses of all sizes — from startups to Fortune 500 enterprises — across healthcare, real estate, finance, ecommerce, education, logistics, and more." },
+  { question: "What types of businesses do you work with?", answer: "We serve businesses of all sizes, from startups to Fortune 500 enterprises, across healthcare, real estate, finance, ecommerce, education, logistics, and more." },
   { question: "How long does a typical automation project take?", answer: "Most projects are delivered in 2-4 weeks. Complex enterprise implementations may take 6-12 weeks depending on scope and integrations required." },
   { question: "What automation platforms do you specialize in?", answer: "We are certified experts in n8n, Make.com, Zapier, OpenAI, Claude, Gemini, 3CX, VICIdial, FreePBX, and custom API development." },
   { question: "Do you offer ongoing support after launch?", answer: "Yes. Every project includes 30 days of post-launch hypercare. We also offer monthly maintenance and optimization plans." },

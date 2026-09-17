@@ -5,7 +5,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   title: "Work",
-  description: "Explore ROLAN's product portfolio — six interactive web applications with live demos.",
+  description: "Explore ROLAN's product portfolio: six interactive web applications with live demos.",
   path: "/portfolio",
 });
 
@@ -15,7 +15,7 @@ export default function PortfolioPage() {
       <PageHero
         eyebrow="Work"
         title="Applications you can open and use"
-        subtitle="A gallery of realistic products across property, food, logistics, learning, clinic, and finance — each with a working live demo."
+        subtitle="A gallery of realistic products across property, food, logistics, learning, clinic, and finance, each with a working live demo."
       />
       <section className="section-padding pt-0">
         <div className="container mx-auto max-w-7xl px-4">

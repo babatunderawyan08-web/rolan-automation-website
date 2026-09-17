@@ -171,7 +171,7 @@ export async function POST(request: Request) {
   let event: Awaited<ReturnType<typeof createCalendarEvent>>;
   try {
     event = await createCalendarEvent({
-      summary: `${typeLabel} — ${data.name.trim()}`,
+      summary: `${typeLabel}: ${data.name.trim()}`,
       description,
       startIso: start.toISOString(),
       endIso: end.toISOString(),
@@ -218,7 +218,7 @@ export async function POST(request: Request) {
     "contact@rolanautomation.com";
 
   const icsContent = buildIcs({
-    title: `${typeLabel} — ${SITE.name}`,
+    title: `${typeLabel}: ${SITE.name}`,
     description: [
       description,
       appointment.meetLink ? `\nMeet link: ${appointment.meetLink}` : "",
